@@ -1,6 +1,8 @@
-STUDENT_NAME: student name
+CHILD_NAME: child name
 PARENT_NAME: parent's name
 EXCLUSION_DATE: date of exclusion
+EXCLUSION_LETTER_DATE: date of headteacher's letter of exclusion
+EXCLUSION_REASON: reason for exclusion given in headteacher's letter
 
 
 SUSPENSION_DOC = Suspensions_and_permanent_exclusions_guidance

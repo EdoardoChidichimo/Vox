@@ -5,17 +5,22 @@
     "relevant_excerpts": [
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "reference": "Paragraph 1, SUSPENSION_DOC"
       },
       {
-        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "content": "It would also be unlawful to exclude a pupil simply because they have SEN or a disability that the school feels it is unable to meet, or for a reason such as, academic attainment/ability; or the failure of a pupil to meet specific conditions before they are reinstated, such as to attend a reintegration meeting.",
+        "reference": "Paragraph 20, SUSPENSION_DOC"
+      },
+      {
+        "content": "Excluding children from school for non-disciplinary reasons is unlawful.",
+        "reference": "Page 4, House of Commons Library Briefing Paper: Off-rolling in English schools"
       }
     ],
     "suggested_wordings": {
       "conditions": {
         "If stated reason is non-disciplinary": [
-          "Sentence 1 with <<EXCLUSION_DATE>>"
+          "The reason the headteacher gave in their letter of <<EXCLUSION_LETTER_DATE>> confirming <<CHILD_NAME>>'s exclusion was <<EXCLUSION_REASON>>.",
+          "This is not a valid reason to exclude a young person as it is not a matter of discipline. It does not relate to a breach of the school's behaviour policy. Therefore, it is not within the headteacher's lawful powers to exclude <<CHILD_NAME>> as a result of <<INCIDENT(S)>>. Excluding due to a non-disciplinary reason is a form off-rolling and it is unlawful. The headteacher has therefore acted outside the scope of their lawful power and we ask the governors to reinstate name of young person with immediate effect."
         ],
         "If stated reason is disciplinary but ...": [
           "Sentence 1 with <<EXCLUSION_DATE>>", 
