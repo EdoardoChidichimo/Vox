@@ -9,8 +9,7 @@
       "suggested_wordings": {
         "conditions": {
           "If stated reason is non-disciplinary": [
-            "Sentence 1 with <<EXCLUSION_DATE>>", 
-            "Sentence 2"
+            "Sentence 1 with <<EXCLUSION_DATE>>"
           ],
           "If stated reason is disciplinary but ...": [
             "Sentence 1 with <<EXCLUSION_DATE>>", 
