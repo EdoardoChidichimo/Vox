@@ -1,6 +1,6 @@
 [
     {
-      "title": "title",
+      "title": "I have changed the title!",
       "relevant_guidance": "SUSPENSION_DOC",
       "relevant_excerpts": {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
@@ -157,5 +157,5 @@
             ]
           }
         }
-      },
+      }
   ]
