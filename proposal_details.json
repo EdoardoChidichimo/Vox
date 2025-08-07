@@ -1,161 +1,77 @@
 [
-    {
-      "title": "I have changed the title!",
-      "relevant_guidance": "SUSPENSION_DOC",
-      "relevant_excerpts": {
+  {
+    "title": "I have changed the title!",
+    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_excerpts": [
+      {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
         "reference": "Paragraph 2, SUSPENSION_DOC"
       },
-      "suggested_wordings": {
-        "conditions": {
-          "If stated reason is non-disciplinary": [
-            "Sentence 1 with <<EXCLUSION_DATE>>"
-          ],
-          "If stated reason is disciplinary but ...": [
-            "Sentence 1 with <<EXCLUSION_DATE>>", 
-            "Sentence 2"
-          ]
-        }
+      {
+        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
+        "reference": "Paragraph 2, SUSPENSION_DOC"
       }
-    },
-    {
-      "title": "title",
-      "relevant_guidance": "relevant_guidance",
-      "relevant_excerpts": {
-        "content": "content",
-        "reference": "a new reference"
-      },
-      "suggested_wordings": {
-        "conditions": {
-          "only_condition": [
-            "Sentence 1 with <<EXCLUSION_DATE>>", 
-            "Sentence 2"
-          ],
-          "condition_2": [
-            "Sentence 1 with <<EXCLUSION_DATE>>", 
-            "Sentence 2"
-          ]
-        }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "If stated reason is non-disciplinary": [
+          "Sentence 1 with <<EXCLUSION_DATE>>"
+        ],
+        "If stated reason is disciplinary but ...": [
+          "Sentence 1 with <<EXCLUSION_DATE>>", 
+          "Sentence 2"
+        ]
       }
-    },
-    {
-        "title": "title",
-        "relevant_guidance": "relevant_guidance",
-        "relevant_excerpts": {
-          "content": "content",
-          "reference": "reference"
-        },
-        "suggested_wordings": {
-          "conditions": {
-            "only_condition": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ],
-            "condition_2": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ]
-          }
-        }
+    }
+  },
+  {
+    "title": "I have changed the title!",
+    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_excerpts": [
+      {
+        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
+        "reference": "Paragraph 2, SUSPENSION_DOC"
       },
       {
-        "title": "title",
-        "relevant_guidance": "relevant_guidance",
-        "relevant_excerpts": {
-          "content": "content",
-          "reference": "reference"
-        },
-        "suggested_wordings": {
-          "conditions": {
-            "only_condition": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ],
-            "condition_2": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ]
-          }
-        }
-      },
-      {
-        "title": "title",
-        "relevant_guidance": "relevant_guidance",
-        "relevant_excerpts": {
-          "content": "content",
-          "reference": "reference"
-        },
-        "suggested_wordings": {
-          "conditions": {
-            "only_condition": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ],
-            "condition_2": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ]
-          }
-        }
-      },
-      {
-        "title": "title",
-        "relevant_guidance": "relevant_guidance",
-        "relevant_excerpts": {
-          "content": "content",
-          "reference": "reference"
-        },
-        "suggested_wordings": {
-          "conditions": {
-            "only_condition": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ],
-            "condition_2": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ]
-          }
-        }
-      },
-      {
-        "title": "title",
-        "relevant_guidance": "relevant_guidance",
-        "relevant_excerpts": {
-          "content": "content",
-          "reference": "reference"
-        },
-        "suggested_wordings": {
-          "conditions": {
-            "only_condition": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ],
-            "condition_2": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ]
-          }
-        }
-      },
-      {
-        "title": "title",
-        "relevant_guidance": "relevant_guidance",
-        "relevant_excerpts": {
-          "content": "content",
-          "reference": "reference"
-        },
-        "suggested_wordings": {
-          "conditions": {
-            "only_condition": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ],
-            "condition_2": [
-              "Sentence 1 with <<EXCLUSION_DATE>>", 
-              "Sentence 2"
-            ]
-          }
-        }
+        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
+        "reference": "Paragraph 2, SUSPENSION_DOC"
       }
-  ]
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "If stated reason is non-disciplinary": [
+          "Sentence 1 with <<EXCLUSION_DATE>>"
+        ],
+        "If stated reason is disciplinary but ...": [
+          "Sentence 1 with <<EXCLUSION_DATE>>", 
+          "Sentence 2"
+        ]
+      }
+    }
+  },
+  {
+    "title": "I have changed the title!",
+    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_excerpts": [
+      {
+        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
+        "reference": "Paragraph 2, SUSPENSION_DOC"
+      },
+      {
+        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
+        "reference": "Paragraph 2, SUSPENSION_DOC"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "If stated reason is non-disciplinary": [
+          "Sentence 1 with <<EXCLUSION_DATE>>"
+        ],
+        "If stated reason is disciplinary but ...": [
+          "Sentence 1 with <<EXCLUSION_DATE>>", 
+          "Sentence 2"
+        ]
+      }
+    }
+  }
+]
