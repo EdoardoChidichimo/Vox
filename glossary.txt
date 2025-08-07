@@ -1,13 +1,19 @@
+Static variables (either simple [dates/names] or LLM summaries of inputs [exclusion reason]):
 CHILD_NAME: child name
 PARENT_NAME: parent's name
 EXCLUSION_DATE: date of exclusion
 EXCLUSION_LETTER_DATE: date of headteacher's letter of exclusion
 EXCLUSION_REASON: reason for exclusion given in headteacher's letter
-
+INCIDENT: parent's version of the incident
 
 SUSPENSION_DOC = Suspensions_and_permanent_exclusions_guidance
 BEHAVIOUR_DOC = Behaviour in schools - advice for headteachers and school staff_Feb_2024
 SEND_DOC = SEND_Code_of_Practice_January_2015
+
+
+Dynamic variables (LLM needs to adapt based on context):
+
+
 
 
 

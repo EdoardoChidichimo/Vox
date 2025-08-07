@@ -13,14 +13,63 @@
       },
       {
         "content": "Excluding children from school for non-disciplinary reasons is unlawful.",
-        "reference": "Page 4, House of Commons Library Briefing Paper: Off-rolling in English schools"
+        "reference": "Page 4, House of Commons Library Briefing Paper: Off-rolling in English schools."
       }
     ],
     "suggested_wordings": {
       "conditions": {
         "If stated reason is non-disciplinary": [
           "The reason the headteacher gave in their letter of <<EXCLUSION_LETTER_DATE>> confirming <<CHILD_NAME>>'s exclusion was <<EXCLUSION_REASON>>.",
-          "This is not a valid reason to exclude a young person as it is not a matter of discipline. It does not relate to a breach of the school's behaviour policy. Therefore, it is not within the headteacher's lawful powers to exclude <<CHILD_NAME>> as a result of <<INCIDENT(S)>>. Excluding due to a non-disciplinary reason is a form off-rolling and it is unlawful. The headteacher has therefore acted outside the scope of their lawful power and we ask the governors to reinstate name of young person with immediate effect."
+          "This is not a valid reason to exclude a young person as it is not a matter of discipline. It does not relate to a breach of the school's behaviour policy. Therefore, it is not within the headteacher's lawful powers to exclude <<CHILD_NAME>> as a result of this incident. Excluding due to a non-disciplinary reason is a form off-rolling and it is unlawful. The headteacher has therefore acted outside the scope of their lawful power and we ask the governors to reinstate <<CHILD_NAME>> with immediate effect."
+        ],
+        "If stated reason is disciplinary but true reason is non-disciplinary": [
+          "The reason the headteacher gave in their letter of <<EXCLUSION_LETTER_DATE>> confirming <<CHILD_NAME>>'s exclusion was <<EXCLUSION_REASON>>.",
+          "However, the headteacher has said in the letter that <<QUOTE SHOWING ALTERNATIVE MOTIVATION>>.",
+          "This reveals a motivation for the exclusion that is not reflected in the letter confirming the permanent exclusion. This is not a valid reason to exclude a young person as it is not a matter of discipline. It does not relate to a breach of the school's behaviour policy. Therefore, it is not within the headteacher's lawful powers to exclude <<CHILD_NAME>> as a result of this incident. The headteacher has therefore acted outside the scope of their lawful power and we ask the governors to reinstate <<CHILD_NAME>> with immediate effect.",
+          "If the governors do not agree that this exclusion has not been imposed for non-disciplinary reasons, we ask the governors to keep in mind the principal of procedural fairness that justice must not just be done but be unequivocally seen to be done. Clearly, in this instance, the headteacher has expressed an alternative, unlawful, influence on their decision making and justice cannot been seen to be done, because the family can see that the headteacher's decision has been adversely influenced by inappropriate factors. Therefore, we still urge the governors to reinstate <<CHILD_NAME>>."
+        ]
+      }
+    }
+  },
+
+  {
+    "title": "I have changed the title!",
+    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_excerpts": [
+      {
+        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
+        "reference": "Paragraph 2, SUSPENSION_DOC"
+      },
+      {
+        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
+        "reference": "Paragraph 2, SUSPENSION_DOC"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "": [
+          "Sentence 1 with <<EXCLUSION_DATE>>"
+        ]
+      }
+    }
+  },
+  {
+    "title": "I have changed the title!",
+    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_excerpts": [
+      {
+        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
+        "reference": "Paragraph 2, SUSPENSION_DOC"
+      },
+      {
+        "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
+        "reference": "Paragraph 2, SUSPENSION_DOC"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "If stated reason is non-disciplinary": [
+          "Sentence 1 with <<EXCLUSION_DATE>>"
         ],
         "If stated reason is disciplinary but ...": [
           "Sentence 1 with <<EXCLUSION_DATE>>", 
