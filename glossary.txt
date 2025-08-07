@@ -1,0 +1,12 @@
+STUDENT_NAME: student name
+PARENT_NAME: parent's name
+EXCLUSION_DATE: date of exclusion
+
+
+SUSPENSION_DOC = Suspensions_and_permanent_exclusions_guidance
+BEHAVIOUR_DOC = Behaviour in schools - advice for headteachers and school staff_Feb_2024
+SEND_DOC = SEND_Code_of_Practice_January_2015
+
+
+
+If there is only one condition in a wording document, leave as "only_condition"
