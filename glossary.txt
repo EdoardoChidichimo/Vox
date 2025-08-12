@@ -11,10 +11,7 @@ BEHAVIOUR_DOC = Behaviour in schools - advice for headteachers and school staff_
 SEND_DOC = SEND_Code_of_Practice_January_2015
 
 
-Dynamic variables (LLM needs to adapt based on context):
 
 
 
-
-
-If there is only one condition in a wording document, leave as "only_condition"
+Dynamic variables (LLM needs to adapt based on context)
