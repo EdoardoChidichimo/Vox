@@ -1,15 +1,15 @@
 [
   {
     "title": "I have changed the title!",
-    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_guidance": "<<SUSPENSION_DOC>>",
     "relevant_excerpts": [
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 1, SUSPENSION_DOC"
+        "reference": "Paragraph 1, <<SUSPENSION_DOC>>"
       },
       {
         "content": "It would also be unlawful to exclude a pupil simply because they have SEN or a disability that the school feels it is unable to meet, or for a reason such as, academic attainment/ability; or the failure of a pupil to meet specific conditions before they are reinstated, such as to attend a reintegration meeting.",
-        "reference": "Paragraph 20, SUSPENSION_DOC"
+        "reference": "Paragraph 20, <<SUSPENSION_DOC>>"
       },
       {
         "content": "Excluding children from school for non-disciplinary reasons is unlawful.",
@@ -34,15 +34,15 @@
 
   {
     "title": "I have changed the title!",
-    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_guidance": "<<SUSPENSION_DOC>>",
     "relevant_excerpts": [
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
       },
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
       }
     ],
     "suggested_wordings": {
@@ -55,15 +55,15 @@
   },
   {
     "title": "I have changed the title!",
-    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_guidance": "<<SUSPENSION_DOC>>",
     "relevant_excerpts": [
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
       },
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
       }
     ],
     "suggested_wordings": {
@@ -80,15 +80,15 @@
   },
   {
     "title": "I have changed the title!",
-    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_guidance": "<<SUSPENSION_DOC>>",
     "relevant_excerpts": [
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
       },
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
       }
     ],
     "suggested_wordings": {
@@ -105,15 +105,15 @@
   },
   {
     "title": "I have changed the title!",
-    "relevant_guidance": "SUSPENSION_DOC",
+    "relevant_guidance": "<<SUSPENSION_DOC>>",
     "relevant_excerpts": [
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
       },
       {
         "content": "Only the headteacher of a school can suspend or permanently exclude a pupil on disciplinary grounds.",
-        "reference": "Paragraph 2, SUSPENSION_DOC"
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
       }
     ],
     "suggested_wordings": {
