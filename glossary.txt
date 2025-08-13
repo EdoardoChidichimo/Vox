@@ -1,12 +1,175 @@
-CHILD_NAME: child name
-PARENT_NAME: parent's name
-EXCLUSION_DATE: date of exclusion
-EXCLUSION_LETTER_DATE: date of headteacher's letter of exclusion
-EXCLUSION_REASON: reason for exclusion given in headteacher's letter
-INCIDENT: parent's version of the incident
+LANGUAGE (Dropdown; string)
+CHILD_NAME: child name (String)
+PARENT_NAME: parent's name (String)
+SCHOOL_NAME (String)
 
-POTENTIAL_BREACHES: list of potential breaches, structured by the title of statutory guidance parts or sections with explicit and comprehensive detail as to why the school may be in breach
 
-SUSPENSION_DOC = Suspensions_and_permanent_exclusions_guidance
-BEHAVIOUR_DOC = Behaviour in schools - advice for headteachers and school staff_Feb_2024
-SEND_DOC = SEND_Code_of_Practice_January_2015
+-- About the Exclusion
+EXCLUSION_DATE: date of exclusion (date)
+EXCLUSION_LETTER_DATE: date of headteacher's letter of exclusion (date)
+
+EXISTS_EXCLUSION_LETTER: "Was a letter written to confirm the exclusion?" (Boolean)
+ - If not EXISTS_EXCLUSION_LETTER: stop process and tell parents that they must receive letter first outlining reasons and permanency.
+EXCLUSION_LETTER: The exclusion letter (String only no document upload)
+EXCLUSION_SCHOOL_FACTS_INPUT: "What does the school say happened to lead to the exclusion?" (Parents input the school's version of events; String)
+EXCLUSION_SCHOOL_EVIDENCE_INPUT: "What evidence does the school have?" (String)
+EXCLUSION_SCHOOL_FACTS_LLM: synthesise(EXCLUSION_LETTER, EXCLUSION_SCHOOL_FACTS_INPUT, EXCLUSION_SCHOOL_EVIDENCE_INPUT) (String)
+EXCLUSION_REASON_LLM: Extract reason for exclusion given in EXCLUSION_LETTER only (string)
+
+EXCLUSION_SCHOOL_FACTS_CONFIRM: "Does the young person agree that this is what happened?" (Boolean)
+EXCLUSION_PARENTS_FACTS_INPUT: "What is the student's version of events?" (String)
+EXCLUSION_PARENTS_FACTS_WITNESSES_INPUT: "Are there witnesses that can support the young person’s version of events?" (Boolean)
+IS_STUDENT_VOICE_HEARD: "Did the school speak with the young person and take their version of events before excluding them?" (Boolean)
+EXCLUSION_PARENTS_FACTS_LLM: synthesise(EXCLUSION_SCHOOL_FACTS_CONFIRM, EXCLUSION_PARENTS_FACTS_INPUT, EXCLUSION_PARENTS_FACTS_WITNESSES_INPUT, IS_STUDENT_VOICE_HEARD) (String, hardcode the boolean responses)
+
+
+-- About the Young Person
+IS_SEND: "Does the young person have SEND?" (Boolean)
+IS_SEND_SCHOOL_AWARE: If IS_SEND: "Is the school aware of this SEND?" (Boolean)
+SEND_SCHOOL_ADDRESS: If IS_SEND: "If any, what steps have the school taken to address this SEND?" (String)
+SEND_WHO_SUPPORT: If IS_SEND: "Are any clinicians, pastoral workers or professionals working to support the young person with their SEND?" (Select NA or enter text)
+IS_EHCP: "Does the young person have an EHCP?" (Boolean)
+IS_ETHNIC_MIN: "Is the young person from an ethnic minority background?" (Boolean)
+IS_PREV_SUSPEND: "Has the young person been previously suspended?" (Boolean)
+PARENT_RISK_AWARE: "Were the family aware of behavioral issues, or the risk of exclusion before it happened?" (Boolean)
+CONTRIB_FACTORS: "If any, what contributing factors does the student have? (E.g., bereavement, relocation, abuse or neglect, mental health needs, bullying, criminal exploitation, significant challenges at home)" (String)
+CHILD_BACKGROUND_SUMMARY: [don't use LLM, write a list of conditional string statements of variables above.]
+
+
+-- About the Process
+# these questions are integrated into the exclusion and young person sections.
+
+## The above questions are derived from documents/interview_form.docx
+
+
+-- Procedure
+STAGE: "Governors" or "Independent Review Panel" (String selection)
+GOVERNOR_PROCEDURE_INFO: If STAGE == "IRP", then ask for procedural info about the governor meeting
+
+
+
+
+
+
+
+
+
+TOTAL_CONTEXT: EXCLUSION_SCHOOL_FACTS_LLM + EXCLUSION_REASON_LLM + EXCLUSION_PARENTS_FACTS_LLM + CHILD_BACKGROUND_SUMMARY
+
+
+-- Knowledge Base (documents/statutory_guidance)
+SUSPENSION_DOC = "suspensions.pdf"
+BEHAVIOUR_DOC = "behaviour_in_schools.pdf"
+SEND_DOC = "send"
+RELEVANT_DOCUMENTS: if IS_SEND: [SUSPENSION_DOC, BEHAVIOUR_DOC, SEND_DOC], else [SUSPENSION_DOC, BEHAVIOUR_DOC]
+
+-- LLM
+Open-source GPT model (gpt-oss-20b), RAG (Knowledge base: RELEVANT_DOCUMENTS)
+
+
+
+
+
+
+
+
+
+######## IDENTIFYING POTENTIAL BREACHES ########
+
+POTENTIAL_BREACHES = []
+
+def evaluate_section():
+
+    if section is significant:
+        if enough information:
+            return "<<SECTION_TITLE>> <<paragraph_section>>: The school may be in breach of ... because ...." (with explicit and comprehensive detail as to why the school may be in breach)
+        else:
+            prompt user for more information
+            evaluate_section()
+
+    return "" # empty response
+
+
+For document in RELEVANT_DOCUMENTS:
+
+    For section in document**:
+        relevant_section = evaluate_section(section, TOTAL_CONTEXT)
+
+        if relevant_heading:
+            POTENTIAL_BREACHES.append(f"{document.title} | {relevant_heading}")
+
+
+** SUSPENSION_DOC: headings ("Part one", etc.); BEHAVIOUR_DOC: subheading; SEND_DOC: ?
+!! Create list of strings of headings for each document
+
+###############################################
+
+
+
+
+
+
+######## GENERATING POSITION STATEMENT ########
+
+POTENTIAL_BREACHES = []
+grounds = load("position_statement_grounds.json")
+
+POTENTIAL_GROUNDS = []
+
+
+def relevant(breach, ground.title):
+    return LLM(is the ground.title relevant to the breach?)
+
+def generate_ground_statement(breach, ground, TOTAL_CONTEXT):
+
+    """ 
+    The school may be in breach of this: BREACH.
+    
+    This is a potential ground for this breach: INSERT ENTIRE GROUND
+
+    Here are the total facts and context of this case: TOTAL_CONTEXT
+
+    GENERATE 2–8 PARAGRAPHS OF 1–3 CONCISE AND ACCURATE SENTENCES EACH SUMMARISING THE GROUND OF ARGUMENT 
+    WITH RESPECT TO THE FACTS AND STATUTORY GUIDANCE. FIRST PARAGRAPH SHOULD DIRECTLY QUOTE 
+    VERBATIM FROM THE STATUTORY GUIDANCE USED. EACH PARAGRAPH SHOULD BUILD ON THE PREVIOUS PARAGRPAHS. 
+    MODEL YOUR ANSWER ON SUGGESTED WORDINGS (DEPENDENT IF THE CONDITION IN CONDITIONS APPLIES).
+    DON'T GO TOO BROAD, REMAIN CONCENTRATED ON THE BREACH IDENTIFIED, THE RELEVANT FACTS AND STATUTORY GUIDANCE TO THAT BREACH.
+    """
+
+
+# Match breaches to grounds
+
+For breach in POTENTIAL_BREACHES:
+
+    For ground in grounds:
+
+        if relevant(breach, ground.title):
+
+            POTENTIAL_GROUNDS.append(ground.title)
+
+            ground_statement = generate_ground_statement(breach, ground, TOTAL_CONTEXT)
+
+        else:
+
+            Use stat guidance to come up with ground title
+            Quote the breach from statutory guidance. 
+            Pass EVERY SINGLE suggested wordings in json file to show how it usually looks and ask to "generate 2–8 paragraphs ..." based on that. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###############################################
+
+
+

@@ -1,0 +1,44 @@
+Raoul:
+- Finish position_statement_grounds.json
+- Design position statement template
+
+Edoardo:
+- Implement pipeline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+I want to create a github website. It should be stylish, professional, and almost governmental in design. Sharp edges. The primary function of the website is to provide a client-facing chat bot that guides parents specifically though the UK school exclusion process. The LLM (open-source gpt) should follow a RAG design. The following should be broken up into manageable steps that an AI assistant could help go through, like yourself.
+
+Each stage should be shown above as a progress tracker.
+First, the parents must be asked their preferred language and the bot should then respond in their selection throughout. 
+Then, the "letter of exclusion" should be inputted as a text field (not a document) [be clear that this refers to the letter given by the headteacher]. The parent should be asked if their child is SEND or in the process of being diagnosed for SEND. Ask if the child is from an ethnic minority.
+The parent is prompted to give the school name (they should have the option to skip this step). The LLM should do a web search for any equality policies or equality aims/objectives or similar document and return a list of results from which the parent can confirm which is correct. If a correct result is identified, store all the information from that page. If no correct result is identified, skip this step.
+
+The next section, is the interview form questions. Here, questions about the exclusion, the child, and procedural questions ensue. The procedural question should ask if the parents are at the first stage ("Governers") or the second ("Independent Review Panel"). If the second, request information on the procedure of the governers meeting.
+
+All their information should be stored as variables (CHILD_NAME, PARENT_NAME, EXCLUSION_DATE, EXCLUSION_LETTER_DATE, etc.). Then, the LLM should synthesise all of their information into string variables for FACTS (facts of the case), EXCLUSION_REASON (as given by the headteacher), PARENTS_VERSION_OF_EVENTS. These should be stored as variables for later on.
+
+Using its knowledge base (which includes all documents stored in "documents" folder and the school's equality policies, if found, and conditionally include the SEND code of practice document if child is SEND) it should do the following:  based on FACTS, EXCLUSION_REASON, and PARENTS_VERSION_OF_EVENTS, go through each statutory guidance (SUSPENSION_DOC [most important], BEHAVIOUR_DOC,and SEND_DOC if relevant) and identify where the school has potentially not followed the statutory guidance (store as list of only the most significant and relevant parts of the statutory guidance they violate, e.g.,  POTENTIAL_BREACHES = ["Part 3: The school are in violation of .... because ...", "Page/Section 5: ...." etc.]. Record the list of statutory guidance documents used as this will be needed later.
+
+VERY IMPORTANT: If more information is needed due to uncertainty or for the LLM to make up its mind, ask the parent for more information.
+
+
+The final step is to generate a position statement. The layout is already configured in position statement template.docx. When it comes to writing the grounds, go through each of the "title" fields in the proposal_details.json and adjudicate which ones are relevant based on POTENTIAL_BREACHES. For each relevant title, fill out the preceeding lines in that json element. Under suggested wordings, there is a conditions field with multiple conditions. Check if the conditions apply first and then proceed with those suggested wordings. Print out the ground titles and relevant subsequent information (relevant_guidance, relevant_excerpts, and suggested wordings).
+
+If no titles are relevant, then generate your own ground title and wording (using the json file as a template and guide for language).
