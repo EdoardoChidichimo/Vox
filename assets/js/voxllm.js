@@ -134,6 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (questionQueue.length === 0) {
+            // Check if this is because the first question was answered with "No"
+            if (userResponses.existsExclusionLetter === false) {
+                // Conversation should end here, no further action needed
+                return;
+            }
+            
             // All questions answered, provide summary
             provideCaseSummary();
             return;
@@ -145,6 +151,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function buildQuestionQueue() {
         questionQueue = [];
+        
+        // If the first question was answered with "No", don't add any questions
+        if (userResponses.existsExclusionLetter === false) {
+            return;
+        }
         
         // Stage 1: About the Exclusion
         if (userResponses.existsExclusionLetter === null) {
@@ -416,6 +427,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Check if we need to stop the process
                 if (!response) {
                     addMessage('I\'m sorry, but you must receive an exclusion letter first before we can proceed. The letter must outline the reasons for the exclusion and whether it is permanent or fixed-term. Please contact the school to request this letter and then return to continue.', 'bot');
+                    
+                    // Hide the input area and stop the conversation
+                    chatInputArea.style.display = 'none';
+                    
+                    // Clear the question queue to prevent further questions
+                    questionQueue = [];
+                    currentQuestion = null;
+                    
                     return;
                 }
                 break;
