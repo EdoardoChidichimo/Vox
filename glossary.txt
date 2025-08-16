@@ -25,6 +25,7 @@ EXCLUSION_PARENTS_FACTS_LLM: synthesise(EXCLUSION_SCHOOL_FACTS_CONFIRM, EXCLUSIO
 
 -- About the Young Person
 IS_SEND: "Does the young person have SEND?" (Boolean)
+-> !!!! IS_SEND_FORM: If IS_SEND: "What needs does the child have and how do they manifest?"
 IS_SEND_SCHOOL_AWARE: If IS_SEND: "Is the school aware of this SEND?" (Boolean)
 SEND_SCHOOL_ADDRESS: If IS_SEND: "If any, what steps have the school taken to address this SEND?" (String)
 SEND_WHO_SUPPORT: If IS_SEND: "Are any clinicians, pastoral workers or professionals working to support the young person with their SEND?" (Select NA or enter text)

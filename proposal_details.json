@@ -139,6 +139,77 @@
         "content": "Where a school has concerns about the behaviour, or risk of suspension and permanent exclusion, of a pupil with SEN, a disability or an EHC plan it should, in partnership with others (including where relevant, the local authority), consider what additional support or alternative placement may be required. This should involve assessing the suitability of provision for a pupil's SEN or disability.",
         "reference": "Paragraph 56, <<SUSPENSION_DOC>>"
       },
+      {
+        "content": "Schools must also ensure that any provision, criterion, or practice does not discriminate against pupils by unfairly increasing their risk of exclusion. For example, if reasonable adjustments have not been made for a pupil with a disability that can manifest itself in breaches of school rules if needs are not met, a decision to exclude may be discriminatory.",
+        "reference": "Duties under the Equality Act 2010 and Children and Families Act 2014, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "The governing board must also comply with their statutory duties in relation to pupils with SEN when administering the exclusion process, including (in the case of the governing board of relevant settings) using their 'best endeavours' to ensure the appropriate special educational provision is made for pupils with SEN and (for all settings) having regard to the Special Educational Need and Disability (SEND) Code of Practice.",
+        "reference": "Duties under the Equality Act 2010 and Children and Families Act 2014, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "Some behaviours are more likely be associated with particular types of SEND, such as a pupil with speech, language and communication needs who may not understand a verbal instruction. Behaviour will often need to be considered in relation to a pupil's SEND, although it does not follow that every incident of misbehaviour will be connected to their SEND.",
+        "reference": "Page 13, <<BEHAVIOUR_DOC>>"
+      },
+      {
+        "content": "Schools need to manage pupil behaviour effectively, whether or not the pupil has underlying needs. When a pupil is identified as having SEND, the graduated approach should be used to assess, plan, deliver and then review the impact of the support being provided.",
+        "reference": "Page 14, <<BEHAVIOUR_DOC>>"
+      },
+      {
+        "content": "When considering excluding a pupil, schools should consider any contributing factors that are identified after an incident of poor behaviour has occurred, which could include where the pupil has mental health problems.",
+        "reference": "Paragraph 3.15, Mental health and behaviour in schools"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "": [
+          "<<CHILD_NAME>> has special educational needs which exhibit themselves as <<RELEVANT BEHAVIOURS>>.",
+          "The school was aware of this yet failed to take effective action to mitigate the risk of exclusion, and help <<CHILD_NAME>> to engage effectively with their education.",
+          "The exclusion has not been used as a last resort and we ask the Governors now to reinstate <<CHILD_NAME>>."
+        ]
+      }
+    }
+  }
+  {
+    "title": "The breach was not serious enough or not in a pattern of persistent breaches",
+    "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
+    "relevant_excerpts": [
+      {
+        "content": "A permanent exclusion is when a pupil is no longer allowed to attend a school (unless the pupil is reinstated). The decision to exclude a pupil permanently should only be taken: \n in response to a serious breach or persistent breaches of the school's behaviour policy; and \n where allowing the pupil to remain in school would seriously harm the education or welfare of the pupil or others such as staff or pupils in the school.",
+        "reference": "Paragraph 11, <<SUSPENSION_DOC>>"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "If the EXCLUSION_REASON_LLM was for a serious breach": [
+          "<<CHILD_NAME>> has been permanently excluded for <<EXCLUSION_REASON_LLM>>. We do not seek to suggest that this is not a breach of the school's behaviour policy, or that some action from the school would not be appropriate.",
+          "However, the first limb of paragraph 11 sets a high bar for severity to represent the hugely significant impact that permanent exclusion will have on <<CHILD_NAME>>. The school must, to satisfy this limb, be able to show that the incident was so severe that no other disciplinary, pastoral or welfare response would be appropriate.",
+          "The allegation against <<CHILD_NAME>> does not meet this high threshold. It is a misdemeanour which can be satisfactorily addressed whilst keeping them in school.",
+          "Therefore, it is submitted that the school has failed to satisfy the first limb of the test at paragraph 11 and <<CHILD_NAME>> should be reinstated with immediate effect."
+        ],
+        "If the EXCLUSION_REASON_LLM was for persistent breaches but they were not serious enough": [
+          "CHILD_NAME has been permanently excluded for persistent disruptive behaviour. We do not seek to suggest that there have been no breaches of the school's behaviour policy or that some action from the school would be appropriate.",
+          "However, the first limb of the test at paragraph 11 requires a sustained pattern of behaviour which is significant enough to warrant the most severe sanction a school can employ, and to be proportionate to the significant impact this will have on CHILD_NAME.",
+          "These incidents do not meet the high threshold required to justify a permanent exclusion.",
+          "We therefore submit to the governors that the headteacher has not met the first part of the test outlined in paragraph 11 and has thus acted beyond their lawful powers. The governors should, therefore, rescind the exclusion immediately."
+        ],
+        "If the EXCLUSION_REASON_LLM was for persistent breaches but they were not persistent": [
+          "<<CHILD_NAME>> has been permanently excluded for <<EXCLUSION_REASON_LLM>>. We do not seek to suggest that this is not a breach of the school's behaviour policy, or that some action from the school would not be appropriate.",
+          "However, the first limb of paragraph 11 sets a high bar for severity to represent the hugely significant impact that permanent exclusion will have on <<CHILD_NAME>>. The school must, to satisfy this limb, be able to show that the incident was so severe that no other disciplinary, pastoral or welfare response would be appropriate.",
+          "These incidents do not meet the threshold. At their most serious, they are misdemeanours which can be satisfactorily addressed whilst keeping CHILD_NAME in school. They are also not regular, numerous or sustained enough to be described as persistent, they are punctuated by significant periods of positive engagement by CHILD_NAME.",
+          "We therefore submit to the governors that the headteacher has not satisfied the first limb of the test at paragraph 11 and therefore not acted within the scope of their lawful powers. The governors should therefore rescind the permanent exclusion with immediate effect."
+        ]
+      }
+    }
+  },
+  {
+    "title": "Exclusion will have significant impact on the young person",
+    "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
+    "relevant_excerpts": [
+      {
+        "content": "Any decision of a headteacher, including suspension or permanent exclusion, must be made in line with the principles of administrative law, i.e. that it is: lawful (with respect to the legislation relating directly to suspensions and permanent exclusions and a school's wider legal duties); reasonable; fair; and proportionate.",
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
+      }
     ],
     "suggested_wordings": {
       "conditions": {
@@ -152,5 +223,5 @@
         ]
       }
     }
-  }
+  },
 ]
