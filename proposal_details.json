@@ -96,7 +96,59 @@
       "conditions": {
         "": [
           "The school's public sector equality duty mandates that they will advance equality of opportunity between members of different groups with a relevant protected characteristic. This is a positive duty and requires that the school take proactive steps. This requires that the school, in certain circumstances, treat “some persons more favourably than others”.",
-          "This is not a valid reason to exclude a young person as it is not a matter of discipline. It does not relate to a breach of the school's behaviour policy. Therefore, it is not within the headteacher's lawful powers to exclude <<CHILD_NAME>> as a result of this incident. Excluding due to a non-disciplinary reason is a form off-rolling and it is unlawful. The headteacher has therefore acted outside the scope of their lawful power and we ask the governors to reinstate <<CHILD_NAME>> with immediate effect."
+        ]
+        // IF AFTER BOT RESEARCHES SCHOOL EQUALITY POLICY IT FINDS SOMETHING THEN MENTION HERE
+      }
+    }
+  },
+  {
+    "title": "Exclusion will have significant impact on the young person",
+    "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
+    "relevant_excerpts": [
+      {
+        "content": "Any decision of a headteacher, including suspension or permanent exclusion, must be made in line with the principles of administrative law, i.e. that it is: lawful (with respect to the legislation relating directly to suspensions and permanent exclusions and a school's wider legal duties); reasonable; fair; and proportionate.",
+        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "": [
+          "To uphold the exclusion, the governing board must satisfy themselves that the exclusion will not have a disproportionate impact on <<CHILD_NAME>>; that is to say, that the benefits of the exclusion are not outweighed by the harm that it will do to them.",
+          "We submit that the impact on <<CHILD_NAME>> will be fundamental and profound, with consequences that will likely affect them for many years to come. It is well understood that exclusion has broad and lasting effects. Specifically, an exclusion:",
+          " - Makes a young person more vulnerable to criminal gangs, with the Home Office, Children's Commissioner, Ofsted and Children's Society identifying that children out of mainstream education are more susceptible to being criminally exploited, or becoming involved in violent crime as either victim or perpetrator",
+          " - Severely harms a young person's academic prospects and onward transition into adulthood",
+          " - Undermines a young person's mental health. Children in pupil referral units begin school refusing at an increased rate, and report social isolation as well as feelings of anxiety, frustration and low mood",
+          "Clearly, these are significant impacts that must be factored in when deciding to exclude <<CHILD_NAME>>. The headteacher has failed to show that the exclusion is proportionate, and therefore the governing board should reinstate <<CHILD_NAME>>."
+        ]
+      }
+    }
+  },
+  {
+    "title": "Failure to identify and/or consider SEND",
+    "relevant_guidance": ["<<SUSPENSION_DOC>>", "<<BEHAVIOUR_DOC>>"], 
+    "relevant_excerpts": [
+      {
+        "content": "The Equality Act 2010 requires schools to make reasonable adjustments for disabled pupils. This duty can, in principle, apply both to the suspensions and permanent exclusions process and to the disciplinary sanctions imposed. Under the Children and Families Act 2014, governing boards of relevant settings must use their 'best endeavours' to ensure the appropriate special educational provision is made for pupils with SEN, which will include any support in relation to behaviour management that they need because of their SEN.",
+        "reference": "Paragraph 54, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "Schools should engage proactively with parents in supporting the behaviour of pupils with additional needs.",
+        "reference": "Paragraph 55, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "Where a school has concerns about the behaviour, or risk of suspension and permanent exclusion, of a pupil with SEN, a disability or an EHC plan it should, in partnership with others (including where relevant, the local authority), consider what additional support or alternative placement may be required. This should involve assessing the suitability of provision for a pupil's SEN or disability.",
+        "reference": "Paragraph 56, <<SUSPENSION_DOC>>"
+      },
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "": [
+          "To uphold the exclusion, the governing board must satisfy themselves that the exclusion will not have a disproportionate impact on <<CHILD_NAME>>; that is to say, that the benefits of the exclusion are not outweighed by the harm that it will do to them.",
+          "We submit that the impact on <<CHILD_NAME>> will be fundamental and profound, with consequences that will likely affect them for many years to come. It is well understood that exclusion has broad and lasting effects. Specifically, an exclusion:",
+          " - Makes a young person more vulnerable to criminal gangs, with the Home Office, Children's Commissioner, Ofsted and Children's Society identifying that children out of mainstream education are more susceptible to being criminally exploited, or becoming involved in violent crime as either victim or perpetrator",
+          " - Severely harms a young person's academic prospects and onward transition into adulthood",
+          " - Undermines a young person's mental health. Children in pupil referral units begin school refusing at an increased rate, and report social isolation as well as feelings of anxiety, frustration and low mood",
+          "Clearly, these are significant impacts that must be factored in when deciding to exclude <<CHILD_NAME>>. The headteacher has failed to show that the exclusion is proportionate, and therefore the governing board should reinstate <<CHILD_NAME>>."
         ]
       }
     }
