@@ -81,7 +81,7 @@ console.log('LLM Analysis:', data.llmOutputs.exclusionReasonLLM);
 ## Tuning the System
 
 ### 1. Modify Prompts
-Edit the prompts in `assets/js/llm-api.js`:
+Edit the prompts in `assets/js/llm-prompts.js`:
 - `extractExclusionReason()` method
 - `synthesiseSchoolFacts()` method
 

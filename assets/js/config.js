@@ -1,25 +1,25 @@
 // VoxLLM Configuration File
-// Customise your GPT-OSS settings here
+// Customise your Ollama settings here
 
 const VoxLLMConfig = {
-    // Self-hosted open source model endpoint
-    // This will be your RAG system endpoint
-    defaultApiEndpoint: 'https://your-domain.com/api/llm', // Update this to your actual endpoint
+    // Ollama API endpoint
+    defaultApiEndpoint: 'http://localhost:11434/api/generate',
     
-    // Model identifier for your open source model
-    defaultModel: 'vox-legal-ai',
+    // Model identifier for Ollama
+    defaultModel: 'gpt-oss:20b',
     
-    // Available models on your system
+    // Available models on your Ollama system
     availableModels: [
-        'vox-legal-ai',
-        'vox-legal-ai-fast',
-        'vox-legal-ai-detailed'
+        'gpt-oss:20b',
+        'llama2:13b',
+        'mistral:7b',
+        'codellama:13b'
     ],
     
-    // API call settings
+    // API call settings (Ollama specific)
     apiSettings: {
+        stream: false,           // Disable streaming for consistent responses
         temperature: 0.3,        // Lower for more consistent responses
-        maxTokens: 1000,         // Maximum response length
         topP: 0.9               // Nucleus sampling parameter
     },
     

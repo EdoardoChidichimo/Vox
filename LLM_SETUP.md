@@ -32,7 +32,10 @@ const VoxLLMConfig = {
 };
 ```
 
-### 2. `assets/js/llm-api.js`
+### 2. `assets/js/llm-prompts.js`
+This file contains all the prompts and system messages used by the LLM API. You can easily edit the prompts here without touching the main API logic.
+
+### 3. `assets/js/llm-api.js`
 This file handles all LLM API communication. It's designed to work with standard chat completion APIs.
 
 ## Required API Endpoint
@@ -131,7 +134,7 @@ To add new LLM analysis functions:
 3. Add corresponding UI elements if needed
 
 ### Modifying Prompts
-Edit the system messages and prompts in `llm-api.js` to:
+Edit the system messages and prompts in `llm-prompts.js` to:
 - Adjust the tone and style of responses
 - Include specific legal frameworks
 - Reference particular guidance documents

@@ -1,11 +1,11 @@
 // LLM API Handler for VoxLLM
-// Handles communication with GPT-OSS for case analysis and synthesis
+// Handles communication with Ollama for case analysis and synthesis
 
 class LLMAPI {
     constructor() {
-        // Configuration for self-hosted open source model
-        this.apiEndpoint = VoxLLMConfig.defaultApiEndpoint;
-        this.model = VoxLLMConfig.defaultModel;
+        // Configuration for Ollama API
+        this.apiEndpoint = 'http://localhost:11434/api/generate';
+        this.model = 'gpt-oss:20b';
         
         // Store API responses for debugging and reference
         this.apiResponses = [];
@@ -20,69 +20,124 @@ class LLMAPI {
     }
     
     /**
-     * Make a call to the LLM API
+     * Make a call to the Ollama API
      * @param {string} prompt - The prompt to send to the LLM
      * @param {string} systemMessage - Optional system message
      * @returns {Promise<string>} - The LLM response
      */
     async callLLM(prompt, systemMessage = null) {
-        const messages = [];
+        console.log('🔍 LLM API call initiated');
+        console.log('Model:', this.model);
+        console.log('Endpoint:', this.apiEndpoint);
+        console.log('Prompt length:', prompt.length);
+        console.log('System message:', systemMessage);
         
-        // Add system message if provided
+        // Combine system message and user prompt if system message is provided
+        let fullPrompt = prompt;
         if (systemMessage) {
-            messages.push({
-                role: 'system',
-                content: systemMessage
-            });
+            fullPrompt = `${systemMessage}\n\n${prompt}`;
         }
-        
-        // Add user message
-        messages.push({
-            role: 'user',
-            content: prompt
-        });
         
         const requestBody = {
             model: this.model,
-            messages: messages,
-            temperature: VoxLLMConfig.apiSettings.temperature,
-            max_tokens: VoxLLMConfig.apiSettings.maxTokens,
-            top_p: VoxLLMConfig.apiSettings.topP
+            prompt: fullPrompt,
+            stream: false
         };
         
+        console.log('Request body:', requestBody);
+        console.log('Full prompt length:', fullPrompt.length);
+        
         try {
+            console.log('📡 Sending request to Ollama API...');
             const response = await fetch(this.apiEndpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                    // No API key required for self-hosted system
                 },
                 body: JSON.stringify(requestBody)
             });
+            
+            console.log('📥 Response received:', response);
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
             
             if (!response.ok) {
                 throw new Error(`API call failed: ${response.status} ${response.statusText}`);
             }
             
             const data = await response.json();
-            const llmResponse = data.choices[0].message.content;
+            console.log('📋 Response data:', data);
+            const llmResponse = data.response;
             
             // Store the response for debugging
             this.apiResponses.push({
                 timestamp: new Date().toISOString(),
-                prompt: prompt,
+                prompt: fullPrompt,
                 response: llmResponse,
                 model: this.model
             });
             
+            console.log('✅ Ollama API response:', llmResponse);
+            console.log('📊 Total API responses stored:', this.apiResponses.length);
             return llmResponse;
             
         } catch (error) {
-            console.error('LLM API call failed:', error);
+            console.error('❌ Ollama API call failed:', error);
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack,
+                endpoint: this.apiEndpoint,
+                model: this.model
+            });
             throw error;
         }
     }
     
+    /**
+     * Test the connection to Ollama API
+     * @returns {Promise<boolean>} - True if connection successful
+     */
+    async testConnection() {
+        console.log('🧪 Testing Ollama API connection...');
+        try {
+            const testPrompt = LLMPrompts.testPrompts.connectionTest.prompt;
+            const response = await this.callLLM(testPrompt, LLMPrompts.testPrompts.connectionTest.systemMessage);
+            console.log('✅ Connection test successful:', response);
+            return true;
+        } catch (error) {
+            console.error('❌ Connection test failed:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Check if Ollama service is accessible
+     * @returns {Promise<boolean>} - True if service is accessible
+     */
+    async checkServiceStatus() {
+        console.log('🔍 Checking Ollama service status...');
+        try {
+            const response = await fetch('http://localhost:11434/api/tags', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ Ollama service is accessible. Available models:', data);
+                return true;
+            } else {
+                console.log('❌ Ollama service responded with status:', response.status);
+                return false;
+            }
+        } catch (error) {
+            console.error('❌ Ollama service check failed:', error);
+            return false;
+        }
+    }
+
     /**
      * Synthesise school facts from multiple sources
      * @param {string} exclusionLetter - Content of the exclusion letter
@@ -91,26 +146,12 @@ class LLMAPI {
      * @returns {Promise<string>} - Synthesised facts
      */
     async synthesiseSchoolFacts(exclusionLetter, schoolFactsInput, schoolEvidenceInput) {
-        const systemMessage = `You are a legal expert specialising in UK school exclusion law. Your role is to synthesise information from multiple sources to create a clear, factual summary of the school's position in an exclusion case. Be objective, accurate, and focus on identifying key facts and evidence.`;
+        const systemMessage = LLMPrompts.systemMessages.schoolFactsSynthesis;
         
-        const prompt = `Please synthesise the following information about a school exclusion case to create a clear summary of the school's position:
-
-EXCLUSION LETTER CONTENT:
-${exclusionLetter}
-
-SCHOOL'S VERSION OF EVENTS (from parent input):
-${schoolFactsInput}
-
-SCHOOL'S EVIDENCE:
-${schoolEvidenceInput}
-
-Please provide a synthesised summary that:
-1. Identifies the key facts presented by the school
-2. Highlights any inconsistencies or gaps in the information
-3. Summarises the evidence provided
-4. Presents the information in a clear, structured format
-
-Focus on factual accuracy and avoid speculation. If there are contradictions between sources, note them clearly.`;
+        const prompt = LLMPrompts.prompts.synthesiseSchoolFacts
+            .replace('{exclusionLetter}', exclusionLetter)
+            .replace('{schoolFactsInput}', schoolFactsInput)
+            .replace('{schoolEvidenceInput}', schoolEvidenceInput);
         
         return await this.callLLM(prompt, systemMessage);
     }
@@ -121,21 +162,10 @@ Focus on factual accuracy and avoid speculation. If there are contradictions bet
      * @returns {Promise<string>} - Extracted exclusion reason
      */
     async extractExclusionReason(exclusionLetter) {
-        const systemMessage = `You are a legal expert specialising in UK school exclusion law. Your role is to extract and clearly state the specific reason(s) given for a school exclusion from official documentation. Be precise and identify all stated reasons.`;
+        const systemMessage = LLMPrompts.systemMessages.exclusionReasonExtraction;
         
-        const prompt = `Please extract the specific reason(s) given for the school exclusion from the following exclusion letter:
-
-EXCLUSION LETTER:
-${exclusionLetter}
-
-Please:
-1. Identify and list all stated reasons for the exclusion
-2. Quote the exact language used in the letter where possible
-3. Categorise the reasons (e.g., behavioural, academic, safety concerns)
-4. Note if the exclusion is permanent or fixed-term
-5. Identify any specific incidents or dates mentioned
-
-Present your response in a clear, structured format.`;
+        const prompt = LLMPrompts.prompts.extractExclusionReason
+            .replace('{exclusionLetter}', exclusionLetter);
         
         return await this.callLLM(prompt, systemMessage);
     }
@@ -149,26 +179,13 @@ Present your response in a clear, structured format.`;
      * @returns {Promise<string>} - Synthesised parents facts
      */
     async synthesiseParentsFacts(schoolFactsConfirm, parentsFactsInput, parentsFactsWitnessesInput, isStudentVoiceHeard) {
-        const systemMessage = `You are a legal expert specialising in UK school exclusion law. Your role is to synthesise information about the student's perspective and whether proper procedures were followed. Focus on identifying potential procedural breaches and the strength of the student's case.`;
+        const systemMessage = LLMPrompts.systemMessages.studentPerspectiveAnalysis;
         
-        const prompt = `Please synthesise the following information about a school exclusion case from the student's perspective:
-
-STUDENT AGREES WITH SCHOOL'S VERSION: ${schoolFactsConfirm ? 'Yes' : 'No'}
-
-STUDENT'S VERSION OF EVENTS: ${parentsFactsInput}
-
-WITNESSES AVAILABLE: ${parentsFactsWitnessesInput ? 'Yes' : 'No'}
-
-STUDENT VOICE HEARD BEFORE EXCLUSION: ${isStudentVoiceHeard ? 'Yes' : 'No'}
-
-Please provide a synthesised analysis that:
-1. Identifies any contradictions between school and student versions
-2. Assesses the strength of the student's position
-3. Highlights potential procedural breaches (especially regarding student voice)
-4. Notes the availability and potential impact of witnesses
-5. Identifies key legal issues that may arise
-
-Present your response in a clear, structured format focusing on legal implications.`;
+        const prompt = LLMPrompts.prompts.synthesiseParentsFacts
+            .replace('{schoolFactsConfirm}', schoolFactsConfirm ? 'Yes' : 'No')
+            .replace('{parentsFactsInput}', parentsFactsInput)
+            .replace('{parentsFactsWitnessesInput}', parentsFactsWitnessesInput ? 'Yes' : 'No')
+            .replace('{isStudentVoiceHeard}', isStudentVoiceHeard ? 'Yes' : 'No');
         
         return await this.callLLM(prompt, systemMessage);
     }

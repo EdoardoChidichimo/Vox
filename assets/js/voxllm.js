@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentQuestion = null;
     let questionQueue = [];
     
+    // Track whether LLM analysis has been completed
+    let llmAnalysisCompleted = false;
+    
     console.log('DOM loaded, elements found:', {
         beginCaseBtn: beginCaseBtn,
         chatbotInterface: chatbotInterface,
@@ -74,6 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
         chatbotInterface.classList.add('active');
         console.log('Added active class, chatbot should now be visible');
         
+        // Test Ollama connection first
+        testOllamaConnection();
+        
         // Start the conversation
         startConversation();
     });
@@ -82,6 +88,29 @@ document.addEventListener('DOMContentLoaded', function() {
     beginCaseBtn.onclick = function() {
         console.log('Button clicked via onclick!');
     };
+    
+    // Test Ollama connection function
+    async function testOllamaConnection() {
+        console.log('🧪 Testing Ollama connection...');
+        try {
+            // First check if the service is accessible
+            const isServiceAccessible = await llmAPI.checkServiceStatus();
+            if (!isServiceAccessible) {
+                console.log('❌ Ollama service is not accessible');
+                return;
+            }
+            
+            // Then test the actual API call
+            const isConnected = await llmAPI.testConnection();
+            if (isConnected) {
+                console.log('✅ Ollama connection successful');
+            } else {
+                console.log('❌ Ollama connection failed');
+            }
+        } catch (error) {
+            console.error('❌ Ollama connection test error:', error);
+        }
+    }
     
     function startConversation() {
         // Clear any existing messages
@@ -113,6 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             governorProcedureInfo: null
         };
         
+        // Reset LLM analysis flag
+        llmAnalysisCompleted = false;
+        
         // Add greeting message
         addMessage('Hello! I\'m VoxLLM, your AI assistant for school exclusion cases. I\'m here to help you understand your situation and guide you through the process.', 'bot');
         
@@ -127,114 +159,184 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 2000);
     }
     
-    function askNextQuestion() {
+    async function askNextQuestion() {
+        console.log('🔍 askNextQuestion called');
+        console.log('Current question queue length:', questionQueue.length);
+        console.log('Current question:', currentQuestion);
+        console.log('Stage 1 complete:', isStage1Complete());
+        console.log('LLM analysis completed:', llmAnalysisCompleted);
+        
         if (questionQueue.length === 0) {
+            console.log('📝 Question queue is empty, building new queue...');
             // Build question queue based on current responses
             buildQuestionQueue();
+            console.log('📝 New question queue length:', questionQueue.length);
         }
         
         if (questionQueue.length === 0) {
+            console.log('📝 Question queue still empty after building');
             // Check if this is because the first question was answered with "No"
             if (userResponses.existsExclusionLetter === false) {
+                console.log('❌ First question answered with "No", ending conversation');
                 // Conversation should end here, no further action needed
                 return;
             }
             
+            // Check if Stage 1 is complete but LLM analysis is not
+            if (isStage1Complete() && !llmAnalysisCompleted) {
+                console.log('✅ Stage 1 complete but LLM analysis not complete - calling provideCaseSummary...');
+                await provideCaseSummary();
+                return;
+            }
+            
+            // Check if Stage 2 is complete but background summary not computed
+            if (llmAnalysisCompleted && isStage2Complete() && !backgroundSummary) {
+                console.log('✅ Stage 2 complete but background summary not computed - calling provideCaseSummary...');
+                console.log('Background summary status:', backgroundSummary);
+                console.log('Stage 2 completion status:', isStage2Complete());
+                await provideCaseSummary();
+                return;
+            }
+            
             // All questions answered, provide summary
-            provideCaseSummary();
+            console.log('✅ All questions answered, calling provideCaseSummary...');
+            await provideCaseSummary();
             return;
         }
         
         currentQuestion = questionQueue.shift();
+        console.log('📝 Asking question:', currentQuestion);
         askQuestion(currentQuestion);
     }
     
     function buildQuestionQueue() {
+        console.log('🔍 buildQuestionQueue called');
+        console.log('Current user responses:', userResponses);
+        console.log('Current LLM outputs:', llmOutputs);
+        console.log('Stage 1 complete:', isStage1Complete());
+        console.log('LLM analysis completed:', llmAnalysisCompleted);
+        
         questionQueue = [];
         
         // If the first question was answered with "No", don't add any questions
         if (userResponses.existsExclusionLetter === false) {
+            console.log('❌ First question answered with "No", no questions added');
             return;
         }
         
         // Stage 1: About the Exclusion
         if (userResponses.existsExclusionLetter === null) {
             questionQueue.push('existsExclusionLetter');
+            console.log('➕ Added existsExclusionLetter to queue');
         }
         
         if (userResponses.existsExclusionLetter === true && userResponses.exclusionLetter === null) {
             questionQueue.push('exclusionLetter');
+            console.log('➕ Added exclusionLetter to queue');
         }
         
         if (userResponses.existsExclusionLetter === true && userResponses.exclusionSchoolFactsInput === null) {
             questionQueue.push('exclusionSchoolFactsInput');
+            console.log('➕ Added exclusionSchoolFactsInput to queue');
         }
         
         if (userResponses.existsExclusionLetter === true && userResponses.exclusionSchoolEvidenceInput === null) {
             questionQueue.push('exclusionSchoolEvidenceInput');
+            console.log('➕ Added exclusionSchoolEvidenceInput to queue');
         }
         
         if (userResponses.existsExclusionLetter === true && userResponses.exclusionSchoolFactsConfirm === null) {
             questionQueue.push('exclusionSchoolFactsConfirm');
+            console.log('➕ Added exclusionSchoolFactsConfirm to queue');
         }
         
         if (userResponses.existsExclusionLetter === true && userResponses.exclusionParentsFactsInput === null) {
             questionQueue.push('exclusionParentsFactsInput');
+            console.log('➕ Added exclusionParentsFactsInput to queue');
         }
         
         if (userResponses.existsExclusionLetter === true && userResponses.exclusionParentsFactsWitnessesInput === null) {
             questionQueue.push('exclusionParentsFactsWitnessesInput');
+            console.log('➕ Added exclusionParentsFactsWitnessesInput to queue');
         }
         
         if (userResponses.existsExclusionLetter === true && userResponses.isStudentVoiceHeard === null) {
             questionQueue.push('isStudentVoiceHeard');
+            console.log('➕ Added isStudentVoiceHeard to queue');
         }
         
-        // Stage 2: About the Young Person (only if Stage 1 is complete)
-        if (isStage1Complete() && userResponses.isSend === null) {
-            questionQueue.push('isSend');
+        // If Stage 1 is complete, we can proceed to Stage 2 questions
+        // BUT only after LLM analysis is completed
+        if (isStage1Complete() && llmAnalysisCompleted) {
+            console.log('✅ Stage 1 complete AND LLM analysis complete, adding Stage 2 questions...');
+            
+            // Stage 2: About the Young Person
+            if (userResponses.isSend === null) {
+                questionQueue.push('isSend');
+                console.log('➕ Added isSend to queue');
+            }
+            
+            if (userResponses.isSend === true && userResponses.isSendSchoolAware === null) {
+                questionQueue.push('isSendSchoolAware');
+                console.log('➕ Added isSendSchoolAware to queue');
+            }
+            
+            if (userResponses.isSend === true && userResponses.isSendSchoolAware === true && userResponses.sendSchoolAddress === null) {
+                questionQueue.push('sendSchoolAddress');
+                console.log('➕ Added sendSchoolAddress to queue');
+            }
+            
+            if (userResponses.isSend === true && userResponses.sendWhoSupport === null) {
+                questionQueue.push('sendWhoSupport');
+                console.log('➕ Added sendWhoSupport to queue');
+            }
+            
+            if (userResponses.isEhcp === null) {
+                questionQueue.push('isEhcp');
+                console.log('➕ Added isEhcp to queue');
+            }
+            
+            if (userResponses.isEthnicMin === null) {
+                questionQueue.push('isEthnicMin');
+                console.log('➕ Added isEthnicMin to queue');
+            }
+            
+            if (userResponses.isPrevSuspend === null) {
+                questionQueue.push('isPrevSuspend');
+                console.log('➕ Added isPrevSuspend to queue');
+            }
+            
+            if (userResponses.parentRiskAware === null) {
+                questionQueue.push('parentRiskAware');
+                console.log('➕ Added parentRiskAware to queue');
+            }
+            
+            if (userResponses.contribFactors === null) {
+                questionQueue.push('contribFactors');
+                console.log('➕ Added contribFactors to queue');
+            }
+        } else if (isStage1Complete() && !llmAnalysisCompleted) {
+            console.log('✅ Stage 1 complete but LLM analysis NOT complete - waiting for analysis...');
+            // Don't add any questions - wait for LLM analysis to complete
         }
         
-        if (isStage1Complete() && userResponses.isSend === true && userResponses.isSendSchoolAware === null) {
-            questionQueue.push('isSendSchoolAware');
-        }
-        
-        if (isStage1Complete() && userResponses.isSend === true && userResponses.isSendSchoolAware === true && userResponses.sendSchoolAddress === null) {
-            questionQueue.push('sendSchoolAddress');
-        }
-        
-        if (isStage1Complete() && userResponses.isSend === true && userResponses.sendWhoSupport === null) {
-            questionQueue.push('sendWhoSupport');
-        }
-        
-        if (isStage1Complete() && userResponses.isEhcp === null) {
-            questionQueue.push('isEhcp');
-        }
-        
-        if (isStage1Complete() && userResponses.isEthnicMin === null) {
-            questionQueue.push('isEthnicMin');
-        }
-        
-        if (isStage1Complete() && userResponses.isPrevSuspend === null) {
-            questionQueue.push('isPrevSuspend');
-        }
-        
-        if (isStage1Complete() && userResponses.parentRiskAware === null) {
-            questionQueue.push('parentRiskAware');
-        }
-        
-        if (isStage1Complete() && userResponses.contribFactors === null) {
-            questionQueue.push('contribFactors');
-        }
-        
-        // Stage 3: About the Procedure (only if Stage 2 is complete)
-        if (isStage2Complete() && userResponses.stage === null) {
+        // Stage 3: About the Procedure (only if Stage 2 is complete AND background summary is computed)
+        if (isStage2Complete() && backgroundSummary && userResponses.stage === null) {
             questionQueue.push('stage');
+            console.log('➕ Added stage to queue (Stage 2 complete and background summary computed)');
         }
         
-        if (isStage2Complete() && userResponses.stage === 'IRP' && userResponses.governorProcedureInfo === null) {
+        if (isStage2Complete() && backgroundSummary && userResponses.stage === 'IRP' && userResponses.governorProcedureInfo === null) {
             questionQueue.push('governorProcedureInfo');
+            console.log('➕ Added governorProcedureInfo to queue (Stage 2 complete and background summary computed)');
         }
+        
+        // Log why Stage 3 questions might not be added
+        if (isStage2Complete() && !backgroundSummary) {
+            console.log('⚠️ Stage 2 complete but background summary not computed - Stage 3 questions not added yet');
+        }
+        
+        console.log('📝 Final question queue:', questionQueue);
     }
     
     // Helper function to check if Stage 1 is complete
@@ -376,6 +478,47 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
+    function addProgressBar(stepName) {
+        const progressDiv = document.createElement('div');
+        progressDiv.className = 'progress-bar-container';
+        progressDiv.innerHTML = `
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">Processing ${stepName}...</div>
+        `;
+        chatMessages.appendChild(progressDiv);
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Animate the progress bar
+        setTimeout(() => {
+            const progressFill = progressDiv.querySelector('.progress-fill');
+            if (progressFill) {
+                progressFill.style.width = '100%';
+            }
+        }, 100);
+        
+        // Return the progress div so it can be removed when the step completes
+        return progressDiv;
+    }
+    
+    // Function to disable user input during analysis
+    function disableUserInput() {
+        chatInputArea.style.display = 'none';
+        chatInputArea.style.pointerEvents = 'none';
+        console.log('🔒 User input disabled during analysis');
+    }
+    
+    // Function to enable user input after analysis
+    function enableUserInput() {
+        chatInputArea.style.pointerEvents = 'auto';
+        console.log('🔓 User input enabled after analysis');
+    }
+    
+
+    
     function showBooleanOptions() {
         chatInputArea.innerHTML = `
             <div class="boolean-options">
@@ -511,6 +654,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1000);
     };
     
+
+    
     // Make handleTextResponse available globally
     window.handleTextResponse = function() {
         const textInput = document.getElementById('textInput');
@@ -566,9 +711,22 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     async function provideCaseSummary() {
+        console.log('🔍 provideCaseSummary called');
+        console.log('Current state:', {
+            isStage1Complete: isStage1Complete(),
+            isStage2Complete: isStage2Complete(),
+            isStage3Complete: isStage3Complete(),
+            llmAnalysisCompleted: llmAnalysisCompleted,
+            llmOutputs: llmOutputs,
+            userResponses: userResponses
+        });
+        
         // Check which stage we're completing
-        if (isStage1Complete() && !isStage2Complete()) {
-            addMessage('Thank you for providing all the information for Stage 1. I\'m now analysing your case...', 'bot');
+        if (isStage1Complete() && !llmAnalysisCompleted) {
+            console.log('✅ Stage 1 complete, starting LLM analysis...');
+
+            // Disable user input during analysis
+            disableUserInput();
             
             // Show progress tracker and update to Stage 2
             const progressTracker = document.getElementById('progressTracker');
@@ -577,89 +735,217 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateProgressTracker(2);
             }
             
-            // Perform Stage 1 LLM analysis
+            // Perform Stage 1 LLM analysis synchronously with progress updates
             if (userResponses.existsExclusionLetter) {
-                setTimeout(async () => {
-                    addMessage('🔄 Analysing Stage 1...', 'bot');
+                try {
+                    console.log('🔄 Starting Stage 1 LLM analysis sequence...');
                     
-                    try {
-                        // Extract exclusion reason and store in variable
-                        const exclusionReason = await llmAPI.extractExclusionReason(userResponses.exclusionLetter);
-                        llmOutputs.exclusionReasonLLM = exclusionReason;
-                        
-                        // Synthesise school facts and store in variable
-                        const synthesisedFacts = await llmAPI.synthesiseSchoolFacts(
-                            userResponses.exclusionLetter,
-                            userResponses.exclusionSchoolFactsInput,
-                            userResponses.exclusionSchoolEvidenceInput
-                        );
-                        llmOutputs.exclusionSchoolFactsLLM = synthesisedFacts;
-                        
-                        // Synthesise parents facts and store in variable
-                        const parentsFactsSynthesis = await llmAPI.synthesiseParentsFacts(
-                            userResponses.exclusionSchoolFactsConfirm,
-                            userResponses.exclusionParentsFactsInput,
-                            userResponses.exclusionParentsFactsWitnessesInput,
-                            userResponses.isStudentVoiceHeard
-                        );
-                        llmOutputs.exclusionParentsFactsLLM = parentsFactsSynthesis;
-                        
-                        addMessage('Stage 1 analysis complete! Now let\'s move to Stage 2: About the Young Person.', 'bot');
-                        
-                        // Add section divider
-                        setTimeout(() => {
-                            addSectionDivider();
-                        }, 1500);
-                        
-                        // Log the stored variables for debugging/tuning
-                        console.log('Stage 1 LLM Outputs stored:', llmOutputs);
-                        console.log('User Responses:', userResponses);
-                        
-                        // Continue to Stage 2
-                        setTimeout(() => {
-                            askNextQuestion();
-                        }, 2000);
-                        
-                    } catch (error) {
-                        console.error('LLM analysis failed:', error);
-                        addMessage('Analysis completed with some issues. Please check the console for details.', 'bot');
-                    }
-                }, 1000);
+                    // Small delay to let user read the initial message
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    console.log('🔄 Calling runStage1LLMAnalysisWithProgress...');
+                    await runStage1LLMAnalysisWithProgress();
+                    console.log('✅ runStage1LLMAnalysisWithProgress completed');
+                    
+                    // Enable user input after analysis
+                    enableUserInput();
+                   
+                    // Add section divider after analysis
+                    setTimeout(() => {
+                        addSectionDivider();
+                    }, 2000);
+                    
+                    // Start Stage 2 questions after analysis with a longer delay
+                    setTimeout(() => {
+                        askNextQuestion();
+                    }, 3000);
+                    
+                } catch (error) {
+                    console.error('❌ Stage 1 analysis failed:', error);
+                    addMessage('There was an error during the analysis. Please try again or contact support.', 'bot');
+                    // Re-enable user input on error
+                    enableUserInput();
+                    return; // Don't continue if analysis failed
+                }
             }
-        } else if (isStage2Complete() && !isStage3Complete()) {
-            addMessage('Thank you for providing all the information for Stage 2. Now let\'s move to Stage 3: About the Procedure.', 'bot');
+        } else if (llmAnalysisCompleted && !isStage2Complete()) {
+            console.log('✅ LLM analysis complete, continuing with Stage 2 questions...');
+            addMessage('Now that the analysis is complete, let\'s continue with Stage 2 questions...', 'bot');
             
             // Add section divider
             setTimeout(() => {
                 addSectionDivider();
             }, 1500);
             
-            // Continue to Stage 3
+            // Continue with Stage 2 questions
             setTimeout(() => {
                 askNextQuestion();
             }, 2000);
             
-        } else if (isStage3Complete()) {
-            addMessage('Thank you for providing all the information for Stage 3. I\'m now analysing your case...', 'bot');
+        } else if (llmAnalysisCompleted && isStage2Complete() && !backgroundSummary) {
+            console.log('✅ Stage 2 complete, computing background summary...');
+            console.log('Background summary status:', backgroundSummary);
+            console.log('Stage 2 completion status:', isStage2Complete());
+            
+            // Disable user input during background summary computation
+            disableUserInput();
+            
+            // Update progress tracker to Stage 3
+            updateProgressTracker(3);
+            
+            try {
+                // Show progress bar for background summary computation
+                const progressBar = addProgressBar('backgroundSummary');
+                
+                // Small delay to let user read the message
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Simulate computation time for better UX
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Compute background summary
+                const summary = computeBackgroundSummary();
+                console.log('✅ Background summary computed:', summary);
+                
+                // Remove the progress bar
+                if (progressBar && progressBar.parentNode) {
+                    progressBar.remove();
+                }
+                
+                // Display the background summary
+                addMessage('**Background Summary:**\n\n' + summary.join('\n'), 'bot');
+                
+                // Enable user input after background summary
+                enableUserInput();
+                
+                // Add section divider after background summary
+                setTimeout(() => {
+                    addSectionDivider();
+                }, 2000);
+                
+                // Continue to Stage 3 automatically
+                setTimeout(() => {
+                    askNextQuestion();
+                }, 3000);
+                
+            } catch (error) {
+                console.error('❌ Background summary computation failed:', error);
+                addMessage('There was an error collating the background summary. Please try again or contact support.', 'bot');
+                // Re-enable user input on error
+                enableUserInput();
+                return; // Don't continue if computation failed
+            }
+            
+        } else if (llmAnalysisCompleted && isStage3Complete()) {
+            console.log('✅ Stage 3 complete, final analysis...');
+            addMessage('Thank you for providing all the information for Stage 3. Your case has been fully processed and analysed.', 'bot');
             
             // Update progress tracker to Stage 4
             updateProgressTracker(4);
-            
-            // Compute background summary
-            computeBackgroundSummary();
-            
-            addMessage('Stage 3 analysis complete! Your case has been processed and analysed.', 'bot');
             
             // Log the stored variables for debugging/tuning
             console.log('Stage 3 completed. Background Summary:', backgroundSummary);
             console.log('All User Responses:', userResponses);
         } else {
+            console.log('❌ No stage complete, cannot proceed');
             addMessage('To proceed with case analysis, you\'ll need to provide an exclusion letter from the school.', 'bot');
+        }
+    }
+    
+    // Function to run Stage 1 LLM analysis synchronously with progress updates
+    async function runStage1LLMAnalysisWithProgress() {
+        console.log('🔄 Starting Stage 1 LLM analysis...');
+    
+        
+        try {
+            // Step 1: Extract exclusion reason
+            const progressBar1 = addProgressBar('extractExclusionReason');
+            
+            const exclusionReason = await llmAPI.extractExclusionReason(userResponses.exclusionLetter);
+            console.log('Exclusion reason extracted:', exclusionReason);
+            llmOutputs.exclusionReasonLLM = exclusionReason;
+            
+            // Remove the progress bar
+            if (progressBar1 && progressBar1.parentNode) {
+                progressBar1.remove();
+            }
+            
+            // Show the result
+            addMessage('**Exclusion Reason Analysis:**\n\n' + exclusionReason, 'bot');
+            
+            // Pause to let user read the result
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Step 2: Synthesise school facts
+            const progressBar2 = addProgressBar('synthesiseSchoolFacts');
+            
+            const synthesisedFacts = await llmAPI.synthesiseSchoolFacts(
+                userResponses.exclusionLetter,
+                userResponses.exclusionSchoolFactsInput,
+                userResponses.exclusionSchoolEvidenceInput
+            );
+            console.log('School facts synthesised:', synthesisedFacts);
+            llmOutputs.exclusionSchoolFactsLLM = synthesisedFacts;
+            
+            // Remove the progress bar
+            if (progressBar2 && progressBar2.parentNode) {
+                progressBar2.remove();
+            }
+            
+            // Show the result
+            addMessage('**School Facts Analysis:**\n\n' + synthesisedFacts, 'bot');
+            
+            // Pause to let user read the result
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Step 3: Synthesise parents facts
+            const progressBar3 = addProgressBar('synthesiseParentsFacts');
+            
+            const parentsFactsSynthesis = await llmAPI.synthesiseParentsFacts(
+                userResponses.exclusionSchoolFactsConfirm,
+                userResponses.exclusionParentsFactsInput,
+                userResponses.exclusionParentsFactsWitnessesInput,
+                userResponses.isStudentVoiceHeard
+            );
+            console.log('Parents facts synthesised:', parentsFactsSynthesis);
+            llmOutputs.exclusionParentsFactsLLM = parentsFactsSynthesis;
+            
+            // Remove the progress bar
+            if (progressBar3 && progressBar3.parentNode) {
+                progressBar3.remove();
+            }
+            
+            // Show the result
+            addMessage('**Student Perspective Analysis:**\n\n' + parentsFactsSynthesis, 'bot');
+            
+            // Pause to let user read the final result
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            console.log('✅ Stage 1 LLM analysis complete');
+            console.log('Stage 1 LLM Outputs stored:', llmOutputs);
+            
+            // Mark LLM analysis as completed
+            llmAnalysisCompleted = true;
+            console.log('✅ LLM analysis marked as completed');
+            
+        } catch (error) {
+            console.error('❌ Stage 1 LLM analysis failed:', error);
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack,
+                llmAPI: llmAPI,
+                userResponses: userResponses
+            });
+            
+            addMessage('**Analysis Error:** ' + error.message + '\n\nPlease check the console for more details.', 'bot');
+            throw error; // Re-throw to handle in calling function
         }
     }
     
     // Helper function to check if Stage 2 is complete
     function isStage2Complete() {
+        // Stage 2 can be complete once all questions are answered
+        // LLM analysis is now completed before Stage 2 begins
         return userResponses.isSend !== null &&
                userResponses.isEhcp !== null &&
                userResponses.isEthnicMin !== null &&
@@ -761,6 +1047,57 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     };
     
+    // Function to manually trigger LLM analysis for debugging
+    window.triggerLLMAnalysis = async function() {
+        console.log('🔧 Manually triggering LLM analysis...');
+        console.log('Current user responses:', userResponses);
+        
+        if (!userResponses.existsExclusionLetter) {
+            console.log('❌ No exclusion letter available for analysis');
+            addMessage('No exclusion letter available for analysis. Please complete the form first.', 'bot');
+            return;
+        }
+        
+        try {
+            addMessage('Manually triggering Stage 1 analysis...', 'bot');
+            
+            // Use the same synchronous analysis function
+            await runStage1LLMAnalysisWithProgress();
+            
+            addMessage('Manual Stage 1 analysis complete!', 'bot');
+            console.log('Manual analysis completed. LLM Outputs:', llmOutputs);
+            
+        } catch (error) {
+            console.error('❌ Manual LLM analysis failed:', error);
+            addMessage('Manual analysis failed. Please check the console for details.', 'bot');
+        }
+    };
+    
+    // Function to check LLM analysis status
+    window.checkLLMStatus = function() {
+        const status = {
+            exclusionReasonLLM: !!llmOutputs.exclusionReasonLLM,
+            exclusionSchoolFactsLLM: !!llmOutputs.exclusionSchoolFactsLLM,
+            exclusionParentsFactsLLM: !!llmOutputs.exclusionParentsFactsLLM
+        };
+        
+        const completedCount = Object.values(status).filter(Boolean).length;
+        const totalCount = Object.keys(status).length;
+        
+        console.log('📊 LLM Analysis Status:', status);
+        console.log(`Progress: ${completedCount}/${totalCount} analyses complete`);
+        
+        // if (completedCount === totalCount) {
+        //     addMessage('All Stage 1 LLM analysis complete!', 'bot');
+        // } else if (completedCount > 0) {
+        //     addMessage(`Stage 1 LLM analysis in progress: ${completedCount}/${totalCount} complete`, 'bot');
+        // } else {
+        //     addMessage('Stage 1 LLM analysis not yet started', 'bot');
+        // }
+        
+        return status;
+    };
+    
     // Function to close the chatbot
     window.closeChatbot = function() {
         // Hide the chatbot interface
@@ -813,5 +1150,6 @@ document.addEventListener('DOMContentLoaded', function() {
             exclusionParentsFactsLLM: null
         };
         backgroundSummary = null;
+        llmAnalysisCompleted = false;
     };
 });
