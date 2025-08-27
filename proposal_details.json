@@ -169,7 +169,7 @@
         ]
       }
     }
-  }
+  },
   {
     "title": "The breach was not serious enough or not in a pattern of persistent breaches",
     "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
@@ -182,10 +182,10 @@
     "suggested_wordings": {
       "conditions": {
         "If the EXCLUSION_REASON_LLM was for a serious breach": [
-          "<<CHILD_NAME>> has been permanently excluded for <<EXCLUSION_REASON_LLM>>. We do not seek to suggest that this is not a breach of the school's behaviour policy, or that some action from the school would not be appropriate.",
-          "However, the first limb of paragraph 11 sets a high bar for severity to represent the hugely significant impact that permanent exclusion will have on <<CHILD_NAME>>. The school must, to satisfy this limb, be able to show that the incident was so severe that no other disciplinary, pastoral or welfare response would be appropriate.",
-          "The allegation against <<CHILD_NAME>> does not meet this high threshold. It is a misdemeanour which can be satisfactorily addressed whilst keeping them in school.",
-          "Therefore, it is submitted that the school has failed to satisfy the first limb of the test at paragraph 11 and <<CHILD_NAME>> should be reinstated with immediate effect."
+          "CHILD_NAME has been permanently excluded for EXCLUSION_REASON_LLM. We do not seek to suggest that this is not a breach of the school's behaviour policy, or that some action from the school would not be appropriate.",
+          "However, the first limb of paragraph 11 sets a high bar for severity to represent the hugely significant impact that permanent exclusion will have on CHILD_NAME. The school must, to satisfy this limb, be able to show that the incident was so severe that no other disciplinary, pastoral or welfare response would be appropriate.",
+          "The allegation against CHILD_NAME does not meet this high threshold. It is a misdemeanour which can be satisfactorily addressed whilst keeping them in school.",
+          "Therefore, it is submitted that the school has failed to satisfy the first limb of the test at paragraph 11 and CHILD_NAME should be reinstated with immediate effect."
         ],
         "If the EXCLUSION_REASON_LLM was for persistent breaches but they were not serious enough": [
           "CHILD_NAME has been permanently excluded for persistent disruptive behaviour. We do not seek to suggest that there have been no breaches of the school's behaviour policy or that some action from the school would be appropriate.",
@@ -194,8 +194,8 @@
           "We therefore submit to the governors that the headteacher has not met the first part of the test outlined in paragraph 11 and has thus acted beyond their lawful powers. The governors should, therefore, rescind the exclusion immediately."
         ],
         "If the EXCLUSION_REASON_LLM was for persistent breaches but they were not persistent": [
-          "<<CHILD_NAME>> has been permanently excluded for <<EXCLUSION_REASON_LLM>>. We do not seek to suggest that this is not a breach of the school's behaviour policy, or that some action from the school would not be appropriate.",
-          "However, the first limb of paragraph 11 sets a high bar for severity to represent the hugely significant impact that permanent exclusion will have on <<CHILD_NAME>>. The school must, to satisfy this limb, be able to show that the incident was so severe that no other disciplinary, pastoral or welfare response would be appropriate.",
+          "CHILD_NAME has been permanently excluded for EXCLUSION_REASON_LLM. We do not seek to suggest that this is not a breach of the school's behaviour policy, or that some action from the school would not be appropriate.",
+          "However, the first limb of paragraph 11 sets a high bar for severity to represent the hugely significant impact that permanent exclusion will have on CHILD_NAME. The school must, to satisfy this limb, be able to show that the incident was so severe that no other disciplinary, pastoral or welfare response would be appropriate.",
           "These incidents do not meet the threshold. At their most serious, they are misdemeanours which can be satisfactorily addressed whilst keeping CHILD_NAME in school. They are also not regular, numerous or sustained enough to be described as persistent, they are punctuated by significant periods of positive engagement by CHILD_NAME.",
           "We therefore submit to the governors that the headteacher has not satisfied the first limb of the test at paragraph 11 and therefore not acted within the scope of their lawful powers. The governors should therefore rescind the permanent exclusion with immediate effect."
         ]
@@ -203,23 +203,92 @@
     }
   },
   {
-    "title": "Exclusion will have significant impact on the young person",
+    "title": "The headteacher converted/extended the exclusion",
     "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
     "relevant_excerpts": [
       {
-        "content": "Any decision of a headteacher, including suspension or permanent exclusion, must be made in line with the principles of administrative law, i.e. that it is: lawful (with respect to the legislation relating directly to suspensions and permanent exclusions and a school's wider legal duties); reasonable; fair; and proportionate.",
-        "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
+        "content": "The law does not allow for extending a suspension or 'converting' a suspension into a permanent exclusion. In exceptional cases, usually where further evidence has come to light, a further suspension may be issued to begin immediately after the first suspension ends; or a permanent exclusion may be issued to begin immediately after the end of the suspension.",
+        "reference": "Paragraph 10, <<SUSPENSION_DOC>>"
       }
     ],
     "suggested_wordings": {
       "conditions": {
         "": [
-          "To uphold the exclusion, the governing board must satisfy themselves that the exclusion will not have a disproportionate impact on <<CHILD_NAME>>; that is to say, that the benefits of the exclusion are not outweighed by the harm that it will do to them.",
-          "We submit that the impact on <<CHILD_NAME>> will be fundamental and profound, with consequences that will likely affect them for many years to come. It is well understood that exclusion has broad and lasting effects. Specifically, an exclusion:",
-          " - Makes a young person more vulnerable to criminal gangs, with the Home Office, Children's Commissioner, Ofsted and Children's Society identifying that children out of mainstream education are more susceptible to being criminally exploited, or becoming involved in violent crime as either victim or perpetrator",
-          " - Severely harms a young person's academic prospects and onward transition into adulthood",
-          " - Undermines a young person's mental health. Children in pupil referral units begin school refusing at an increased rate, and report social isolation as well as feelings of anxiety, frustration and low mood",
-          "Clearly, these are significant impacts that must be factored in when deciding to exclude <<CHILD_NAME>>. The headteacher has failed to show that the exclusion is proportionate, and therefore the governing board should reinstate <<CHILD_NAME>>."
+          "No new information has come to light to justify the conversion/extension  of the suspension that could not have been discovered before implementing the suspension in the first place. Certainly, there are no “exceptional” circumstances which would justify this action. For clarity, this would require something truly out of the ordinary, and does not allow a school to hold a child off-site with one suspension whilst they investigate the matter.",
+          "Therefore, it is clear that the suspension has been converted/extended, and is therefore unlawful. The governors are asked to reinstate CHILD_NAME with immediate effect."
+        ]
+      }
+    }
+  },
+  {
+    "title": "The headteacher did not give reasons for the exclusion",
+    "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
+    "relevant_excerpts": [
+      {
+        "content": "Whenever a headteacher suspends or permanently excludes a pupil they must, without delay, notify parents or the excluded pupil (if they are 18 years or older) of the period of the suspension or permanent exclusion and the reason(s) for it.",
+        "reference": "Paragraph 63, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "They must also, without delay, after their decision, provide parents with the following information in writing: the reason(s) for the suspension or permanent exclusion.",
+        "reference": "Paragraph 64, <<SUSPENSION_DOC>>"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "": [
+          "The letter does not provide any clarity or detail as to how the headteacher has reached their decision. This is a serious procedural error and has left the family without any way to understand the reasons for the exclusion.",
+          "This procedural flaw undermines the headteacher's decision-making process and makes it inevitable that the process of challenging the exclusion is tilted irrevocably in favour of the school. Therefore, the governing board must conclude that the process has been unfair and reinstate CHILD_NAME with immediate effect."      
+        ]
+      }
+    }
+  },
+  {
+    "title": "The pupil is a looked-after child or a previously looked-after child",
+    "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
+    "relevant_excerpts": [
+      {
+        "content": "For children with a social worker, education is an important protective factor, providing a safe space for children to receive support, be visible to professionals and realise their potential. When children are not in school, they miss the protection and opportunities it can provide, and become more vulnerable to harm. Headteachers should balance this important reality with the need to ensure calm and safe environments for all pupils and staff, so should devise strategies that take both of these aspects into account.",
+        "reference": "Paragraph 58, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "Where a looked-after child (LAC) is likely to be subject to a suspension or permanent exclusion, the Designated Teacher (DT) should contact the local authority's VSH as soon as possible. The VSH, working with the DT and others, should consider what additional assessment and support need to be put in place to help the school address the factors affecting the child's behaviour and reduce the need for suspension or permanent exclusion. Where relevant, the school should also engage with a child's social worker, foster carers, or children's home workers.",
+        "reference": "Paragraph 60, <<SUSPENSION_DOC>>"
+      },
+      {
+         "content": "All looked-after children should have a Personal Education Plan (PEP) which is part of the child's care plan or detention placement plan. 40 This should be reviewed every term and any concerns about the pupil's behaviour should be recorded, as well as how the pupil is being supported to improve their behaviour and reduce the likelihood of exclusion.",
+        "reference": "Paragraph 61, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "Where previously looked-after children face the risk of being suspended or permanently excluded, the school should engage with the child's parents and the school's DT. The school may also seek the advice of the VSH on strategies to support the pupil.",
+       "reference": "Paragraph 62, <<SUSPENSION_DOC>>"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "": [
+          "Looked-after children and previously looked-after children are one of the most vulnerable groups in society. As such, the governors must satisfy themselves that the circumstances around this exclusion are truly exceptional to warrant the permanent exclusion of such a vulnerable young person."
+        ]
+      }
+    }
+  },
+  {
+    "title": "",
+    "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
+    "relevant_excerpts": [
+      {
+        "content": "Whenever a headteacher suspends or permanently excludes a pupil they must, without delay, notify parents or the excluded pupil (if they are 18 years or older) of the period of the suspension or permanent exclusion and the reason(s) for it.",
+        "reference": "Paragraph 63, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "They must also, without delay, after their decision, provide parents with the following information in writing: the reason(s) for the suspension or permanent exclusion.",
+        "reference": "Paragraph 64, <<SUSPENSION_DOC>>"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "": [
+          "The letter does not provide any clarity or detail as to how the headteacher has reached their decision. This is a serious procedural error and has left the family without any way to understand the reasons for the exclusion.",
+          "This procedural flaw undermines the headteacher's decision-making process and makes it inevitable that the process of challenging the exclusion is tilted irrevocably in favour of the school. Therefore, the governing board must conclude that the process has been unfair and reinstate CHILD_NAME with immediate effect."      
         ]
       }
     }
