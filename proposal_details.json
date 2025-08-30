@@ -272,23 +272,79 @@
     }
   },
   {
-    "title": "",
+    "title": "Pupil is a victim of direct discrimination",
     "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
     "relevant_excerpts": [
       {
-        "content": "Whenever a headteacher suspends or permanently excludes a pupil they must, without delay, notify parents or the excluded pupil (if they are 18 years or older) of the period of the suspension or permanent exclusion and the reason(s) for it.",
-        "reference": "Paragraph 63, <<SUSPENSION_DOC>>"
+        "content": "Under the Equality Act 2010 (the Equality Act) and the Equality Act 2010: advice for schools, schools must not discriminate against, harass, or victimise pupils because of their: sex; race; disability; religion or belief; sexual orientation; pregnancy/maternity; or gender reassignment. For disabled children, this includes a duty to make reasonable adjustments to any provision, criterion or practice which puts them at a substantial disadvantage, and the provision of auxiliary aids and services.",
+        "reference": "Part two, <<SUSPENSION_DOC>>"
       },
       {
-        "content": "They must also, without delay, after their decision, provide parents with the following information in writing: the reason(s) for the suspension or permanent exclusion.",
-        "reference": "Paragraph 64, <<SUSPENSION_DOC>>"
+        "content": "Direct discrimination occurs when one person treats another less favourably, because of a protected characteristic, than they treat - or would treat - other people. This describes the most clear-cut and obvious examples of discrimination - for example if a school were to refuse to let a pupil be a prefect because she is a lesbian.",
+        "reference": "Paragraph 1.17, Equality Act 2010: advice for schools"
+      },
+      {
+        "content": "A change for schools in this Act is that there can no longer be justification for direct discrimination in any circumstances. Under the DDA schools could justify some direct discrimination - if was a proportionate means of meeting a legitimate aim. What the change means is that if a school discriminates against a person purely because of his or her disability (even if they are trying to achieve a legitimate aim) then it would be unlawful discrimination as there can be no justification for their actions.",
+        "reference": "Paragraph 4.8, Equality Act 2010: advice for schools"
+      },
+      {
+        "content": "In order for someone to show that he or she has been directly discriminated against, he or she must compare what has happened to him or her to the treatment that a person without his or her protected characteristic is receiving, or would receive. So a gay pupil cannot claim that excluding him for fighting is direct discrimination because of sexual orientation unless he can show that a straight or bisexual pupil would not be excluded for fighting.",
+        "reference": "Paragraph 5.5, Equality and Humans Rights Commission - Technical guidance for schools in England"
+      },
+      {
+        "content": "A pupil does not need to find an actual person with whom to compare his or her treatment, but can rely on a 'hypothetical comparator' if he or she can show that there is evidence that such a person would be treated differently. Constructing a hypothetical comparator may involve considering elements of the treatment of several people whose circumstances are similar to those of the pupil, but not the same. Looking at these elements together, a court may conclude that the pupil was less favourably treated because of a protected characteristic than a hypothetical comparator without that characteristic would have been treated.",
+        "reference": "Paragraph 5.6, Equality and Humans Rights Commission - Technical guidance for schools in England"
       }
     ],
     "suggested_wordings": {
       "conditions": {
-        "": [
-          "The letter does not provide any clarity or detail as to how the headteacher has reached their decision. This is a serious procedural error and has left the family without any way to understand the reasons for the exclusion.",
-          "This procedural flaw undermines the headteacher's decision-making process and makes it inevitable that the process of challenging the exclusion is tilted irrevocably in favour of the school. Therefore, the governing board must conclude that the process has been unfair and reinstate CHILD_NAME with immediate effect."      
+        "Suspected direct discrimination": [
+          "CHILD_NAME is <<PROTECTED CHARACTERISTIC>> which is a protected characteristic.",
+          "The headteacher has been influenced to exclude CHILD_NAME because they are <<PROTECTED CHARACTERISTIC>>.",
+          "This is evidenced in <<PIECE OF EVIDENCE>> which records that <<“QUOTE FROM EVIDENCE”>>.",
+          "This clearly evidences an intent to exclude CHILD_NAME, or at least an unwillingness to mitigate the risk of exclusion, because of CHILD_NAME being <<PROTECTED CHARACTERISTIC>>, a protected characteristic under the Equality Act. We submit that, on the balance of probabilities, a person who did not share this characteristic, where all other circumstances are equal, would not have been excluded.",
+          "Therefore, the exclusion resulted from direct discrimination and CHILD_NAME should be reinstated with immediate effect." 
+        ]
+      }
+    }
+  },
+  {
+    "title": "Pupil is a victim of indirect discrimination",
+    "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
+    "relevant_excerpts": [
+      {
+        "content": "Under the Equality Act 2010 (the Equality Act) and the Equality Act 2010: advice for schools, schools must not discriminate against, harass, or victimise pupils because of their: sex; race; disability; religion or belief; sexual orientation; pregnancy/maternity; or gender reassignment. For disabled children, this includes a duty to make reasonable adjustments to any provision, criterion or practice which puts them at a substantial disadvantage, and the provision of auxiliary aids and services.",
+        "reference": "Part two, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "Schools must also ensure that any provision, criterion, or practice does not discriminate against pupils by unfairly increasing their risk of exclusion. For example, if reasonable adjustments have not been made for a pupil with a disability that can manifest itself in breaches of school rules if needs are not met, a decision to exclude may be discriminatory.",
+        "reference": "Part two, <<SUSPENSION_DOC>>"
+      },
+      {
+        "content": "Indirect discrimination occurs when a “provision, criterion or practice” is applied generally but has the effect of putting people with a particular characteristic at a disadvantage when compared to people without that characteristic. An example might be holding a parents' meeting on a Friday evening, which could make it difficult for observant Jewish parents to attend. It is a defence against a claim of indirect discrimination if it can be shown to be “a proportionate means of achieving a legitimate aim”. This means both that the reason for the rule or practice is legitimate, and that it could not reasonably be achieved in a different way which did not discriminate.",
+        "reference": "Paragraph 1.18, Equality Act 2010: advice for schools"
+      },
+      {
+        "content": "A school must not do something which applies to all pupils but which is more likely to have an adverse effect on disabled pupils only - for example having a rule that all pupils must demonstrate physical fitness levels before being admitted to the school - unless they can show that it is done for a legitimate reason, and is a proportionate way of achieving that legitimate aim.",
+        "reference": "Paragraph 4.9, Equality Act 2010: advice for schools"
+      },
+      {
+        "content": "Indirect discrimination will occur if all of the following four conditions are met. \n A school applies (or would apply) the provision, criterion or practice equally to all relevant pupils, including a particular pupil with a protected characteristic. \n The provision, criterion or practice puts, or would put, pupils sharing a protected characteristic at a particular disadvantage compared to relevant pupils who do not share that characteristic. \n The provision, criteria, practice or rule puts, or would put, the particular pupil at that disadvantage. \n The school cannot show that the provision, criteria or practice is justified as a 'proportionate means of achieving a legitimate aim'.",
+        "reference": "Paragraph 5.25, Equality and Humans Rights Commission - Technical guidance for schools in England"
+      },
+      {
+        "content": "'Disadvantage' is not defined in the Act. It could include denial of an opportunity or choice, deterrence, rejection or exclusion. The courts have found that 'detriment', a similar concept, is something about which a reasonable person would complain - so an unjustified sense of grievance would not amount to a disadvantage. A disadvantage does not have to be quantifiable and the pupil does not have to experience actual loss. It is enough that the pupil can reasonably say that he or she would have preferred to be treated differently.",
+        "reference": "Paragraph 5.21, Equality and Humans Rights Commission - Technical guidance for schools in England"
+      }
+    ],
+    "suggested_wordings": {
+      "conditions": {
+        "Suspected indirect discrimination": [
+          "CHILD_NAME is <<PROTECTED CHARACTERISTIC>> which is a protected characteristic.",
+          "We are not submitting that the school has directly discriminated against young person, but instead that by applying the same policies and practices equally to them, they have been severely disadvantaged as a result of their protected characteristic.",
+          "This submission is best explained by setting out the test at section 19 of the Equality Act as a series of questions and answering each in turn.",
+          "The first question is: has young person been subject to a provision, criterion or practice that would apply to persons who are not protected characteristic?",
+          "Therefore, the exclusion resulted from direct discrimination and CHILD_NAME should be reinstated with immediate effect." 
         ]
       }
     }
