@@ -38,7 +38,7 @@ Please provide a synthesised summary that:
 3. Summarises the evidence provided
 4. Presents the information in a clear, structured format
 
-Focus on factual accuracy and avoid speculation. If there are contradictions between sources, note them clearly. Respond succinctly but without missing any information or detail. Respond ONLY with the summary as a paragraph, no other text or formatting.`,
+Focus on factual accuracy and avoid speculation. If there are contradictions between sources, note them clearly. Do NOT include any legal citations or references to statutes or other legal sources. Respond succinctly but without missing any information or detail. Respond ONLY with the summary as a paragraph, no other text or formatting.`,
 
         extractExclusionReason: `Please extract the specific reason(s) given for the school exclusion from the following exclusion letter:
 
@@ -52,7 +52,7 @@ Please:
 4. Note if the exclusion is permanent or fixed-term
 5. Identify any specific incidents or dates mentioned
 
-Respond succinctly but without missing any information or detail. Respond ONLY with a 1–3 sentence(s) summary, no other text or formatting.`,
+Respond succinctly but without missing any information or detail. Respond ONLY with a 1–3 sentence(s) summary, no other text or formatting. Do NOT include any legal citations or references to statutes or other legal sources.`,
 
         synthesiseParentsFacts: `Please synthesise the following information about a school exclusion case from the student's perspective:
 
@@ -71,7 +71,7 @@ Please provide a synthesised analysis that:
 4. Notes the availability and potential impact of witnesses
 5. Identifies key legal issues that may arise
 
-Respond succinctly but without missing any information or detail. Respond ONLY with the summary as a paragraph, no other text or formatting.`
+Respond succinctly but without missing any information or detail. Do NOT include any legal citations or references to statutes or other legal sources. Respond ONLY with the summary as a paragraph, no other text or formatting.`
     },
 
     // Test prompts
