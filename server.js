@@ -12,8 +12,9 @@ app.use(cors());
 // Serve static files
 app.use(express.static('.'));
 
-// Parse JSON bodies
-app.use(express.json());
+// Parse JSON bodies with increased limit for large documents
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Proxy endpoint for Ollama Cloud API
 app.post('/api/ollama-proxy', async (req, res) => {

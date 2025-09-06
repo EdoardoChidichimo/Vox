@@ -6,6 +6,53 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const llmAPI = new LLMAPI();
     
+    // Make llmAPI globally accessible for console debugging
+    window.llmAPI = llmAPI;
+    
+    // Helper function to set API key from console
+    window.setApiKey = function(apiKey) {
+        if (!apiKey || typeof apiKey !== 'string') {
+            console.error('❌ Please provide a valid API key string');
+            console.log('💡 Usage: setApiKey("your_api_key_here")');
+            return false;
+        }
+        
+        llmAPI.setApiKey(apiKey);
+        console.log('✅ API key set successfully');
+        console.log('🔧 You can now test the connection with: testLLMConnection()');
+        return true;
+    };
+    
+    // Helper function to test LLM connection from console
+    window.testLLMConnection = async function() {
+        console.log('🧪 Testing LLM connection...');
+        try {
+            const success = await llmAPI.testConnection();
+            if (success) {
+                console.log('✅ LLM connection test successful!');
+            } else {
+                console.log('❌ LLM connection test failed');
+            }
+            return success;
+        } catch (error) {
+            console.error('❌ LLM connection test error:', error);
+            return false;
+        }
+    };
+    
+    // Helper function to check current API key status
+    window.checkApiKeyStatus = function() {
+        const currentKey = llmAPI.apiKey;
+        if (currentKey && currentKey.length > 0) {
+            console.log('✅ API key is set (length:', currentKey.length, 'characters)');
+            console.log('🔑 Key preview:', currentKey.substring(0, 10) + '...' + currentKey.substring(currentKey.length - 4));
+        } else {
+            console.log('❌ No API key set');
+            console.log('💡 Set it with: setApiKey("your_api_key_here")');
+        }
+        return !!currentKey;
+    };
+    
     let userResponses = {
         // Stage 1: About the Exclusion
         existsExclusionLetter: null,
@@ -755,9 +802,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
         } else if (llmAnalysisCompleted && isStage3Complete()) {
-            createTotalContext();
-            addMessage('Thank you. Your case is now being processed. I will check all relevant documents and provide you with a detailed report.', 'bot');
-            updateProgressTracker(4); // to stage 4
+            await generateFinalPositionStatement();
         } else {
             console.log('❌ No stage complete, cannot proceed');
             addMessage('To proceed with case analysis, you\'ll need to provide an exclusion letter from the school.', 'bot');
@@ -782,31 +827,31 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Step 2: Synthesise school facts
             const progressBar2 = addProgressBar('Synthesising School Facts');
-            const synthesisedFacts = await llmAPI.synthesiseSchoolFacts(
+            const synthesisedSchoolFacts = await llmAPI.synthesiseSchoolFacts(
                 userResponses.exclusionLetter,
                 userResponses.exclusionSchoolFactsInput,
                 userResponses.exclusionSchoolEvidenceInput
             );
-            llmOutputs.exclusionSchoolFactsLLM = synthesisedFacts;
+            llmOutputs.exclusionSchoolFactsLLM = synthesisedSchoolFacts;
             if (progressBar2 && progressBar2.parentNode) {
                 progressBar2.remove();
             }
-            addMessage('**School Facts Analysis:**\n\n' + synthesisedFacts, 'bot');
+            addMessage('**School Facts Analysis:**\n\n' + synthesisedSchoolFacts, 'bot');
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             // Step 3: Synthesise parents facts
             const progressBar3 = addProgressBar('Synthesising Parents Facts');
-            const parentsFactsSynthesis = await llmAPI.synthesiseParentsFacts(
+            const synthesisedParentsFacts = await llmAPI.synthesiseParentsFacts(
                 userResponses.exclusionSchoolFactsConfirm,
                 userResponses.exclusionParentsFactsInput,
                 userResponses.exclusionParentsFactsWitnessesInput,
                 userResponses.isStudentVoiceHeard
             );
-            llmOutputs.exclusionParentsFactsLLM = parentsFactsSynthesis;
+            llmOutputs.exclusionParentsFactsLLM = synthesisedParentsFacts;
             if (progressBar3 && progressBar3.parentNode) {
                 progressBar3.remove();
             }
-            addMessage('**Student Perspective Analysis:**\n\n' + parentsFactsSynthesis, 'bot');
+            addMessage('**Student Perspective Analysis:**\n\n' + synthesisedParentsFacts, 'bot');
             await new Promise(resolve => setTimeout(resolve, 2000));
             
 
@@ -927,6 +972,71 @@ document.addEventListener('DOMContentLoaded', function() {
         
         totalContext = sections.join('\n\n');
         return totalContext;
+    }
+    
+    async function generateFinalPositionStatement() {
+        console.log('🔄 Starting final position statement generation...');
+        
+        // Disable user input during final processing
+        disableUserInput();
+        
+        // Update progress tracker to Stage 4
+        updateProgressTracker(4);
+        
+        addMessage('Thank you. Your case is now being processed. I will check all relevant documents and provide you with a detailed position statement.', 'bot');
+        
+        try {
+            // Show progress bar for position statement generation
+            const progressBar = addProgressBar('Generating Position Statement');
+            
+            // Small delay to let user read the message
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Load the required documents
+            const suspensionsGuidance = await loadTextFile('/documents/statutory_guidance/suspensions.txt');
+            const behaviourInSchoolsGuidance = await loadTextFile('/documents/statutory_guidance/behaviour_in_schools.txt');
+            const positionStatementGrounds = await loadTextFile('/documents/proposal_details.json');
+            
+            // Generate the position statement
+            const positionStatement = await llmAPI.generatePositionStatement(
+                llmOutputs.exclusionReasonLLM,
+                llmOutputs.exclusionSchoolFactsLLM,
+                llmOutputs.exclusionParentsFactsLLM,
+                backgroundSummary.join('\n'),
+                suspensionsGuidance,
+                behaviourInSchoolsGuidance,
+                positionStatementGrounds
+            );
+            
+            if (progressBar && progressBar.parentNode) {
+                progressBar.remove();
+            }
+            
+            // Display the position statement
+            addMessage('**Position Statement:**\n\n' + positionStatement, 'bot');
+            
+            // Create total context for final summary
+            createTotalContext();
+            
+            console.log('✅ Position statement generated successfully');
+            
+        } catch (error) {
+            console.error('❌ Position statement generation failed:', error);
+            addMessage('There was an error generating the position statement. Please try again or contact support.', 'bot');
+        }
+    }
+    
+    async function loadTextFile(filePath) {
+        try {
+            const response = await fetch(filePath);
+            if (!response.ok) {
+                throw new Error(`Failed to load ${filePath}: ${response.statusText}`);
+            }
+            return await response.text();
+        } catch (error) {
+            console.error(`Error loading ${filePath}:`, error);
+            throw error;
+        }
     }
     
     window.getLLMOutputs = function() {

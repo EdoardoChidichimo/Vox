@@ -31,19 +31,38 @@ class LLMAPI {
             }
         }
         
-        // Try to get from environment variable
-        if (typeof process !== 'undefined' && process.env && process.env.OLLAMA_API_KEY) {
-            return process.env.OLLAMA_API_KEY;
+        // Try to get from environment variable (check both hyphenated and underscore versions)
+        if (typeof process !== 'undefined' && process.env) {
+            // Check for hyphenated version first (OLLAMA-API-KEY)
+            
+            if (process.env['OLLAMA_API_KEY']) {
+                console.log('✅ Found API key in OLLAMA_API_KEY environment variable');
+                return process.env['OLLAMA_API_KEY'];
+            }
+            
+            // Check for underscore version (OLLAMA_API_KEY)
+            if (process.env.OLLAMA_API_KEY) {
+                console.log('✅ Found API key in OLLAMA_API_KEY environment variable');
+                return process.env.OLLAMA_API_KEY;
+            }
         }
         
         // For browser environment, try to get from a global variable
-        if (typeof window !== 'undefined' && window.OLLAMA_API_KEY) {
-            return window.OLLAMA_API_KEY;
+        if (typeof window !== 'undefined') {
+            if (window['OLLAMA-API-KEY']) {
+                console.log('✅ Found API key in window.OLLAMA-API-KEY');
+                return window['OLLAMA-API-KEY'];
+            }
+            if (window.OLLAMA_API_KEY) {
+                console.log('✅ Found API key in window.OLLAMA_API_KEY');
+                return window.OLLAMA_API_KEY;
+            }
         }
         
         // Fallback to a default key (this should be overridden in production)
-        console.warn('⚠️ No API key found in environment variables. Using fallback key.');
-        return 'dbc56a448a8a48d39c6982bf59d5c731.qhdWodXgEf_tLKbJAEwqlgkY';
+        console.warn('⚠️ No API key found in environment variables (OLLAMA-API-KEY or OLLAMA_API_KEY). Using fallback key.');
+        console.log('💡 Make sure to set your API key using: export OLLAMA-API-KEY="your_api_key_here"');
+        return '';
     }
     
     /**
@@ -78,7 +97,7 @@ class LLMAPI {
         console.log('Model:', this.model);
         console.log('Host:', this.host);
         console.log('Prompt length:', prompt.length);
-        console.log('System message:', systemMessage);
+        console.log('System message length:', systemMessage ? systemMessage.length : 0);
         console.log('Temperature:', temperature);
         
         const messages = [];
@@ -105,6 +124,13 @@ class LLMAPI {
                 temperature: temperature
             }
         };
+        
+        // Calculate payload size for monitoring
+        const payloadSize = JSON.stringify(requestBody).length;
+        console.log('📊 Estimated payload size:', payloadSize, 'bytes');
+        if (payloadSize > 100000) {
+            console.warn('⚠️ Large payload detected! Size:', Math.round(payloadSize / 1024), 'KB');
+        }
         
         console.log('Request body:', requestBody);
         
@@ -309,6 +335,96 @@ class LLMAPI {
             .replace('{parentsFactsInput}', parentsFactsInput)
             .replace('{parentsFactsWitnessesInput}', parentsFactsWitnessesInput ? 'Yes' : 'No')
             .replace('{isStudentVoiceHeard}', isStudentVoiceHeard ? 'Yes' : 'No');
+        
+        return await this.callLLM(prompt, systemMessage);
+    }
+    
+    /**
+     * Intelligently chunk large text documents to reduce payload size
+     * @param {string} text - The text to chunk
+     * @param {number} maxLength - Maximum length per chunk (default: 15000 chars)
+     * @returns {string} - Truncated or summarised text
+     */
+    chunkLargeDocument(text, maxLength = 15000) {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        
+        console.log(`📄 Document too large (${text.length} chars), chunking to ${maxLength} chars`);
+        
+        // For structured documents, try to keep important sections
+        const lines = text.split('\n');
+        let result = '';
+        let currentLength = 0;
+        
+        // Prioritise headings and first paragraphs of sections
+        for (const line of lines) {
+            const trimmedLine = line.trim();
+            
+            // Always include headings (markdown style or numbered)
+            if (trimmedLine.startsWith('#') || 
+                trimmedLine.startsWith('##') || 
+                /^\d+\./.test(trimmedLine) ||
+                trimmedLine.toUpperCase() === trimmedLine && trimmedLine.length < 100) {
+                
+                if (currentLength + line.length < maxLength) {
+                    result += line + '\n';
+                    currentLength += line.length + 1;
+                } else {
+                    break;
+                }
+            }
+            // Include content lines until we hit the limit
+            else if (trimmedLine.length > 0) {
+                if (currentLength + line.length < maxLength) {
+                    result += line + '\n';
+                    currentLength += line.length + 1;
+                } else {
+                    break;
+                }
+            }
+        }
+        
+        result += '\n\n[Document truncated to fit payload limits. Original length: ' + text.length + ' characters]';
+        
+        console.log(`📄 Document chunked from ${text.length} to ${result.length} characters`);
+        return result;
+    }
+
+    /**
+     * Generate position statement document
+     * @param {string} exclusionReason - The reason for exclusion
+     * @param {string} synthesisedSchoolFacts - School's synthesised facts
+     * @param {string} synthesisedParentsFacts - Student perspective analysis
+     * @param {string} backgroundSummary - Child background summary
+     * @param {string} suspensionsGuidance - Content from suspensions.txt
+     * @param {string} behaviourInSchoolsGuidance - Content from behaviour_in_schools.txt
+     * @param {string} positionStatementGrounds - JSON content from position_statement_grounds.json
+     * @returns {Promise<string>} - Generated position statement
+     */
+    async generatePositionStatement(exclusionReason, synthesisedSchoolFacts, synthesisedParentsFacts, backgroundSummary, suspensionsGuidance, behaviourInSchoolsGuidance, positionStatementGrounds) {
+        const systemMessage = LLMPrompts.systemMessages.legalExpert;
+        
+        // Chunk large documents to prevent payload size issues
+        const chunkedSuspensionsGuidance = this.chunkLargeDocument(suspensionsGuidance, 20000);
+        const chunkedBehaviourGuidance = this.chunkLargeDocument(behaviourInSchoolsGuidance, 15000);
+        const chunkedPositionGrounds = this.chunkLargeDocument(positionStatementGrounds, 25000);
+        
+        console.log('📊 Document sizes after chunking:');
+        console.log('- Suspensions guidance:', chunkedSuspensionsGuidance.length, 'chars');
+        console.log('- Behaviour guidance:', chunkedBehaviourGuidance.length, 'chars');
+        console.log('- Position grounds:', chunkedPositionGrounds.length, 'chars');
+        console.log('- Total guidance content:', 
+            chunkedSuspensionsGuidance.length + chunkedBehaviourGuidance.length + chunkedPositionGrounds.length, 'chars');
+        
+        const prompt = LLMPrompts.prompts.generatePositionStatement
+            .replace('{exclusionReason}', exclusionReason)
+            .replace('{synthesisedSchoolFacts}', synthesisedSchoolFacts)
+            .replace('{synthesisedParentsFacts}', synthesisedParentsFacts)
+            .replace('{backgroundSummary}', backgroundSummary)
+            .replace('{suspensionsGuidance}', chunkedSuspensionsGuidance)
+            .replace('{behaviourInSchoolsGuidance}', chunkedBehaviourGuidance)
+            .replace('{positionStatementGrounds}', chunkedPositionGrounds);
         
         return await this.callLLM(prompt, systemMessage);
     }
