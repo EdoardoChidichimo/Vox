@@ -95,9 +95,8 @@
     "suggested_wordings": {
       "conditions": {
         "": [
-          "The school's public sector equality duty mandates that they will advance equality of opportunity between members of different groups with a relevant protected characteristic. This is a positive duty and requires that the school take proactive steps. This requires that the school, in certain circumstances, treat “some persons more favourably than others”.",
+          "The school's public sector equality duty mandates that they will advance equality of opportunity between members of different groups with a relevant protected characteristic. This is a positive duty and requires that the school take proactive steps. This requires that the school, in certain circumstances, treat “some persons more favourably than others”."
         ]
-        // IF AFTER BOT RESEARCHES SCHOOL EQUALITY POLICY IT FINDS SOMETHING THEN MENTION HERE
       }
     }
   },
@@ -480,7 +479,7 @@
       {
         "content": "Schools can create environments where positive behaviours are more likely by proactively supporting pupils to behave appropriately. Pupils should be taught explicitly what good behaviour looks like. Some pupils will need additional support to reach the expected standard of behaviour. Where possible, this support should be identified and put in place as soon as possible to avoid misbehaviour occurring in the first place.",
         "reference": "Introduction, <<BEHAVIOUR_DOC>>"
-      }
+      },
       {
         "content": "Schools should adopt a range of initial intervention strategies to help pupils manage their behaviour and to reduce the likelihood of suspension and permanent exclusion. This is achieved by helping pupils understand behavioural expectations and by providing support for pupils who struggle to meet those expectations. Some pupils will need more support than others and this should be provided as proactively as possible. It will often be necessary to deliver this support outside of the classroom, in small groups, or in one-to-one activities.",
         "reference": "Page 27, <<BEHAVIOUR_DOC>>"
@@ -610,11 +609,11 @@
           "Whilst we acknowledge that the school has identified a serious breach of the school's behaviour policy, it is nonetheless submitted that the school has failed to satisfy the second limb of the test at paragraph 11 of the guidance, and that CHILD_NAME would be able to return to the school without seriously harming the education or welfare of themselves or others at the school.",
           "CHILD_NAME can return to school without seriously harming the education or welfare of themselves or others. The incident young person is accused of is isolated and clearly does not reflect their otherwise very positive engagement with their education.",
           "CHILD_NAME has never had a suspension, and never been involved in a similar incident. They have never been involved in any serious breaches of the school's behaviour policy.",
-          "CHILD_NAME deeply regrets their involvement in this incident and understands the school's need to address what happened. However, this does not mean that a permanent exclusion is justified, and it is clear from the behaviour records that CHILD_NAME will not seriously harm the education or welfare of themselves or others if they are allowed to return.  Therefore, the test at paragraph 11 is not satisfied and the governors should reinstate CHILD_NAME with immediate effect.",
+          "CHILD_NAME deeply regrets their involvement in this incident and understands the school's need to address what happened. However, this does not mean that a permanent exclusion is justified, and it is clear from the behaviour records that CHILD_NAME will not seriously harm the education or welfare of themselves or others if they are allowed to return.  Therefore, the test at paragraph 11 is not satisfied and the governors should reinstate CHILD_NAME with immediate effect."
         ],
         "If there were several breaches but they were not serious enough": [
           "CHILD_NAME can return to name of school without seriously harming the education or welfare of themselves or others. Whilst they are accused of a number of breaches of the school's behaviour policy, these breaches are very low level, involving only minor disruption or no disruption to other learners. Whilst we do not suggest they should be ignored entirely; they clearly do not evidence the level of severity required to satisfy the second limb of the test at paragraph 11 of the Exclusions Guidance.",
-          "CHILD_NAME deeply regrets their involvement in these incidents and understands the school's need to address their behaviour. However, this does not mean that a permanent exclusion is justified, and it is clear from the behaviour records that CHILD_NAME will not seriously harm the education or welfare of themselves or others if they are allowed to return. Therefore, the test at paragraph 11 is not satisfied and the governors should reinstate CHILD_NAME with immediate effect.",
+          "CHILD_NAME deeply regrets their involvement in these incidents and understands the school's need to address their behaviour. However, this does not mean that a permanent exclusion is justified, and it is clear from the behaviour records that CHILD_NAME will not seriously harm the education or welfare of themselves or others if they are allowed to return. Therefore, the test at paragraph 11 is not satisfied and the governors should reinstate CHILD_NAME with immediate effect."
         ],
         "If the school did not appreciate relevant contributing factors":  [
           "The school has failed to take appropriate steps to investigate, identify and address unmet needs that is contributing to young person's behaviour.",
@@ -644,5 +643,5 @@
         ]
       }
     }
-  },
+  }
 ]
