@@ -17,6 +17,7 @@ const LLMPrompts = {
         exclusionReasonExtraction: `You are a legal expert specialising in UK school exclusion law. Your role is to extract and clearly state the specific reason(s) given for a school exclusion from official documentation. Be precise and identify all stated reasons.`,
         
         studentPerspectiveAnalysis: `You are a legal expert specialising in UK school exclusion law. Your role is to synthesise information about the student's perspective and whether proper procedures were followed.`
+
     },
 
 
@@ -69,7 +70,7 @@ Please provide a synthesised analysis that:
 Respond succinctly but without missing any information or detail. Do NOT include any legal citations or references to statutes or other legal sources. Respond ONLY with the summary as a paragraph, no other text or formatting.`,
 
         generatePositionStatement: ` # INSTRUCTIONS 
-Generate a position statement document (1–2 pages) using the most relevant grounds of arguments (listed in JSON format below) based on the facts of the case (under Knowledge), and use the two statutory guidance documents attached. From the JSON, pick the most relevant and important titles, from these analyse which conditions apply, and use the suggested wordings to fill out the points (the suggested wordings do not need to be verbatim). If referencing relevant excerpts, quote as much as relevant in quotation marks (from the “content” field) with the reference citation (from the corresponding “reference” field). The list of grounds are not exhaustive and you can apply your own. The structure of the response needs to be 3–4 arguments in the format: [GROUND_TITLE + 3–5 bullet points using suggested wording and guidance]. Unless in the relevant information, replace unknown information with placeholders, do not invent names, dates, or other information. Do not include a document title, header, introduction, summary or concluding overall recommendation, just the numbered grounds of argument (title + bullet points).
+Generate a position statement document (1–2 pages) using the most relevant grounds of arguments (listed in JSON format below) based on the facts of the case (under Knowledge), and use the two statutory guidance documents attached. From the JSON, pick the most relevant and important titles, from these analyse which conditions apply, and use the suggested wordings to fill out the points (the suggested wordings do not need to be verbatim). If referencing relevant excerpts, quote as much as relevant in quotation marks (from the "content" field) with the reference citation (from the corresponding "reference" field). Never use semicolons. The list of grounds are not exhaustive and you can apply your own. The structure of the response needs to be 3–4 arguments in the format: [GROUND_TITLE + 3–5 bullet points using suggested wording and guidance]. Unless in the relevant information, replace unknown information with placeholders, do not invent names, dates, or other information. Do not include a document title, header, introduction, summary, or concluding overall recommendation, just the numbered grounds of argument (title + bullet points).
 
 # KNOWLEDGE
 Exclusion Reason: {exclusionReason}
@@ -86,7 +87,26 @@ Suspensions Guidance: {suspensionsGuidance}
 Behaviour in Schools Guidance: {behaviourInSchoolsGuidance}
 
 # POSITION STATEMENT GROUNDS
-{positionStatementGrounds}`
+{positionStatementGrounds}
+
+# YOUR RESPONSE:`,
+
+        formatPositionStatement: `Please reformat the following position statement into **exactly** this JSON style:
+
+{
+  "groundsTitles": "Grounds Title 1; Grounds Title 2; Grounds Title 3; Grounds Title 4; ...",
+  "groundsReasons": "Ground 1 paragraph 1; Ground 1 paragraph 2; Ground 1 paragraph 3 || Ground 2 paragraph 1; Ground 2 paragraph 2 || Ground 3 paragraph 1; Ground 3 paragraph 2; ..."
+}
+
+Formatting rules:
+- Each ground title in "groundsTitles" must be separated by a single semicolon ';' (no trailing semicolon at the end).
+- Each grounds' reasoning block in "groundsReasons" must be separated by a double pipe '||'.
+- Inside each block, each paragraph/reason must be separated by a single semicolon ';' (again, no trailing semicolon at the end).
+- Do not add or remove grounds or paragraphs — only reformat as required.
+- Preserve the original text of titles and paragraphs exactly, except for trimming leading/trailing whitespace.
+- Where appropriate, replace any placeholders in the position statement (including child name, parent name, school name, stage, exclusion date) with the following LaTeX variables (with backslash before the variable and after if there is a space after it): childName, parentName, schoolName, stage, exclusionDate.
+
+{positionStatement}`
     },
 
     // Test prompts

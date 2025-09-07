@@ -75,12 +75,19 @@ document.addEventListener('DOMContentLoaded', function() {
         contribFactors: null,
         // Stage 3: About the Procedure
         stage: null,
-        governorProcedureInfo: null
+        governorProcedureInfo: null,
+        // Stage 4: Document Details
+        childName: null,
+        parentName: null,
+        schoolName: null,
+        exclusionDate: null
     };
     let llmOutputs = {
         exclusionReasonLLM: null,
         exclusionSchoolFactsLLM: null,
-        exclusionParentsFactsLLM: null
+        exclusionParentsFactsLLM: null,
+        positionStatementRaw: null,
+        positionStatementFormatted: null
     };
     let backgroundSummary = null;
     let totalContext = null;
@@ -164,7 +171,12 @@ document.addEventListener('DOMContentLoaded', function() {
             contribFactors: null,
             // Stage 3: About the Procedure
             stage: null,
-            governorProcedureInfo: null
+            governorProcedureInfo: null,
+            // Stage 4: Document Details
+            childName: null,
+            parentName: null,
+            schoolName: null,
+            exclusionDate: null
         };
         
         // Reset LLM analysis flag
@@ -325,6 +337,28 @@ document.addEventListener('DOMContentLoaded', function() {
             questionQueue.push('governorProcedureInfo');
         }
         
+        // Stage 4: Document Details (only after position statement is generated)
+        if (isStage3Complete() && llmOutputs.positionStatementRaw && !llmOutputs.positionStatementFormatted) {
+            // This will be handled in the final processing, not through question queue
+        } else if (llmOutputs.positionStatementFormatted) {
+            // Add document detail questions if position statement is formatted but details not collected
+            if (userResponses.childName === null) {
+                questionQueue.push('childName');
+            }
+            
+            if (userResponses.parentName === null) {
+                questionQueue.push('parentName');
+            }
+            
+            if (userResponses.schoolName === null) {
+                questionQueue.push('schoolName');
+            }
+            
+            if (userResponses.exclusionDate === null) {
+                questionQueue.push('exclusionDate');
+            }
+        }
+        
     }
     
     function isStage1Complete() {
@@ -420,6 +454,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'governorProcedureInfo':
                 addMessage('Please provide details about any procedural issues during the governor meeting. Were there any concerns about fairness, time limits, or other procedural matters?', 'bot');
+                showTextInput();
+                break;
+            // Stage 4: Document Details
+            case 'childName':
+                // Add Stage 4 header when first Stage 4 question is asked
+                addSectionHeader('— Document Details —', 4);
+                addMessage('What is the child\'s full name?', 'bot');
+                showTextInput();
+                break;
+            case 'parentName':
+                addMessage('What is the parent\'s full name?', 'bot');
+                showTextInput();
+                break;
+            case 'schoolName':
+                addMessage('What is the full name of the school?', 'bot');
+                showTextInput();
+                break;
+            case 'exclusionDate':
+                addMessage('What is the full date of the exclusion? (Please provide in DD/MM/YYYY format)', 'bot');
                 showTextInput();
                 break;
         }
@@ -543,6 +596,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let stage = 1; // Default to stage 1
         if (['isSend', 'isSendSchoolAware', 'sendSchoolAddress', 'sendWhoSupport', 'isEhcp', 'isEthnicMin', 'isPrevSuspend', 'parentRiskAware', 'contribFactors'].includes(currentQuestion)) {
             stage = 2;
+        } else if (['stage', 'governorProcedureInfo'].includes(currentQuestion)) {
+            stage = 3;
+        } else if (['childName', 'parentName', 'schoolName', 'exclusionDate'].includes(currentQuestion)) {
+            stage = 4;
         }
         
         addMessage(responseText, 'user', stage);
@@ -613,6 +670,8 @@ document.addEventListener('DOMContentLoaded', function() {
             stage = 2;
         } else if (['stage', 'governorProcedureInfo'].includes(currentQuestion)) {
             stage = 3;
+        } else if (['childName', 'parentName', 'schoolName', 'exclusionDate'].includes(currentQuestion)) {
+            stage = 4;
         }
         
         addMessage(response, 'user', stage);
@@ -657,6 +716,8 @@ document.addEventListener('DOMContentLoaded', function() {
             stage = 2;
         } else if (['stage', 'governorProcedureInfo'].includes(currentQuestion)) {
             stage = 3;
+        } else if (['childName', 'parentName', 'schoolName', 'exclusionDate'].includes(currentQuestion)) {
+            stage = 4;
         }
         
         addMessage(response, 'user', stage);
@@ -683,6 +744,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'governorProcedureInfo':
                 userResponses.governorProcedureInfo = response;
+                break;
+            case 'childName':
+                userResponses.childName = response;
+                break;
+            case 'parentName':
+                userResponses.parentName = response;
+                break;
+            case 'schoolName':
+                userResponses.schoolName = response;
+                break;
+            case 'exclusionDate':
+                userResponses.exclusionDate = response;
                 break;
         }
         
@@ -801,8 +874,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 return; // Don't continue if computation failed
             }
             
-        } else if (llmAnalysisCompleted && isStage3Complete()) {
+        } else if (llmAnalysisCompleted && isStage3Complete() && !llmOutputs.positionStatementRaw) {
             await generateFinalPositionStatement();
+        } else if (llmOutputs.positionStatementFormatted && isStage4Complete()) {
+            await generateFinalPDF();
         } else {
             console.log('❌ No stage complete, cannot proceed');
             addMessage('To proceed with case analysis, you\'ll need to provide an exclusion letter from the school.', 'bot');
@@ -892,6 +967,13 @@ document.addEventListener('DOMContentLoaded', function() {
             return userResponses.governorProcedureInfo !== null;
         }
         return userResponses.stage !== null; // For 'Governors' stage, only need the stage selection
+    }
+    
+    function isStage4Complete() {
+        return userResponses.childName !== null &&
+               userResponses.parentName !== null &&
+               userResponses.schoolName !== null &&
+               userResponses.exclusionDate !== null;
     }
     
 
@@ -1012,17 +1094,152 @@ document.addEventListener('DOMContentLoaded', function() {
                 progressBar.remove();
             }
             
+            // Store the raw position statement
+            llmOutputs.positionStatementRaw = positionStatement;
+            
             // Display the position statement
             addMessage('**Position Statement:**\n\n' + positionStatement, 'bot');
             
-            // Create total context for final summary
-            createTotalContext();
+            // Now format the position statement
+            await formatAndContinueToDocumentDetails(positionStatement);
             
             console.log('✅ Position statement generated successfully');
             
         } catch (error) {
             console.error('❌ Position statement generation failed:', error);
             addMessage('There was an error generating the position statement. Please try again or contact support.', 'bot');
+        }
+    }
+    
+    async function formatAndContinueToDocumentDetails(positionStatement) {
+        try {
+            // Show progress bar for formatting
+            const progressBar = addProgressBar('Formatting Position Statement');
+            
+            // Format the position statement
+            const formattedPositionStatement = await llmAPI.formatPositionStatement(positionStatement);
+            llmOutputs.positionStatementFormatted = formattedPositionStatement;
+            
+            if (progressBar && progressBar.parentNode) {
+                progressBar.remove();
+            }
+            
+            addMessage('Position statement has been formatted for document generation.', 'bot');
+            
+            // Enable user input for document details collection
+            enableUserInput();
+            
+            // Add section divider
+            setTimeout(() => {
+                addSectionDivider();
+            }, 1500);
+            
+            // Continue to document details questions
+            setTimeout(() => {
+                askNextQuestion();
+            }, 2000);
+            
+        } catch (error) {
+            console.error('❌ Position statement formatting failed:', error);
+            addMessage('There was an error formatting the position statement. Please try again or contact support.', 'bot');
+            enableUserInput();
+        }
+    }
+    
+    async function generateFinalPDF() {
+        console.log('🔄 Starting final PDF generation...');
+        
+        // Disable user input during final processing
+        disableUserInput();
+        
+        addMessage('Thank you for providing all the necessary information. I am now generating your final position statement document as a PDF.', 'bot');
+        
+        try {
+            // Show progress bar for PDF generation
+            const progressBar = addProgressBar('Generating PDF Document');
+            
+            // Parse the formatted position statement
+            const formattedData = JSON.parse(llmOutputs.positionStatementFormatted);
+            
+            // Prepare data for LaTeX template
+            const latexData = {
+                childName: userResponses.childName,
+                parentName: userResponses.parentName,
+                schoolName: userResponses.schoolName,
+                stage: userResponses.stage === 'IRP' ? 'Independent Review Panel' : 'Governors',
+                exclusionDate: userResponses.exclusionDate,
+                groundsTitles: formattedData.groundsTitles,
+                groundReasons: formattedData.groundsReasons
+            };
+            
+            // Generate PDF using the LaTeX template
+            const pdfBlob = await generatePDFFromLatex(latexData);
+            
+            if (progressBar && progressBar.parentNode) {
+                progressBar.remove();
+            }
+            
+            // Provide download link
+            const downloadUrl = URL.createObjectURL(pdfBlob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = downloadUrl;
+            downloadLink.download = `Position_Statement_${userResponses.childName.replace(/\s+/g, '_')}.pdf`;
+            
+            addMessage('✅ Your position statement PDF has been generated successfully!', 'bot');
+            
+            // Create download button in chat
+            const downloadButton = document.createElement('button');
+            downloadButton.className = 'download-btn';
+            downloadButton.textContent = '📄 Download Position Statement PDF';
+            downloadButton.onclick = () => {
+                downloadLink.click();
+            };
+            
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'download-container';
+            buttonContainer.appendChild(downloadButton);
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message bot-message';
+            messageDiv.appendChild(buttonContainer);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Create total context for final summary
+            createTotalContext();
+            
+            console.log('✅ PDF generated successfully');
+            
+        } catch (error) {
+            console.error('❌ PDF generation failed:', error);
+            addMessage('There was an error generating the PDF. Please try again or contact support.', 'bot');
+            enableUserInput();
+        }
+    }
+    
+    async function generatePDFFromLatex(data) {
+        try {
+            // This function will handle the LaTeX compilation and PDF generation
+            // For now, we'll create a simple implementation that sends the data to a backend service
+            
+            const response = await fetch('/api/generate-pdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`PDF generation failed: ${response.statusText}`);
+            }
+            
+            return await response.blob();
+            
+        } catch (error) {
+            console.error('Error generating PDF from LaTeX:', error);
+            throw error;
         }
     }
     
@@ -1109,12 +1326,19 @@ document.addEventListener('DOMContentLoaded', function() {
             contribFactors: null,
             // Stage 3: About the Procedure
             stage: null,
-            governorProcedureInfo: null
+            governorProcedureInfo: null,
+            // Stage 4: Document Details
+            childName: null,
+            parentName: null,
+            schoolName: null,
+            exclusionDate: null
         };
         llmOutputs = {
             exclusionReasonLLM: null,
             exclusionSchoolFactsLLM: null,
-            exclusionParentsFactsLLM: null
+            exclusionParentsFactsLLM: null,
+            positionStatementRaw: null,
+            positionStatementFormatted: null
         };
         backgroundSummary = null;
         totalContext = null;

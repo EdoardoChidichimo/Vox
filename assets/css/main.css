@@ -5286,6 +5286,103 @@ input, select, textarea {
     font-style: italic;
 }
 
+/* Download Button Styles */
+.download-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.download-btn {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    color: #ffffff !important;
+    border: 2px solid #28a745 !important;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3) !important;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.download-btn:hover {
+    background: linear-gradient(135deg, #218838, #1e7e34) !important;
+    color: #ffffff !important;
+    border-color: #218838 !important;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4) !important;
+    transform: translateY(-2px);
+}
+
+.download-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(40, 167, 69, 0.3) !important;
+}
+
+/* Section Headers and Dividers */
+.section-header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 2rem 0 1rem 0;
+    padding: 0.8rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    color: #495057;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.section-header.stage-1 {
+    border-left: 4px solid #007bff;
+}
+
+.section-header.stage-2 {
+    border-left: 4px solid #28a745;
+}
+
+.section-header.stage-3 {
+    border-left: 4px solid #ffc107;
+}
+
+.section-header.stage-4 {
+    border-left: 4px solid #dc3545;
+}
+
+.section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, #fec000, #f39c12);
+    margin: 2rem 0;
+    border-radius: 1px;
+    opacity: 0.6;
+}
+
+/* Stage-specific message styling */
+.chat-message.stage-1 .message-content {
+    border-left: 3px solid #007bff;
+}
+
+.chat-message.stage-2 .message-content {
+    border-left: 3px solid #28a745;
+}
+
+.chat-message.stage-3 .message-content {
+    border-left: 3px solid #ffc107;
+}
+
+.chat-message.stage-4 .message-content {
+    border-left: 3px solid #dc3545;
+}
+
 /* Responsive adjustments for chatbot */
 @media screen and (max-width: 736px) {
     .chatbot-interface {

@@ -223,8 +223,10 @@ class LLMAPI {
     async testConnection() {
         console.log('🧪 Testing Ollama Cloud API connection...');
         try {
-            const testPrompt = LLMPrompts.testPrompts.connectionTest.prompt;
-            const response = await this.callLLM(testPrompt, LLMPrompts.testPrompts.connectionTest.systemMessage);
+            // Access LLMPrompts from window object in browser environment
+            const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
+            const testPrompt = prompts.testPrompts.connectionTest.prompt;
+            const response = await this.callLLM(testPrompt, prompts.testPrompts.connectionTest.systemMessage);
             console.log('✅ Connection test successful:', response);
             return true;
         } catch (error) {
@@ -295,9 +297,10 @@ class LLMAPI {
      * @returns {Promise<string>} - Synthesised facts
      */
     async synthesiseSchoolFacts(exclusionLetter, schoolFactsInput, schoolEvidenceInput) {
-        const systemMessage = LLMPrompts.systemMessages.schoolFactsSynthesis;
+        const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
+        const systemMessage = prompts.systemMessages.schoolFactsSynthesis;
         
-        const prompt = LLMPrompts.prompts.synthesiseSchoolFacts
+        const prompt = prompts.prompts.synthesiseSchoolFacts
             .replace('{exclusionLetter}', exclusionLetter)
             .replace('{schoolFactsInput}', schoolFactsInput)
             .replace('{schoolEvidenceInput}', schoolEvidenceInput);
@@ -311,9 +314,10 @@ class LLMAPI {
      * @returns {Promise<string>} - Extracted exclusion reason
      */
     async extractExclusionReason(exclusionLetter) {
-        const systemMessage = LLMPrompts.systemMessages.exclusionReasonExtraction;
+        const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
+        const systemMessage = prompts.systemMessages.exclusionReasonExtraction;
         
-        const prompt = LLMPrompts.prompts.extractExclusionReason
+        const prompt = prompts.prompts.extractExclusionReason
             .replace('{exclusionLetter}', exclusionLetter);
         
         return await this.callLLM(prompt, systemMessage);
@@ -328,9 +332,10 @@ class LLMAPI {
      * @returns {Promise<string>} - Synthesised parents facts
      */
     async synthesiseParentsFacts(schoolFactsConfirm, parentsFactsInput, parentsFactsWitnessesInput, isStudentVoiceHeard) {
-        const systemMessage = LLMPrompts.systemMessages.studentPerspectiveAnalysis;
+        const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
+        const systemMessage = prompts.systemMessages.studentPerspectiveAnalysis;
         
-        const prompt = LLMPrompts.prompts.synthesiseParentsFacts
+        const prompt = prompts.prompts.synthesiseParentsFacts
             .replace('{schoolFactsConfirm}', schoolFactsConfirm ? 'Yes' : 'No')
             .replace('{parentsFactsInput}', parentsFactsInput)
             .replace('{parentsFactsWitnessesInput}', parentsFactsWitnessesInput ? 'Yes' : 'No')
@@ -403,7 +408,8 @@ class LLMAPI {
      * @returns {Promise<string>} - Generated position statement
      */
     async generatePositionStatement(exclusionReason, synthesisedSchoolFacts, synthesisedParentsFacts, backgroundSummary, suspensionsGuidance, behaviourInSchoolsGuidance, positionStatementGrounds) {
-        const systemMessage = LLMPrompts.systemMessages.legalExpert;
+        const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
+        const systemMessage = prompts.systemMessages.legalExpert;
         
         // Chunk large documents to prevent payload size issues
         const chunkedSuspensionsGuidance = this.chunkLargeDocument(suspensionsGuidance, 20000);
@@ -417,7 +423,7 @@ class LLMAPI {
         console.log('- Total guidance content:', 
             chunkedSuspensionsGuidance.length + chunkedBehaviourGuidance.length + chunkedPositionGrounds.length, 'chars');
         
-        const prompt = LLMPrompts.prompts.generatePositionStatement
+        const prompt = prompts.prompts.generatePositionStatement
             .replace('{exclusionReason}', exclusionReason)
             .replace('{synthesisedSchoolFacts}', synthesisedSchoolFacts)
             .replace('{synthesisedParentsFacts}', synthesisedParentsFacts)
@@ -425,6 +431,21 @@ class LLMAPI {
             .replace('{suspensionsGuidance}', chunkedSuspensionsGuidance)
             .replace('{behaviourInSchoolsGuidance}', chunkedBehaviourGuidance)
             .replace('{positionStatementGrounds}', chunkedPositionGrounds);
+        
+        return await this.callLLM(prompt, systemMessage);
+    }
+    
+    /**
+     * Format position statement into structured JSON format
+     * @param {string} positionStatement - The raw position statement text
+     * @returns {Promise<string>} - Formatted JSON string
+     */
+    async formatPositionStatement(positionStatement) {
+        const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
+        const systemMessage = prompts.systemMessages.legalExpert;
+        
+        const prompt = prompts.prompts.formatPositionStatement
+            .replace('{positionStatement}', positionStatement);
         
         return await this.callLLM(prompt, systemMessage);
     }
