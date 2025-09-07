@@ -1,15 +1,15 @@
 [
     {
         "title": "Governing board decision unreasonable because it was irrational having considered relevant information",
-        "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
+        "relevant_guidance": ["Exclusion Guidance"], 
         "relevant_excerpts": [
           {
             "content": "Any decision of a headteacher, including suspension or permanent exclusion, must be made in line with the principles of administrative law, i.e. that it is: lawful (with respect to the legislation relating directly to suspensions and permanent exclusions and a school's wider legal duties); reasonable; fair; and proportionate.",
-            "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
+            "reference": "Paragraph 2, Exclusion Guidance"
           },
           {
             "content": "Public law principles underpin good decision making. All decisions of a governing board must be made in accordance with public law. Panels are expected to understand the legislation that is relevant to suspensions and permanent exclusions and the legal principles that apply. Headteachers and governing board members of panels are likely to have first hand experience of the education context that may be relevant to considerations about whether a decision was reasonable in the circumstances.",
-            "reference": "Paragraph 226, <<SUSPENSION_DOC>>"
+            "reference": "Paragraph 226, Exclusion Guidance"
           }
         ],
         "suggested_wordings": {
@@ -30,15 +30,15 @@
     },    
     {
         "title": "Governing board hearing unfair (arrangements)",
-        "relevant_guidance": ["<<SUSPENSION_DOC>>"], 
+        "relevant_guidance": ["Exclusion Guidance"], 
         "relevant_excerpts": [
           {
             "content": "Any decision of a headteacher, including suspension or permanent exclusion, must be made in line with the principles of administrative law, i.e. that it is: lawful (with respect to the legislation relating directly to suspensions and permanent exclusions and a school's wider legal duties); reasonable; fair; and proportionate.",
-            "reference": "Paragraph 2, <<SUSPENSION_DOC>>"
+            "reference": "Paragraph 2, Exclusion Guidance"
           },
           {
             "content": "Public law principles underpin good decision making. All decisions of a governing board must be made in accordance with public law. Panels are expected to understand the legislation that is relevant to suspensions and permanent exclusions and the legal principles that apply. Headteachers and governing board members of panels are likely to have first hand experience of the education context that may be relevant to considerations about whether a decision was reasonable in the circumstances.",
-            "reference": "Paragraph 226, <<SUSPENSION_DOC>>"
+            "reference": "Paragraph 226, Exclusion Guidance"
           }
         ],
         "suggested_wordings": {
@@ -56,5 +56,5 @@
             ]
           }
         }
-    },    
+    }
 ]

@@ -1077,7 +1077,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Load the required documents
             const suspensionsGuidance = await loadTextFile('/documents/statutory_guidance/suspensions.txt');
             const behaviourInSchoolsGuidance = await loadTextFile('/documents/statutory_guidance/behaviour_in_schools.txt');
-            const positionStatementGrounds = await loadTextFile('/documents/proposal_details.json');
+            
+            let positionStatementGrounds;
+            if (userResponses.stage === 'Governors') {
+                positionStatementGrounds = await loadTextFile('/documents/governors_panel_arguments.json');
+            } else {
+                positionStatementGrounds = await loadTextFile('/documents/irp_arguments.json');
+            }
             
             // Generate the position statement
             const positionStatement = await llmAPI.generatePositionStatement(
