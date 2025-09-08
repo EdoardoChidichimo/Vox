@@ -1165,7 +1165,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const progressBar = addProgressBar('Generating PDF Document');
             
             // Parse the formatted position statement
-            const formattedData = JSON.parse(llmOutputs.positionStatementFormatted);
+            console.log('🔍 Debugging positionStatementFormatted:', llmOutputs.positionStatementFormatted);
+            if (!llmOutputs.positionStatementFormatted) {
+                throw new Error('Position statement formatted data is missing');
+            }
+            
+            let formattedData;
+            try {
+                formattedData = JSON.parse(llmOutputs.positionStatementFormatted);
+            } catch (parseError) {
+                console.error('❌ JSON parse error:', parseError);
+                console.error('❌ Raw data:', llmOutputs.positionStatementFormatted);
+                throw new Error('Failed to parse position statement data: ' + parseError.message);
+            }
             
             // Prepare data for LaTeX template
             const latexData = {
@@ -1229,6 +1241,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // This function will handle the LaTeX compilation and PDF generation
             // For now, we'll create a simple implementation that sends the data to a backend service
             
+            console.log('📤 Sending PDF generation request with data:', data);
+            
             const response = await fetch('/api/generate-pdf', {
                 method: 'POST',
                 headers: {
@@ -1237,8 +1251,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(data)
             });
             
+            console.log('📥 PDF generation response status:', response.status);
+            console.log('📥 PDF generation response headers:', response.headers);
+            
             if (!response.ok) {
-                throw new Error(`PDF generation failed: ${response.statusText}`);
+                const errorText = await response.text();
+                console.error('❌ PDF generation error response:', errorText);
+                throw new Error(`PDF generation failed: ${response.statusText} - ${errorText}`);
             }
             
             return await response.blob();

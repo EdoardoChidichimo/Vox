@@ -153,9 +153,9 @@ app.post('/api/generate-pdf', async (req, res) => {
         await fs.writeFile(texFile, latexContent);
         
         // Copy the logo file to temp directory
-        const logoSrc = path.join(__dirname, 'images', 'vox_logo.png');
+        const logoSrc = path.join(__dirname, 'images', 'vox_transparent.png');
         const imagesDir = path.join(tempDir, 'images');
-        const logoDest = path.join(imagesDir, 'vox_logo.png');
+        const logoDest = path.join(imagesDir, 'vox_transparent.png');
         if (await fs.pathExists(logoSrc)) {
             await fs.ensureDir(imagesDir);
             await fs.copy(logoSrc, logoDest);
