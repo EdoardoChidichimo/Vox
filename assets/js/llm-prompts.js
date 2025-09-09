@@ -70,7 +70,15 @@ Please provide a synthesised analysis that:
 Respond succinctly but without missing any information or detail. Do NOT include any legal citations or references to statutes or other legal sources. Respond ONLY with the summary as a paragraph, no other text or formatting.`,
 
         generatePositionStatement: ` # INSTRUCTIONS 
-Generate a position statement document (2–4 pages) using the most relevant grounds of arguments (listed in JSON format below) based on the facts of the case (under Knowledge), and use the two statutory guidance documents attached. From the JSON, pick the most relevant and important titles, from these analyse which conditions apply, and use the suggested wordings to fill out the points (the suggested wordings do not need to be verbatim and you should NOT reference "suggested wordings" explicitly, but use the relevant references). If referencing relevant excerpts, quote in full in quotation marks (from the "content" field) with the reference citation (from the corresponding "reference" field) in square brackets. NEVER use semicolons. The list of grounds are not exhaustive and you can apply your own. The structure of the response needs to be 3–4 arguments in the format: [GROUND_TITLE + 3–5 bullet points using suggested wording and guidance]. Each bullet point can have multiple sentences in a short paragraph-like structure which consecutively builds upon one another (and remember quotes should be an entire bullet point). Unless in the relevant information, replace unknown information with placeholders, do not invent names, dates, or other information. Do not include a document title, header, introduction, summary, or concluding overall recommendation, just the numbered grounds of argument (title + bullet points).
+Generate a position statement document (2–4 pages) using the most relevant grounds of arguments (listed in JSON format below) based on the facts of the case (under Knowledge), and use the two statutory guidance documents attached. 
+From the JSON, pick the most relevant and important titles, from these analyse which conditions apply, and use the suggested wordings to fill out the points (the suggested wordings do not need to be verbatim and you should NOT reference "suggested wordings" explicitly, but use the relevant references). 
+If referencing relevant excerpts, quote in full in quotation marks (from the "content" field) with the reference citation (from the corresponding "reference" field) in square brackets. Where possible, every reference should follow this format: [Page/Paragraph/Part SPACE Number/NumberRange, DocumentName]. NEVER reference to the suggested wordings as documents themselves, treat them as signposts for references.
+NEVER use semicolons. 
+The list of grounds are not exhaustive and you can apply your own. 
+The structure of the response needs to be 3–4 arguments in the format: [GROUND_TITLE + 3–5 bullet points using suggested wording and guidance]. 
+Each bullet point can have multiple sentences in a short paragraph-like structure which consecutively builds upon one another (and remember quotes should be an entire bullet point). 
+Unless in the knowledge base, replace unknown information with placeholders, do not invent names, dates, or other information. E.g., keep the student name as a clearly demarcatedplaceholder, but fill out relevant behaviours if prompted.
+Do not include a document title, header, introduction, summary, or concluding overall recommendation, just the numbered grounds of argument (title + bullet points).
 
 # KNOWLEDGE
 Exclusion Reason: {exclusionReason}
@@ -105,6 +113,7 @@ Formatting rules:
 - Do not add or remove grounds or paragraphs — only reformat as required.
 - Preserve the original text of titles and paragraphs exactly, except for trimming leading/trailing whitespace.
 - Where appropriate, replace any placeholders in the position statement (including child name, parent name, school name, stage, exclusion date) with the following LaTeX variables (with backslash before the variable and after if there is a space after it): childName, parentName, schoolName, stage, exclusionDate.
+- Remove any bullet point markers like '-', '*', etc.
 
 {positionStatement}`
     },

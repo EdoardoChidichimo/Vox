@@ -5122,6 +5122,7 @@ input, select, textarea {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+/* General user message styling - fallback for messages without stage class */
 .user-message .message-content {
     background: #fec000;
     color: #000000;
@@ -5327,35 +5328,40 @@ input, select, textarea {
     box-shadow: 0 2px 10px rgba(40, 167, 69, 0.3) !important;
 }
 
-/* Section Headers and Dividers */
+/* Section Headers and Dividers - Consolidated styling */
 .section-header {
     text-align: center;
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin: 2rem 0 1rem 0;
-    padding: 0.8rem;
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 1rem 0;
+    padding: 0.5rem;
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
     border: 1px solid #dee2e6;
     border-radius: 8px;
-    color: #495057;
+    color: #1e252d;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
 }
 
+/* Stage-specific section header colours */
 .section-header.stage-1 {
-    border-left: 4px solid #007bff;
+    color: #fec000 !important;
+    border-left: 4px solid #fec000;
 }
 
 .section-header.stage-2 {
-    border-left: 4px solid #28a745;
+    color: #18bfef !important;
+    border-left: 4px solid #18bfef;
 }
 
 .section-header.stage-3 {
-    border-left: 4px solid #ffc107;
+    color: #28a745 !important;
+    border-left: 4px solid #28a745;
 }
 
 .section-header.stage-4 {
-    border-left: 4px solid #dc3545;
+    color: #6f42c1 !important;
+    border-left: 4px solid #6f42c1;
 }
 
 .section-divider {
@@ -5366,20 +5372,20 @@ input, select, textarea {
     opacity: 0.6;
 }
 
-/* Stage-specific message styling */
-.chat-message.stage-1 .message-content {
+/* Stage-specific message styling - only for bot messages to avoid conflicts with user message colours */
+.bot-message.stage-1 .message-content {
     border-left: 3px solid #007bff;
 }
 
-.chat-message.stage-2 .message-content {
+.bot-message.stage-2 .message-content {
     border-left: 3px solid #28a745;
 }
 
-.chat-message.stage-3 .message-content {
+.bot-message.stage-3 .message-content {
     border-left: 3px solid #ffc107;
 }
 
-.chat-message.stage-4 .message-content {
+.bot-message.stage-4 .message-content {
     border-left: 3px solid #dc3545;
 }
 
@@ -5442,33 +5448,6 @@ input, select, textarea {
 }
 
 
-/* Section Header Styles */
-.section-header {
-    color: #1e252d;
-    text-align: center;
-    padding: 0.5rem;
-    margin: 1rem 0;
-    font-weight: 700;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.section-header.stage-1 {
-    color: #fec000;
-}
-
-.section-header.stage-2 {
-    color: #18bfef;
-}
-
-.section-header.stage-3 {
-    color: #28a745;
-}
-
-.section-header.stage-4 {
-    color: #6f42c1;
-}
 
 /* Bot messages remain consistent across all stages */
 .bot-message .message-content {
@@ -5478,28 +5457,28 @@ input, select, textarea {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* User message stage colours */
+/* User message stage colours - these override the general user message styling */
 .user-message.stage-1 .message-content {
-    background: #fec000;
-    color: #000000;
+    background: #fec000 !important;
+    color: #000000 !important;
     border-bottom-right-radius: 0.3rem;
 }
 
 .user-message.stage-2 .message-content {
-    background: #18bfef;
-    color: #ffffff;
+    background: #18bfef !important;
+    color: #ffffff !important;
     border-bottom-right-radius: 0.3rem;
 }
 
 .user-message.stage-3 .message-content {
-    background: #28a745;
-    color: #ffffff;
+    background: #28a745 !important;
+    color: #ffffff !important;
     border-bottom-right-radius: 0.3rem;
 }
 
 .user-message.stage-4 .message-content {
-    background: #6f42c1;
-    color: #ffffff;
+    background: #6f42c1 !important;
+    color: #ffffff !important;
     border-bottom-right-radius: 0.3rem;
 }
 
