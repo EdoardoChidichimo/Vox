@@ -55,24 +55,22 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let userResponses = {
         // Stage 1: About the Exclusion
-        existsExclusionLetter: null,
-        exclusionLetter: null,
-        exclusionSchoolFactsInput: null,
-        exclusionSchoolEvidenceInput: null,
-        exclusionSchoolFactsConfirm: null,
-        exclusionParentsFactsInput: null,
-        exclusionParentsFactsWitnessesInput: null,
-        isStudentVoiceHeard: null,
+        isPermanentlyExcluded: null,
+        exclusionLetterContent: null,
+        schoolVersionEvents: null,
+        schoolEvidence: null,
+        studentAgreesWithSchool: null,
+        studentVersionEvents: null,
+        witnessesDetails: null,
+        studentVoiceHeardDetails: null,
         // Stage 2: About the Young Person
         isSend: null,
-        isSendSchoolAware: null,
-        sendSchoolAddress: null,
-        sendWhoSupport: null,
-        isEhcp: null,
+        sendDetails: null,
+        ehcpDetails: null,
         isEthnicMin: null,
-        isPrevSuspend: null,
-        parentRiskAware: null,
-        contribFactors: null,
+        previousSuspensionsDetails: null,
+        familyAwarenessDetails: null,
+        personalIssuesDetails: null,
         // Stage 3: About the Procedure
         stage: null,
         governorProcedureInfo: null,
@@ -151,24 +149,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset user responses
         userResponses = {
             // Stage 1: About the Exclusion
-            existsExclusionLetter: null,
-            exclusionLetter: null,
-            exclusionSchoolFactsInput: null,
-            exclusionSchoolEvidenceInput: null,
-            exclusionSchoolFactsConfirm: null,
-            exclusionParentsFactsInput: null,
-            exclusionParentsFactsWitnessesInput: null,
-            isStudentVoiceHeard: null,
+            isPermanentlyExcluded: null,
+            exclusionLetterContent: null,
+            schoolVersionEvents: null,
+            schoolEvidence: null,
+            studentAgreesWithSchool: null,
+            studentVersionEvents: null,
+            witnessesDetails: null,
+            studentVoiceHeardDetails: null,
             // Stage 2: About the Young Person
             isSend: null,
-            isSendSchoolAware: null,
-            sendSchoolAddress: null,
-            sendWhoSupport: null,
-            isEhcp: null,
+            sendDetails: null,
+            ehcpDetails: null,
             isEthnicMin: null,
-            isPrevSuspend: null,
-            parentRiskAware: null,
-            contribFactors: null,
+            previousSuspensionsDetails: null,
+            familyAwarenessDetails: null,
+            personalIssuesDetails: null,
             // Stage 3: About the Procedure
             stage: null,
             governorProcedureInfo: null,
@@ -199,16 +195,13 @@ document.addEventListener('DOMContentLoaded', function() {
     async function askNextQuestion() {
         
         if (questionQueue.length === 0) {
-            console.log('📝 Question queue is empty, building new queue...');
             // Build question queue based on current responses
             buildQuestionQueue();
-            console.log('📝 New question queue length:', questionQueue.length);
         }
         
         if (questionQueue.length === 0) {
-            console.log('📝 Question queue still empty after building');
             // Check if this is because the first question was answered with "No"
-            if (userResponses.existsExclusionLetter === false) {
+            if (userResponses.isPermanentlyExcluded === false) {
                 // Conversation should end here, no further action needed
                 return;
             }
@@ -231,100 +224,79 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         currentQuestion = questionQueue.shift();
-        console.log('📝 Asking question:', currentQuestion);
         askQuestion(currentQuestion);
     }
     
     function buildQuestionQueue() {
         questionQueue = [];
         
-        // If the first question was answered with "No", don't add any questions
-        if (userResponses.existsExclusionLetter === false) {
-            console.log('❌ First question answered with "No", no questions added');
-            return;
-        }
-        
         // Stage 1: About the Exclusion
-        if (userResponses.existsExclusionLetter === null) {
-            questionQueue.push('existsExclusionLetter');
-            console.log('➕ Added existsExclusionLetter to queue');
+        if (userResponses.isPermanentlyExcluded === null) {
+            questionQueue.push('isPermanentlyExcluded');
         }
         
-        if (userResponses.existsExclusionLetter === true && userResponses.exclusionLetter === null) {
-            questionQueue.push('exclusionLetter');
-            console.log('➕ Added exclusionLetter to queue');
+        if (userResponses.isPermanentlyExcluded === true && userResponses.exclusionLetterContent === null) {
+            questionQueue.push('exclusionLetterContent');
         }
         
-        if (userResponses.existsExclusionLetter === true && userResponses.exclusionSchoolFactsInput === null) {
-            questionQueue.push('exclusionSchoolFactsInput');
-            console.log('➕ Added exclusionSchoolFactsInput to queue');
+        if (userResponses.isPermanentlyExcluded === true && userResponses.schoolVersionEvents === null) {
+            questionQueue.push('schoolVersionEvents');
         }
         
-        if (userResponses.existsExclusionLetter === true && userResponses.exclusionSchoolEvidenceInput === null) {
-            questionQueue.push('exclusionSchoolEvidenceInput');
-            console.log('➕ Added exclusionSchoolEvidenceInput to queue');
+        if (userResponses.isPermanentlyExcluded === true && userResponses.schoolEvidence === null) {
+            questionQueue.push('schoolEvidence');
         }
         
-        if (userResponses.existsExclusionLetter === true && userResponses.exclusionSchoolFactsConfirm === null) {
-            questionQueue.push('exclusionSchoolFactsConfirm');
-            console.log('➕ Added exclusionSchoolFactsConfirm to queue');
+        if (userResponses.isPermanentlyExcluded === true && userResponses.studentAgreesWithSchool === null) {
+            questionQueue.push('studentAgreesWithSchool');
         }
         
-        if (userResponses.existsExclusionLetter === true && userResponses.exclusionParentsFactsInput === null) {
-            questionQueue.push('exclusionParentsFactsInput');
-            console.log('➕ Added exclusionParentsFactsInput to queue');
+        if (userResponses.isPermanentlyExcluded === true && userResponses.studentVersionEvents === null) {
+            questionQueue.push('studentVersionEvents');
         }
         
-        if (userResponses.existsExclusionLetter === true && userResponses.exclusionParentsFactsWitnessesInput === null) {
-            questionQueue.push('exclusionParentsFactsWitnessesInput');
-            console.log('➕ Added exclusionParentsFactsWitnessesInput to queue');
+        if (userResponses.isPermanentlyExcluded === true && userResponses.witnessesDetails === null) {
+            questionQueue.push('witnessesDetails');
         }
         
-        if (userResponses.existsExclusionLetter === true && userResponses.isStudentVoiceHeard === null) {
-            questionQueue.push('isStudentVoiceHeard');
-            console.log('➕ Added isStudentVoiceHeard to queue');
+        if (userResponses.isPermanentlyExcluded === true && userResponses.studentVoiceHeardDetails === null) {
+            questionQueue.push('studentVoiceHeardDetails');
         }
         
         // If Stage 1 is complete, we can proceed to Stage 2 questions
         // BUT only after LLM analysis is completed
         if (isStage1Complete() && llmAnalysisCompleted) {
-            console.log('✅ Stage 1 complete AND LLM analysis complete, adding Stage 2 questions...');
             
             // Stage 2: About the Young Person
             if (userResponses.isSend === null) {
                 questionQueue.push('isSend');
+            } else if (userResponses.isSend === true) {
+                // If SEND is yes, add the conditional questions immediately
+                if (userResponses.sendDetails === null) {
+                    questionQueue.push('sendDetails');
+                }
+                if (userResponses.ehcpDetails === null) {
+                    questionQueue.push('ehcpDetails');
+                }
             }
             
-            if (userResponses.isSend === true && userResponses.isSendSchoolAware === null) {
-                questionQueue.push('isSendSchoolAware');
-            }
-            
-            if (userResponses.isSend === true && userResponses.isSendSchoolAware === true && userResponses.sendSchoolAddress === null) {
-                questionQueue.push('sendSchoolAddress');
-            }
-            
-            if (userResponses.isSend === true && userResponses.sendWhoSupport === null) {
-                questionQueue.push('sendWhoSupport');
-            }
-            
-            if (userResponses.isEhcp === null) {
-                questionQueue.push('isEhcp');
-            }
-            
-            if (userResponses.isEthnicMin === null) {
-                questionQueue.push('isEthnicMin');
-            }
-            
-            if (userResponses.isPrevSuspend === null) {
-                questionQueue.push('isPrevSuspend');
-            }
-            
-            if (userResponses.parentRiskAware === null) {
-                questionQueue.push('parentRiskAware');
-            }
-            
-            if (userResponses.contribFactors === null) {
-                questionQueue.push('contribFactors');
+            // Add other Stage 2 questions only if SEND is answered (yes or no)
+            if (userResponses.isSend !== null) {
+                if (userResponses.isEthnicMin === null) {
+                    questionQueue.push('isEthnicMin');
+                }
+                
+                if (userResponses.previousSuspensionsDetails === null) {
+                    questionQueue.push('previousSuspensionsDetails');
+                }
+                
+                if (userResponses.familyAwarenessDetails === null) {
+                    questionQueue.push('familyAwarenessDetails');
+                }
+                
+                if (userResponses.personalIssuesDetails === null) {
+                    questionQueue.push('personalIssuesDetails');
+                }
             }
         }
         
@@ -362,98 +334,90 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function isStage1Complete() {
-        return userResponses.existsExclusionLetter === true &&
-               userResponses.exclusionLetter !== null &&
-               userResponses.exclusionSchoolFactsInput !== null &&
-               userResponses.exclusionSchoolEvidenceInput !== null &&
-               userResponses.exclusionSchoolFactsConfirm !== null &&
-               userResponses.exclusionParentsFactsInput !== null &&
-               userResponses.exclusionParentsFactsWitnessesInput !== null &&
-               userResponses.isStudentVoiceHeard !== null;
+        return userResponses.isPermanentlyExcluded === true &&
+               userResponses.exclusionLetterContent !== null &&
+               userResponses.schoolVersionEvents !== null &&
+               userResponses.schoolEvidence !== null &&
+               userResponses.studentAgreesWithSchool !== null &&
+               userResponses.studentVersionEvents !== null &&
+               userResponses.witnessesDetails !== null &&
+               userResponses.studentVoiceHeardDetails !== null;
     }
     
     function askQuestion(questionType) {
         switch (questionType) {
-            case 'existsExclusionLetter':
-                addMessage('Was a letter written to confirm your child\'s exclusion?', 'bot');
+            case 'isPermanentlyExcluded':
+                addMessage('Has your child been permanently excluded?', 'bot');
                 showBooleanOptions();
                 break;
-            case 'exclusionLetter':
-                addMessage('Please provide the content of the exclusion letter. What reasons and details did the school give?', 'bot');
+            case 'exclusionLetterContent':
+                addMessage('Was a letter written to confirm your child\'s exclusion? Please provide the content of the exclusion letter and the reasons given by the school.', 'bot');
                 showTextInput();
                 break;
-            case 'exclusionSchoolFactsInput':
+            case 'schoolVersionEvents':
                 addMessage('What does the school say happened to lead to the exclusion? Please describe the school\'s version of events.', 'bot');
                 showTextInput();
                 break;
-            case 'exclusionSchoolEvidenceInput':
+            case 'schoolEvidence':
                 addMessage('What evidence does the school have to support the exclusion?', 'bot');
                 showTextInput();
                 break;
-            case 'exclusionSchoolFactsConfirm':
-                addMessage('Does the young person agree that this is what happened?', 'bot');
+            case 'studentAgreesWithSchool':
+                addMessage('Does the young person agree with the school\'s version of events?', 'bot');
                 showBooleanOptions();
                 break;
-            case 'exclusionParentsFactsInput':
-                addMessage('What is the student\'s version of events?', 'bot');
+            case 'studentVersionEvents':
+                addMessage('What is the young person\'s version of events?', 'bot');
                 showTextInput();
                 break;
-            case 'exclusionParentsFactsWitnessesInput':
-                addMessage('Are there witnesses that can support the young person\'s version of events?', 'bot');
-                showBooleanOptions();
+            case 'witnessesDetails':
+                addMessage('Are there witnesses that can support the young person\'s version of events? Please provide details.', 'bot');
+                showTextInput();
                 break;
-            case 'isStudentVoiceHeard':
-                addMessage('Did the school speak with the young person and take their version of events before excluding them?', 'bot');
-                showBooleanOptions();
+            case 'studentVoiceHeardDetails':
+                addMessage('Did the school speak with the young person and take their version of events before excluding them? Please provide details.', 'bot');
+                showTextInput();
                 break;
             // Stage 2: About the Young Person
             case 'isSend':
                 // Add Stage 2 header when first Stage 2 question is asked
                 addSectionHeader('— About the Young Person —', 2);
-                addMessage('Does the young person have SEND?', 'bot');
+                addMessage('Does the young person have special educational needs or disabilities (SEND)?', 'bot');
                 showBooleanOptions();
                 break;
-            case 'isSendSchoolAware':
-                addMessage('Is the school aware of this SEND?', 'bot');
-                showBooleanOptions();
-                break;
-            case 'sendSchoolAddress':
-                addMessage('If any, what steps have the school taken to address this SEND?', 'bot');
+            case 'sendDetails':
+                addMessage('Please describe the SEND and how the school have made adjustments to address this SEND.', 'bot');
                 showTextInput();
                 break;
-            case 'sendWhoSupport':
-                addMessage('Are any clinicians, pastoral workers or professionals working to support the young person with their SEND?', 'bot');
-                showSelectOptions(['NA', 'Enter details']);
-                break;
-            case 'isEhcp':
-                addMessage('Does the young person have an EHCP?', 'bot');
-                showBooleanOptions();
+            case 'ehcpDetails':
+                addMessage('Does the young person have an EHCP? Please provide details about how the school has implemented it.', 'bot');
+                showTextInput();
                 break;
             case 'isEthnicMin':
                 addMessage('Is the young person from an ethnic minority background?', 'bot');
                 showBooleanOptions();
                 break;
-            case 'isPrevSuspend':
-                addMessage('Has the young person been previously suspended?', 'bot');
-                showBooleanOptions();
+            case 'previousSuspensionsDetails':
+                addMessage('Has the young person been previously suspended? Please provide details and rough dates.', 'bot');
+                showTextInput();
                 break;
-            case 'parentRiskAware':
-                addMessage('Were the family aware of behavioral issues, or the risk of exclusion before it happened?', 'bot');
-                showBooleanOptions();
+            case 'familyAwarenessDetails':
+                addMessage('Were the family aware of behavioural issues, or the risk of exclusion before it happened? Please provide details.', 'bot');
+                showTextInput();
                 break;
-            case 'contribFactors':
-                addMessage('If any, what contributing factors does the student have? (E.g., bereavement, relocation, abuse or neglect, mental health needs, bullying, criminal exploitation, significant challenges at home)', 'bot');
+            case 'personalIssuesDetails':
+                addMessage('Was/is the young person suffering from any personal issues? (E.g., bereavement, relocation, abuse or neglect, mental health needs, bullying, criminal exploitation, significant challenges at home)', 'bot');
                 showTextInput();
                 break;
             // Stage 3: About the Procedure
             case 'stage':
                 // Add Stage 3 header when first Stage 3 question is asked
                 addSectionHeader('— About the Procedure —', 3);
-                addMessage('What stage are you at in the process?', 'bot');
+                addMessage('At what stage in the process is your case?', 'bot');
                 showSelectOptions(['Governors', 'Independent Review Panel']);
                 break;
             case 'governorProcedureInfo':
-                addMessage('Please provide details about any procedural issues during the governor meeting. Were there any concerns about fairness, time limits, or other procedural matters?', 'bot');
+                addMessage('Please provide details about any procedural issues during the Governors meeting. Did you have any concerns about fairness, time limits, or anything else that seemed odd?', 'bot');
                 showTextInput();
                 break;
             // Stage 4: Document Details
@@ -525,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="progress-bar">
                 <div class="progress-fill"></div>
             </div>
-            <div class="progress-text">Processing ${stepName}...</div>
+            <div class="progress-text">${stepName}...</div>
         `;
         chatMessages.appendChild(progressDiv);
         
@@ -594,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Determine the stage for the user response
         let stage = 1; // Default to stage 1
-        if (['isSend', 'isSendSchoolAware', 'sendSchoolAddress', 'sendWhoSupport', 'isEhcp', 'isEthnicMin', 'isPrevSuspend', 'parentRiskAware', 'contribFactors'].includes(currentQuestion)) {
+        if (['isSend', 'sendDetails', 'ehcpDetails', 'isEthnicMin', 'previousSuspensionsDetails', 'familyAwarenessDetails', 'personalIssuesDetails'].includes(currentQuestion)) {
             stage = 2;
         } else if (['stage', 'governorProcedureInfo'].includes(currentQuestion)) {
             stage = 3;
@@ -606,12 +570,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Store the response based on current question
         switch (currentQuestion) {
-            case 'existsExclusionLetter':
-                userResponses.existsExclusionLetter = response;
+            case 'isPermanentlyExcluded':
+                userResponses.isPermanentlyExcluded = response;
                 
                 // Check if we need to stop the process
                 if (!response) {
-                    addMessage('I\'m sorry, but you must receive an exclusion letter first before we can proceed. The letter must outline the reasons for the exclusion and whether it is permanent or fixed-term. Please contact the school to request this letter and then return to continue.', 'bot');
+                    addMessage('I\'m sorry, but this tool is designed specifically for permanent exclusions. For fixed-term exclusions or other matters, please contact the school directly or seek appropriate legal advice.', 'bot');
                     
                     // Hide the input area and stop the conversation
                     chatInputArea.style.display = 'none';
@@ -623,33 +587,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
                 break;
-            case 'exclusionSchoolFactsConfirm':
-                userResponses.exclusionSchoolFactsConfirm = response;
+            case 'studentAgreesWithSchool':
+                userResponses.studentAgreesWithSchool = response;
                 break;
-            case 'exclusionParentsFactsWitnessesInput':
-                userResponses.exclusionParentsFactsWitnessesInput = response;
-                break;
-            case 'isStudentVoiceHeard':
-                userResponses.isStudentVoiceHeard = response;
-                break;
-            // Stage 2: About the Young Person
             case 'isSend':
                 userResponses.isSend = response;
                 break;
-            case 'isSendSchoolAware':
-                userResponses.isSendSchoolAware = response;
-                break;
-            case 'isEhcp':
-                userResponses.isEhcp = response;
-                break;
             case 'isEthnicMin':
                 userResponses.isEthnicMin = response;
-                break;
-            case 'isPrevSuspend':
-                userResponses.isPrevSuspend = response;
-                break;
-            case 'parentRiskAware':
-                userResponses.parentRiskAware = response;
                 break;
         }
         
@@ -666,7 +611,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.handleSelectResponse = function(response) {
         // Determine the stage for the user response
         let stage = 1; // Default to stage 1
-        if (['isSend', 'isSendSchoolAware', 'sendSchoolAddress', 'sendWhoSupport', 'isEhcp', 'isEthnicMin', 'isPrevSuspend', 'parentRiskAware', 'contribFactors'].includes(currentQuestion)) {
+        if (['isSend', 'sendDetails', 'ehcpDetails', 'isEthnicMin', 'previousSuspensionsDetails', 'familyAwarenessDetails', 'personalIssuesDetails'].includes(currentQuestion)) {
             stage = 2;
         } else if (['stage', 'governorProcedureInfo'].includes(currentQuestion)) {
             stage = 3;
@@ -687,6 +632,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else if (currentQuestion === 'stage') {
             userResponses.stage = response;
+            
+            // If IRP is selected, immediately add the conditional question to the queue
+            if (response === 'Independent Review Panel' && userResponses.governorProcedureInfo === null) {
+                questionQueue.push('governorProcedureInfo');
+            }
         }
         
         // Hide the input area
@@ -712,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Determine the stage for the user response
         let stage = 1; // Default to stage 1
-        if (['isSend', 'isSendSchoolAware', 'sendSchoolAddress', 'sendWhoSupport', 'isEhcp', 'isEthnicMin', 'isPrevSuspend', 'parentRiskAware', 'contribFactors'].includes(currentQuestion)) {
+        if (['isSend', 'sendDetails', 'ehcpDetails', 'isEthnicMin', 'previousSuspensionsDetails', 'familyAwarenessDetails', 'personalIssuesDetails'].includes(currentQuestion)) {
             stage = 2;
         } else if (['stage', 'governorProcedureInfo'].includes(currentQuestion)) {
             stage = 3;
@@ -724,23 +674,38 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Store the response based on current question
         switch (currentQuestion) {
-            case 'exclusionLetter':
-                userResponses.exclusionLetter = response;
+            case 'exclusionLetterContent':
+                userResponses.exclusionLetterContent = response;
                 break;
-            case 'exclusionSchoolFactsInput':
-                userResponses.exclusionSchoolFactsInput = response;
+            case 'schoolVersionEvents':
+                userResponses.schoolVersionEvents = response;
                 break;
-            case 'exclusionSchoolEvidenceInput':
-                userResponses.exclusionSchoolEvidenceInput = response;
+            case 'schoolEvidence':
+                userResponses.schoolEvidence = response;
                 break;
-            case 'exclusionParentsFactsInput':
-                userResponses.exclusionParentsFactsInput = response;
+            case 'studentVersionEvents':
+                userResponses.studentVersionEvents = response;
                 break;
-            case 'sendSchoolAddress':
-                userResponses.sendSchoolAddress = response;
+            case 'witnessesDetails':
+                userResponses.witnessesDetails = response;
                 break;
-            case 'contribFactors':
-                userResponses.contribFactors = response;
+            case 'studentVoiceHeardDetails':
+                userResponses.studentVoiceHeardDetails = response;
+                break;
+            case 'sendDetails':
+                userResponses.sendDetails = response;
+                break;
+            case 'ehcpDetails':
+                userResponses.ehcpDetails = response;
+                break;
+            case 'previousSuspensionsDetails':
+                userResponses.previousSuspensionsDetails = response;
+                break;
+            case 'familyAwarenessDetails':
+                userResponses.familyAwarenessDetails = response;
+                break;
+            case 'personalIssuesDetails':
+                userResponses.personalIssuesDetails = response;
                 break;
             case 'governorProcedureInfo':
                 userResponses.governorProcedureInfo = response;
@@ -780,6 +745,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Check which stage we're completing
         if (isStage1Complete() && !llmAnalysisCompleted) {
+            console.log('🔄 Stage 1 complete, starting LLM analysis...');
+            console.log('📊 Stage 1 completion check:', {
+                isStage1Complete: isStage1Complete(),
+                llmAnalysisCompleted: llmAnalysisCompleted,
+                isPermanentlyExcluded: userResponses.isPermanentlyExcluded
+            });
 
             disableUserInput();
             
@@ -790,7 +761,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Perform Stage 1 LLM analysis synchronously with progress updates
-            if (userResponses.existsExclusionLetter) {
+            if (userResponses.isPermanentlyExcluded) {
                 try {
                     
                     // Small delay to let user read the initial message
@@ -839,7 +810,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             try {
                 // Show progress bar for background summary computation
-                const progressBar = addProgressBar('backgroundSummary');
+                const progressBar = addProgressBar('Processing Background Summary');
                 
                 // Small delay to let user read the message
                 await new Promise(resolve => setTimeout(resolve, 1500));
@@ -852,8 +823,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (progressBar && progressBar.parentNode) {
                     progressBar.remove();
                 }
-                
-                addMessage('**Background Summary:**\n\n' + summary.join('\n'), 'bot');
     
                 enableUserInput();
                 
@@ -891,42 +860,39 @@ document.addEventListener('DOMContentLoaded', function() {
         
         try {
             // Step 1: Extract exclusion reason
-            const progressBar1 = addProgressBar('Extracting Reason for Exclusion');
-            const exclusionReason = await llmAPI.extractExclusionReason(userResponses.exclusionLetter);
+            const progressBar1 = addProgressBar('Processing Exclusion Reason');
+            const exclusionReason = await llmAPI.extractExclusionReason(userResponses.exclusionLetterContent);
             llmOutputs.exclusionReasonLLM = exclusionReason;
             if (progressBar1 && progressBar1.parentNode) {
                 progressBar1.remove();
             }
-            addMessage('**Exclusion Reason Analysis:**\n\n' + exclusionReason, 'bot');
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             // Step 2: Synthesise school facts
-            const progressBar2 = addProgressBar('Synthesising School Facts');
+            const progressBar2 = addProgressBar('Processing School Facts of Exclusion');
             const synthesisedSchoolFacts = await llmAPI.synthesiseSchoolFacts(
-                userResponses.exclusionLetter,
-                userResponses.exclusionSchoolFactsInput,
-                userResponses.exclusionSchoolEvidenceInput
+                userResponses.exclusionLetterContent,
+                userResponses.schoolVersionEvents,
+                userResponses.schoolEvidence
             );
             llmOutputs.exclusionSchoolFactsLLM = synthesisedSchoolFacts;
             if (progressBar2 && progressBar2.parentNode) {
                 progressBar2.remove();
             }
-            addMessage('**School Facts Analysis:**\n\n' + synthesisedSchoolFacts, 'bot');
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             // Step 3: Synthesise parents facts
-            const progressBar3 = addProgressBar('Synthesising Parents Facts');
+            const progressBar3 = addProgressBar('Processing Parent\'s Facts of Exclusion');
             const synthesisedParentsFacts = await llmAPI.synthesiseParentsFacts(
-                userResponses.exclusionSchoolFactsConfirm,
-                userResponses.exclusionParentsFactsInput,
-                userResponses.exclusionParentsFactsWitnessesInput,
-                userResponses.isStudentVoiceHeard
+                userResponses.studentAgreesWithSchool,
+                userResponses.studentVersionEvents,
+                userResponses.witnessesDetails,
+                userResponses.studentVoiceHeardDetails
             );
             llmOutputs.exclusionParentsFactsLLM = synthesisedParentsFacts;
             if (progressBar3 && progressBar3.parentNode) {
                 progressBar3.remove();
             }
-            addMessage('**Student Perspective Analysis:**\n\n' + synthesisedParentsFacts, 'bot');
             await new Promise(resolve => setTimeout(resolve, 2000));
             
 
@@ -948,18 +914,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function isStage2Complete() {
         return userResponses.isSend !== null &&
-               userResponses.isEhcp !== null &&
                userResponses.isEthnicMin !== null &&
-               userResponses.isPrevSuspend !== null &&
-               userResponses.parentRiskAware !== null &&
-               userResponses.contribFactors !== null &&
-               // Handle conditional SEND questions
+               userResponses.previousSuspensionsDetails !== null &&
+               userResponses.familyAwarenessDetails !== null &&
+               userResponses.personalIssuesDetails !== null &&
+               // Handle conditional SEND details and EHCP questions
                (userResponses.isSend === false || 
                 (userResponses.isSend === true && 
-                 userResponses.isSendSchoolAware !== null &&
-                 (userResponses.isSendSchoolAware === false || 
-                  (userResponses.isSendSchoolAware === true && userResponses.sendSchoolAddress !== null)) &&
-                 userResponses.sendWhoSupport !== null));
+                 userResponses.sendDetails !== null && 
+                 userResponses.ehcpDetails !== null));
     }
     
     function isStage3Complete() {
@@ -994,27 +957,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (userResponses.isSend) {
             summary.push("Young person has SEND");
-            if (userResponses.isSendSchoolAware) {
-                summary.push("School is aware of SEND");
-                if (userResponses.sendSchoolAddress) {
-                    summary.push(`School has taken steps: ${userResponses.sendSchoolAddress}`);
-                }
-            } else {
-                summary.push("School is NOT aware of SEND");
+            if (userResponses.sendDetails) {
+                summary.push(`SEND Details: ${userResponses.sendDetails}`);
             }
-            if (userResponses.sendWhoSupport && userResponses.sendWhoSupport !== 'NA') {
-                summary.push(`Professional support: ${userResponses.sendWhoSupport}`);
-            } else if (userResponses.sendWhoSupport === 'NA') {
-                summary.push("No professional support for SEND");
+            if (userResponses.ehcpDetails) {
+                summary.push(`EHCP Details: ${userResponses.ehcpDetails}`);
             }
         } else {
             summary.push("Young person does NOT have SEND");
-        }
-        
-        if (userResponses.isEhcp) {
-            summary.push("Young person has EHCP");
-        } else {
-            summary.push("Young person does NOT have EHCP");
         }
         
         if (userResponses.isEthnicMin) {
@@ -1023,22 +973,22 @@ document.addEventListener('DOMContentLoaded', function() {
             summary.push("Young person is NOT from ethnic minority background");
         }
         
-        if (userResponses.isPrevSuspend) {
-            summary.push("Young person has been previously suspended");
+        if (userResponses.previousSuspensionsDetails) {
+            summary.push(`Previous suspensions: ${userResponses.previousSuspensionsDetails}`);
         } else {
-            summary.push("Young person has NOT been previously suspended");
+            summary.push("No previous suspensions mentioned");
         }
         
-        if (userResponses.parentRiskAware) {
-            summary.push("Family was aware of behavioral issues/risk of exclusion");
+        if (userResponses.familyAwarenessDetails) {
+            summary.push(`Family awareness: ${userResponses.familyAwarenessDetails}`);
         } else {
-            summary.push("Family was NOT aware of behavioral issues/risk of exclusion");
+            summary.push("No family awareness details provided");
         }
         
-        if (userResponses.contribFactors) {
-            summary.push(`Contributing factors: ${userResponses.contribFactors}`);
+        if (userResponses.personalIssuesDetails) {
+            summary.push(`Personal issues: ${userResponses.personalIssuesDetails}`);
         } else {
-            summary.push("No specific contributing factors identified");
+            summary.push("No personal issues mentioned");
         }
         
         backgroundSummary = summary;
@@ -1072,7 +1022,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const progressBar = addProgressBar('Generating Position Statement');
             
             // Small delay to let user read the message
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 10000));
             
             // Load the required documents
             const suspensionsGuidance = await loadTextFile('/documents/statutory_guidance/suspensions.txt');
@@ -1085,6 +1035,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 positionStatementGrounds = await loadTextFile('/documents/irp_arguments.json');
             }
             
+            // Create stage information
+            let stageInfo;
+            if (userResponses.stage === 'Governors') {
+                stageInfo = 'Stage: Preparing for Governors meeting';
+            } else if (userResponses.stage === 'Independent Review Panel') {
+                stageInfo = `Stage: Preparing for Independent Review Panel. Information on how the Governors meeting went: ${userResponses.governorProcedureInfo || 'No procedural issues reported'}`;
+            } else {
+                stageInfo = 'Stage: Unknown';
+            }
+            
             // Generate the position statement
             const positionStatement = await llmAPI.generatePositionStatement(
                 llmOutputs.exclusionReasonLLM,
@@ -1093,7 +1053,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 backgroundSummary.join('\n'),
                 suspensionsGuidance,
                 behaviourInSchoolsGuidance,
-                positionStatementGrounds
+                positionStatementGrounds,
+                stageInfo
             );
             
             if (progressBar && progressBar.parentNode) {
@@ -1102,9 +1063,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Store the raw position statement
             llmOutputs.positionStatementRaw = positionStatement;
-            
-            // Display the position statement
-            addMessage('**Position Statement:**\n\n' + positionStatement, 'bot');
             
             // Now format the position statement
             await formatAndContinueToDocumentDetails(positionStatement);
@@ -1129,9 +1087,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (progressBar && progressBar.parentNode) {
                 progressBar.remove();
             }
-            
-            addMessage('Position statement has been formatted for document generation.', 'bot');
-            
+                        
             // Enable user input for document details collection
             enableUserInput();
             
@@ -1202,9 +1158,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const downloadLink = document.createElement('a');
             downloadLink.href = downloadUrl;
             downloadLink.download = `Position_Statement_${userResponses.childName.replace(/\s+/g, '_')}.pdf`;
-            
-            addMessage('✅ Your position statement PDF has been generated successfully!', 'bot');
-            
+                        
             // Create download button in chat
             const downloadButton = document.createElement('button');
             downloadButton.className = 'download-btn';
@@ -1331,24 +1285,22 @@ document.addEventListener('DOMContentLoaded', function() {
         questionQueue = [];
         userResponses = {
             // Stage 1: About the Exclusion
-            existsExclusionLetter: null,
-            exclusionLetter: null,
-            exclusionSchoolFactsInput: null,
-            exclusionSchoolEvidenceInput: null,
-            exclusionSchoolFactsConfirm: null,
-            exclusionParentsFactsInput: null,
-            exclusionParentsFactsWitnessesInput: null,
-            isStudentVoiceHeard: null,
+            isPermanentlyExcluded: null,
+            exclusionLetterContent: null,
+            schoolVersionEvents: null,
+            schoolEvidence: null,
+            studentAgreesWithSchool: null,
+            studentVersionEvents: null,
+            witnessesDetails: null,
+            studentVoiceHeardDetails: null,
             // Stage 2: About the Young Person
             isSend: null,
-            isSendSchoolAware: null,
-            sendSchoolAddress: null,
-            sendWhoSupport: null,
-            isEhcp: null,
+            sendDetails: null,
+            ehcpDetails: null,
             isEthnicMin: null,
-            isPrevSuspend: null,
-            parentRiskAware: null,
-            contribFactors: null,
+            previousSuspensionsDetails: null,
+            familyAwarenessDetails: null,
+            personalIssuesDetails: null,
             // Stage 3: About the Procedure
             stage: null,
             governorProcedureInfo: null,

@@ -291,55 +291,55 @@ class LLMAPI {
 
     /**
      * Synthesise school facts from multiple sources
-     * @param {string} exclusionLetter - Content of the exclusion letter
-     * @param {string} schoolFactsInput - Parent's input about school's version
-     * @param {string} schoolEvidenceInput - School's evidence
+     * @param {string} exclusionLetterContent - Content of the exclusion letter
+     * @param {string} schoolVersionEvents - School's version of events
+     * @param {string} schoolEvidence - School's evidence
      * @returns {Promise<string>} - Synthesised facts
      */
-    async synthesiseSchoolFacts(exclusionLetter, schoolFactsInput, schoolEvidenceInput) {
+    async synthesiseSchoolFacts(exclusionLetterContent, schoolVersionEvents, schoolEvidence) {
         const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
         const systemMessage = prompts.systemMessages.schoolFactsSynthesis;
         
         const prompt = prompts.prompts.synthesiseSchoolFacts
-            .replace('{exclusionLetter}', exclusionLetter)
-            .replace('{schoolFactsInput}', schoolFactsInput)
-            .replace('{schoolEvidenceInput}', schoolEvidenceInput);
+            .replace('{exclusionLetterContent}', exclusionLetterContent)
+            .replace('{schoolVersionEvents}', schoolVersionEvents)
+            .replace('{schoolEvidence}', schoolEvidence);
         
         return await this.callLLM(prompt, systemMessage);
     }
     
     /**
      * Extract the reason for exclusion from the exclusion letter
-     * @param {string} exclusionLetter - Content of the exclusion letter
+     * @param {string} exclusionLetterContent - Content of the exclusion letter
      * @returns {Promise<string>} - Extracted exclusion reason
      */
-    async extractExclusionReason(exclusionLetter) {
+    async extractExclusionReason(exclusionLetterContent) {
         const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
         const systemMessage = prompts.systemMessages.exclusionReasonExtraction;
         
         const prompt = prompts.prompts.extractExclusionReason
-            .replace('{exclusionLetter}', exclusionLetter);
+            .replace('{exclusionLetterContent}', exclusionLetterContent);
         
         return await this.callLLM(prompt, systemMessage);
     }
     
     /**
      * Synthesise parents facts and student voice information
-     * @param {boolean} schoolFactsConfirm - Whether student agrees with school's version
-     * @param {string} parentsFactsInput - Student's version of events
-     * @param {boolean} parentsFactsWitnessesInput - Whether there are supporting witnesses
-     * @param {boolean} isStudentVoiceHeard - Whether school spoke with student before exclusion
+     * @param {boolean} studentAgreesWithSchool - Whether student agrees with school's version
+     * @param {string} studentVersionEvents - Student's version of events
+     * @param {string} witnessesDetails - Details about witnesses
+     * @param {string} studentVoiceHeardDetails - Details about whether student voice was heard
      * @returns {Promise<string>} - Synthesised parents facts
      */
-    async synthesiseParentsFacts(schoolFactsConfirm, parentsFactsInput, parentsFactsWitnessesInput, isStudentVoiceHeard) {
+    async synthesiseParentsFacts(studentAgreesWithSchool, studentVersionEvents, witnessesDetails, studentVoiceHeardDetails) {
         const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
         const systemMessage = prompts.systemMessages.studentPerspectiveAnalysis;
         
         const prompt = prompts.prompts.synthesiseParentsFacts
-            .replace('{schoolFactsConfirm}', schoolFactsConfirm ? 'Yes' : 'No')
-            .replace('{parentsFactsInput}', parentsFactsInput)
-            .replace('{parentsFactsWitnessesInput}', parentsFactsWitnessesInput ? 'Yes' : 'No')
-            .replace('{isStudentVoiceHeard}', isStudentVoiceHeard ? 'Yes' : 'No');
+            .replace('{studentAgreesWithSchool}', studentAgreesWithSchool ? 'Yes' : 'No')
+            .replace('{studentVersionEvents}', studentVersionEvents)
+            .replace('{witnessesDetails}', witnessesDetails)
+            .replace('{studentVoiceHeardDetails}', studentVoiceHeardDetails);
         
         return await this.callLLM(prompt, systemMessage);
     }
@@ -405,9 +405,10 @@ class LLMAPI {
      * @param {string} suspensionsGuidance - Content from suspensions.txt
      * @param {string} behaviourInSchoolsGuidance - Content from behaviour_in_schools.txt
      * @param {string} positionStatementGrounds - JSON content from position_statement_grounds.json
+     * @param {string} stageInfo - Stage information and procedural details
      * @returns {Promise<string>} - Generated position statement
      */
-    async generatePositionStatement(exclusionReason, synthesisedSchoolFacts, synthesisedParentsFacts, backgroundSummary, suspensionsGuidance, behaviourInSchoolsGuidance, positionStatementGrounds) {
+    async generatePositionStatement(exclusionReason, synthesisedSchoolFacts, synthesisedParentsFacts, backgroundSummary, suspensionsGuidance, behaviourInSchoolsGuidance, positionStatementGrounds, stageInfo) {
         const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
         const systemMessage = prompts.systemMessages.legalExpert;
         
@@ -430,7 +431,8 @@ class LLMAPI {
             .replace('{backgroundSummary}', backgroundSummary)
             .replace('{suspensionsGuidance}', chunkedSuspensionsGuidance)
             .replace('{behaviourInSchoolsGuidance}', chunkedBehaviourGuidance)
-            .replace('{positionStatementGrounds}', chunkedPositionGrounds);
+            .replace('{positionStatementGrounds}', chunkedPositionGrounds)
+            .replace('{stageInfo}', stageInfo);
         
         return await this.callLLM(prompt, systemMessage);
     }

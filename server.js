@@ -114,6 +114,34 @@ app.post('/api/generate-pdf', async (req, res) => {
         console.log('🔄 Generating PDF for:', childName);
         console.log('📋 Request data:', { childName, parentName, schoolName, stage, exclusionDate, groundsTitles, groundReasons });
         
+        // Sanitize text by removing invisible/spacing characters that can cause formatting issues
+        function sanitizeText(text) {
+            if (!text) return '';
+            
+            // Log original text for debugging if it contains suspicious characters
+            const suspiciousChars = /[\u200B-\u200D\uFEFF\u2060-\u2064\u00AD\u200E\u200F\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000\u2028\u2029\u202A-\u202E\u061C]/;
+            if (suspiciousChars.test(text)) {
+                console.log('🧹 Found suspicious characters in text, sanitizing...');
+            }
+            
+            return text
+                .normalize("NFC")
+                // Remove zero-width and invisible characters
+                .replace(/[\u200B-\u200D\uFEFF\u2060-\u2064\u00AD\u200E\u200F\u202A-\u202E\u061C]/g, '')
+                // Replace unusual spaces with normal space
+                .replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
+                // Replace line and paragraph separators with normal newline
+                .replace(/[\u2028\u2029]/g, '\n')
+                // Remove control characters except newline, carriage return, tab
+                .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+                // Collapse multiple spaces/tabs
+                .replace(/[ \t]+/g, ' ')
+                // Reduce multiple blank lines but preserve Markdown paragraph breaks
+                .replace(/\n{3,}/g, '\n\n')
+                // Trim leading/trailing whitespace
+                .trim();
+        }
+
         // Escape special LaTeX characters
         function escapeLatex(text) {
             if (!text) return '';
@@ -134,6 +162,14 @@ app.post('/api/generate-pdf', async (req, res) => {
         const templatePath = path.join(__dirname, 'documents', 'position_statement_template.tex');
         let latexContent = await fs.readFile(templatePath, 'utf8');
         
+        // Sanitize the LLM response data to remove invisible characters
+        const sanitizedGroundsTitles = sanitizeText(groundsTitles);
+        const sanitizedGroundReasons = sanitizeText(groundReasons);
+        
+        // Log sanitized content for debugging
+        console.log('🧹 Sanitized groundsTitles length:', sanitizedGroundsTitles.length);
+        console.log('🧹 Sanitized groundReasons length:', sanitizedGroundReasons.length);
+        
         // Replace placeholders in the LaTeX template with escaped text
         latexContent = latexContent
             .replace(/\\newcommand{\\childName}{[^}]*}/, `\\newcommand{\\childName}{${escapeLatex(childName)}}`)
@@ -141,8 +177,22 @@ app.post('/api/generate-pdf', async (req, res) => {
             .replace(/\\newcommand{\\schoolName}{[^}]*}/, `\\newcommand{\\schoolName}{${escapeLatex(schoolName)}}`)
             .replace(/\\newcommand{\\stage}{[^}]*}/, `\\newcommand{\\stage}{${escapeLatex(stage)}}`)
             .replace(/\\newcommand{\\exclusionDate}{[^}]*}/, `\\newcommand{\\exclusionDate}{${escapeLatex(exclusionDate)}}`)
-            .replace(/\\newcommand{\\groundsTitles}{[^}]*}/, `\\newcommand{\\groundsTitles}{${escapeLatex(groundsTitles)}}`)
-            .replace(/\\newcommand{\\groundReasons}{[^}]*}/, `\\newcommand{\\groundReasons}{${escapeLatex(groundReasons)}}`);
+            .replace(/\\newcommand{\\groundsTitles}{[^}]*}/, `\\newcommand{\\groundsTitles}{${escapeLatex(sanitizedGroundsTitles)}}`)
+            .replace(/\\newcommand{\\groundReasons}{[^}]*}/, `\\newcommand{\\groundReasons}{${escapeLatex(sanitizedGroundReasons)}}`);
+        
+        // Replace square bracket placeholders in groundsTitles and groundReasons with LaTeX command format
+        const placeholderReplacements = {
+            '[childName]': '\\childName\\',
+            '[parentName]': '\\parentName\\',
+            '[schoolName]': '\\schoolName\\',
+            '[stage]': '\\stage\\',
+            '[exclusionDate]': '\\exclusionDate\\'
+        };
+        
+        // Apply placeholder replacements to groundsTitles and groundReasons
+        for (const [placeholder, replacement] of Object.entries(placeholderReplacements)) {
+            latexContent = latexContent.replace(new RegExp(placeholder.replace(/[\[\]]/g, '\\$&'), 'g'), replacement);
+        }
         
         // Create temporary directory for compilation
         const tempDir = path.join(__dirname, 'temp', Date.now().toString());

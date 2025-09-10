@@ -56,7 +56,7 @@
 \newcommand{\stage}{Governors OR Independent Review Panel}
 \newcommand{\exclusionDate}{Full Date}
 \newcommand{\groundsTitles}{Grounds Title 1; Grounds Title 2; Grounds Title 3}
-\newcommand{\groundReasons}{Grounds Title 1 Reasoning 1 blah blah; Grounds Title 1 Reasoning 2 blah blah; Grounds Title 1 Reasoning 3 blah blah || Grounds Title 2 Reasoning 1 blah blah; Grounds Title 2 Reasoning 2 blah blah; Grounds Title 2 Reasoning 3 blah blah || Grounds Title 3 Reasoning 1 blah blah; Grounds Title 3 Reasoning 2 blah blah}
+\newcommand{\groundReasons}{Grounds Title 1 Reasoning 1 blah blah| Grounds Title 1 Reasoning 2 blah blah| Grounds Title 1 Reasoning 3 blah blah ||| Grounds Title 2 Reasoning 1 blah blah| Grounds Title 2 Reasoning 2 blah blah| Grounds Title 2 Reasoning 3 blah blah ||| Grounds Title 3 Reasoning 1 blah blah| Grounds Title 3 Reasoning 2 blah blah}
 
 \newcounter{groundcounter}
 \setcounter{groundcounter}{3}
@@ -64,23 +64,23 @@
 \ExplSyntaxOn
 \NewDocumentCommand{\GroundsTitlesList}{m}
  {
-  \seq_set_split:Nnx \l_tmpa_seq { ; } { #1 }
+  \seq_set_split:Nnx \l_titles_list_seq { ; } { #1 }
   \begin{enumerate}[label=\alph*., leftmargin=*, itemsep=0.25ex]
-    \seq_map_inline:Nn \l_tmpa_seq { \item \tl_trim_spaces:n { ##1 } }
+    \seq_map_inline:Nn \l_titles_list_seq { \item \tl_trim_spaces:n { ##1 } }
   \end{enumerate}
  }
 
 \NewDocumentCommand{\ProcessGrounds}{mm}
  {
   \seq_set_split:Nnx \l_titles_seq { ; } { #1 }
-  \seq_set_split:Nnx \l_sections_seq { || } { #2 }
+  \seq_set_split:Nnx \l_sections_seq { ||| } { #2 }
   
-  \int_set:Nn \l_vox_counter_int { 0 }
+  \int_set:Nn \l_ground_int { 0 }
   \seq_map_inline:Nn \l_titles_seq {
-    \int_incr:N \l_vox_counter_int
-    \section*{\raggedright Ground~\int_to_arabic:n { \l_vox_counter_int }:~\tl_trim_spaces:n{##1}}
-    \tl_set:Nx \l_current_reasons_tl { \seq_item:Nn \l_sections_seq { \l_vox_counter_int } }
-    \seq_set_split:NnV \l_reasons_seq { ; } \l_current_reasons_tl
+    \int_incr:N \l_ground_int
+    \section*{\raggedright Ground~\int_to_arabic:n { \l_ground_int }:~\tl_trim_spaces:n{##1}}
+    \tl_set:Nx \l_current_reasons_tl { \seq_item:Nn \l_sections_seq { \l_ground_int } }
+    \seq_set_split:NnV \l_reasons_seq { | } \l_current_reasons_tl
     
     \begin{enumerate}[label=\arabic*., start=\int_eval:n{\value{groundcounter}+1}, leftmargin=6ex]
       \seq_map_inline:Nn \l_reasons_seq {
@@ -94,8 +94,9 @@
 \seq_new:N \l_titles_seq
 \seq_new:N \l_sections_seq
 \seq_new:N \l_reasons_seq
+\seq_new:N \l_titles_list_seq
 \tl_new:N \l_current_reasons_tl
-\int_new:N \l_vox_counter_int
+\int_new:N \l_ground_int
 \ExplSyntaxOff
 
 \begin{document}

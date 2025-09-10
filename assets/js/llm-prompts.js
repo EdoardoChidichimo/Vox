@@ -25,13 +25,13 @@ const LLMPrompts = {
         synthesiseSchoolFacts: `Please synthesise the following information about a school exclusion case to create a clear summary of the school's position:
 
 EXCLUSION LETTER CONTENT:
-{exclusionLetter}
+{exclusionLetterContent}
 
-SCHOOL'S VERSION OF EVENTS (from parent input):
-{schoolFactsInput}
+SCHOOL'S VERSION OF EVENTS:
+{schoolVersionEvents}
 
 SCHOOL'S EVIDENCE:
-{schoolEvidenceInput}
+{schoolEvidence}
 
 Please provide a synthesised summary that:
 1. Identifies the key facts presented by the school
@@ -44,7 +44,7 @@ Focus on factual accuracy and avoid speculation. If there are contradictions bet
         extractExclusionReason: `Please extract the specific reason(s) given for the school exclusion from the following exclusion letter:
 
 EXCLUSION LETTER:
-{exclusionLetter}
+{exclusionLetterContent}
 
 Please:
 1. Identify the primary stated reason for the exclusion
@@ -55,13 +55,13 @@ Respond succinctly but without missing any information or detail. Respond ONLY w
 
         synthesiseParentsFacts: `Please synthesise the following information about a school exclusion case from the student's perspective:
 
-STUDENT AGREES WITH SCHOOL'S VERSION: {schoolFactsConfirm}
+STUDENT AGREES WITH SCHOOL'S VERSION: {studentAgreesWithSchool}
 
-STUDENT'S VERSION OF EVENTS: {parentsFactsInput}
+STUDENT'S VERSION OF EVENTS: {studentVersionEvents}
 
-WITNESSES AVAILABLE: {parentsFactsWitnessesInput}
+WITNESSES DETAILS: {witnessesDetails}
 
-STUDENT VOICE HEARD BEFORE EXCLUSION: {isStudentVoiceHeard}
+STUDENT VOICE HEARD DETAILS: {studentVoiceHeardDetails}
 
 Please provide a synthesised analysis that:
 1. Identifies any contradictions between school and student versions
@@ -69,16 +69,36 @@ Please provide a synthesised analysis that:
 
 Respond succinctly but without missing any information or detail. Do NOT include any legal citations or references to statutes or other legal sources. Respond ONLY with the summary as a paragraph, no other text or formatting.`,
 
-        generatePositionStatement: ` # INSTRUCTIONS 
-Generate a position statement document (2–4 pages) using the most relevant grounds of arguments (listed in JSON format below) based on the facts of the case (under Knowledge), and use the two statutory guidance documents attached. 
-From the JSON, pick the most relevant and important titles, from these analyse which conditions apply, and use the suggested wordings to fill out the points (the suggested wordings do not need to be verbatim and you should NOT reference "suggested wordings" explicitly, but use the relevant references). 
-If referencing relevant excerpts, quote in full in quotation marks (from the "content" field) with the reference citation (from the corresponding "reference" field) in square brackets. Where possible, every reference should follow this format: [Page/Paragraph/Part SPACE Number/NumberRange, DocumentName]. NEVER reference to the suggested wordings as documents themselves, treat them as signposts for references.
-NEVER use semicolons. 
-The list of grounds are not exhaustive and you can apply your own. 
-The structure of the response needs to be 3–4 arguments in the format: [GROUND_TITLE + 3–5 bullet points using suggested wording and guidance]. 
-Each bullet point can have multiple sentences in a short paragraph-like structure which consecutively builds upon one another (and remember quotes should be an entire bullet point). 
-Unless in the knowledge base, replace unknown information with placeholders, do not invent names, dates, or other information. E.g., keep the student name as a clearly demarcatedplaceholder, but fill out relevant behaviours if prompted.
-Do not include a document title, header, introduction, summary, or concluding overall recommendation, just the numbered grounds of argument (title + bullet points).
+        generatePositionStatement: ` # INSTRUCTIONS
+Generate a 2-4 page position statement using the facts provided under **Knowledge**, the two attached statutory guidance documents, and the list of grounds (JSON format below). Follow these rules:
+
+### Selection and Use of Grounds
+- Select the **most relevant and important grounds** from the JSON.
+- For each selected ground, analyse which conditions apply and build your argument using the provided suggested wordings and guidance.
+- Do **not** mention "suggested wordings" explicitly — treat them as internal references and write in a natural style.
+- You may add your own grounds if justified by the facts.
+
+### Referencing
+- If quoting relevant excerpts, quote them **in full** (from the "content" field) in quotation marks, followed by the reference (from the "reference" field) in square brackets.
+- Use this format for every reference where possible: "[Page/Paragraph/Part SPACE Number/NumberRange, DocumentName]"
+- Never reference the suggested wordings as documents themselves.
+
+### Structure and Formatting
+- Present **3-4 numbered grounds of argument**.
+- Each ground should include:
+  - The "GROUND_TITLE" as the heading.
+  - **3-5 bullet points**, written as short, connected paragraph-style points.
+  - Entirely quoted excerpts should form their own bullet point.
+
+### Placeholders and Factual Integrity
+- Use only these placeholders: "[CHILD_NAME, PARENT_NAME, SCHOOL_NAME, EXCLUSION_DATE, EXCLUSION_LETTER_DATE, STAGE]".
+- Replace placeholders with actual information where available. If information is missing, leave the placeholder and adapt the wording (do not invent facts).
+- If a ground contains placeholders (usually in "<< >>"), replace them with the correct information or remove/adapt them.
+
+### Output Constraints
+- Do **not** include a title, header, introduction, summary, or concluding recommendation — output should consist only of the numbered grounds with their bullet points.
+- Ensure all reasoning is **strictly relevant** to the facts and guidance provided.
+- Do not assume or infer facts outside the knowledge base.
 
 # KNOWLEDGE
 Exclusion Reason: {exclusionReason}
@@ -88,6 +108,8 @@ School's Facts: {synthesisedSchoolFacts}
 Student Perspective: {synthesisedParentsFacts}
 
 Student Background: {backgroundSummary}
+
+Case Stage Information: {stageInfo}
 
 # GUIDANCE DOCUMENTS
 Suspensions Guidance: {suspensionsGuidance}
@@ -103,17 +125,19 @@ Behaviour in Schools Guidance: {behaviourInSchoolsGuidance}
 
 {
   "groundsTitles": "Grounds Title 1; Grounds Title 2; Grounds Title 3; Grounds Title 4; ...",
-  "groundsReasons": "Ground 1 paragraph 1; Ground 1 paragraph 2; Ground 1 paragraph 3 || Ground 2 paragraph 1; Ground 2 paragraph 2 || Ground 3 paragraph 1; Ground 3 paragraph 2; ..."
+  "groundsReasons": "Ground 1 paragraph 1 | Ground 1 paragraph 2 | Ground 1 paragraph 3 ||| Ground 2 paragraph 1 | Ground 2 paragraph 2 ||| Ground 3 paragraph 1 | Ground 3 paragraph 2 | ..."
 }
 
 Formatting rules:
 - Each ground title in "groundsTitles" must be separated by a single semicolon ';' (no trailing semicolon at the end).
-- Each grounds' reasoning block in "groundsReasons" must be separated by a double pipe '||'.
-- Inside each block, each paragraph/reason must be separated by a single semicolon ';' (again, no trailing semicolon at the end).
+- Each grounds' reasoning block in "groundsReasons" must be separated by a triple pipe '|||'.
+- Inside each block, each paragraph/reason must be separated by a single pipe '|' (again, no trailing pipe at the end).
 - Do not add or remove grounds or paragraphs — only reformat as required.
 - Preserve the original text of titles and paragraphs exactly, except for trimming leading/trailing whitespace.
-- Where appropriate, replace any placeholders in the position statement (including child name, parent name, school name, stage, exclusion date) with the following LaTeX variables (with backslash before the variable and after if there is a space after it): childName, parentName, schoolName, stage, exclusionDate.
-- Remove any bullet point markers like '-', '*', etc.
+- Replace placeholders in the position statement (including child name, parent name, school name, stage, exclusion date) with the following square bracket format: [childName], [parentName], [schoolName], [stage], [exclusionDate].
+- Remove any bullet point markers like '-', '*', etc. and any formatting style characters like '*', '**', etc. for bold, italics, etc.
+- Each paragraph should end with a period if it does not already have one.
+- The text should be copied verbatim from the position statement, do not add or remove any text, just reformat as required.
 
 {positionStatement}`
     },
