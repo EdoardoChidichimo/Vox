@@ -87,7 +87,7 @@ Generate a 2-4 page position statement using the facts provided under **Knowledg
 - Present **6–8 numbered grounds of argument**.
 - Each ground should include:
   - The "GROUND_TITLE" as the heading.
-  - **3-5 bullet points**, written as short, connected paragraph-style points.
+  - **3-5 bullet points**, written as short, connected paragraph-style points. You are not limited to single sentences for each bullet point.
   - Entirely quoted excerpts should form their own bullet point and always as the first bullet point.
 
 ### Placeholders and Factual Integrity
