@@ -69,37 +69,7 @@ Please provide a synthesised analysis that:
 
 Respond succinctly but without missing any information or detail. Do NOT include any legal citations or references to statutes or other legal sources. Respond ONLY with the summary as a paragraph, no other text or formatting.`,
 
-        generatePositionStatement: ` # INSTRUCTIONS
-Generate a 2-4 page position statement using the facts provided under **Knowledge**, the two attached statutory guidance documents, and the list of grounds (JSON format below). Follow these rules:
-
-### Selection and Use of Grounds
-- Select the **most relevant and important grounds** from the JSON.
-- For each selected ground, analyse which conditions apply and build your argument using the provided suggested wordings and guidance.
-- Do **not** mention "suggested wordings" explicitly — treat them as internal references and write in a natural style.
-- You may add your own grounds if justified by the facts.
-
-### Referencing
-- If quoting relevant excerpts, quote them **in full** (from the "content" field) in quotation marks, followed by the reference (from the "reference" field) in square brackets.
-- Use this format for every reference where possible: "[Page/Paragraph/Part SPACE Number/NumberRange, DocumentName]"
-- Never reference the suggested wordings as documents themselves.
-
-### Structure and Formatting
-- Present **6–8 numbered grounds of argument**.
-- Each ground should include:
-  - The "GROUND_TITLE" as the heading.
-  - **3-5 bullet points**, written as short, connected paragraph-style points. You are not limited to single sentences for each bullet point.
-  - Entirely quoted excerpts should form their own bullet point and always as the first bullet point.
-
-### Placeholders and Factual Integrity
-- Use only these placeholders: "[CHILD_NAME, PARENT_NAME, SCHOOL_NAME, EXCLUSION_DATE, EXCLUSION_LETTER_DATE, STAGE]".
-- Replace placeholders with actual information where available. If information is missing, leave the placeholder and adapt the wording (do not invent facts).
-- If a ground contains placeholders (usually in "<< >>"), replace them with the correct information or remove/adapt them.
-
-### Output Constraints
-- Do **not** include a title, header, introduction, summary, or concluding recommendation — output should consist only of the numbered grounds with their bullet points.
-- Ensure all reasoning is **strictly relevant** to the facts and guidance provided.
-- Do not assume or infer facts outside the knowledge base.
-
+        generatePositionStatement: `
 # KNOWLEDGE
 Exclusion Reason: {exclusionReason}
 
@@ -118,6 +88,39 @@ Behaviour in Schools Guidance: {behaviourInSchoolsGuidance}
 
 # POSITION STATEMENT GROUNDS
 {positionStatementGrounds}
+
+# INSTRUCTIONS
+Generate a 2-4 page position statement using the facts provided under **Knowledge**, the two attached statutory guidance documents, and the list of grounds (JSON format below). Follow these rules:
+
+### Selection and Use of Grounds
+- Select the **most relevant and important grounds** from the JSON.
+- For each selected ground, analyse which conditions apply and build your argument using the provided suggested wordings and guidance.
+- Do **not** mention "suggested wordings" explicitly — treat them as internal references and write in a natural style.
+- You may add your own grounds if justified by the facts.
+
+### Referencing
+- If quoting relevant excerpts from position statement grounds, quote them **in full** (from the "content" field) in quotation marks, followed by the reference (from the "reference" field) in square brackets.
+- If referencing from suspensions guidance, DocumentName should be "Exclusion Guidance".
+- If referencing from behaviour in schools guidance, DocumentName should be "Behavioural Advice".
+- Use this format for every reference where possible: "[Page/Paragraph/Part SPACE Number/NumberRange, DocumentName]"
+- Never reference the suggested wordings as documents themselves.
+
+### Structure and Formatting
+- Present **6–8 numbered grounds of argument**.
+- Each ground should include:
+  - The "GROUND_TITLE" as the heading.
+  - **3-5 bullet points**, written as short, connected paragraph-style points. You are not limited to single sentences for each bullet point.
+  - Entirely quoted excerpts should form their own bullet point and always as the first bullet point.
+
+### Placeholders and Factual Integrity
+- Use only these placeholders: "[CHILD_NAME, PARENT_NAME, SCHOOL_NAME, EXCLUSION_DATE, EXCLUSION_LETTER_DATE, STAGE]".
+- Replace placeholders with actual information where available, do not invent quotes if none are provided. If information is missing, remove the placeholder and adapt the wording (do not invent facts or quotes, only use the knowledge base).
+- If a ground contains placeholders (usually in "<< >>"), replace them with the correct information or remove/adapt them.
+
+### Output Constraints
+- Do **not** include a title, header, introduction, summary, or concluding recommendation — output should consist only of the numbered grounds with their bullet points.
+- Ensure all reasoning is **strictly relevant** to the facts and guidance provided.
+- Do not assume or infer facts outside the knowledge base.
 
 # YOUR RESPONSE:`,
 
