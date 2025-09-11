@@ -115,7 +115,7 @@ Generate a 2-4 page position statement using the facts provided under **Knowledg
 ### Placeholders and Factual Integrity
 - Use only these placeholders: "[CHILD_NAME, PARENT_NAME, SCHOOL_NAME, EXCLUSION_DATE, EXCLUSION_LETTER_DATE, STAGE]".
 - Replace placeholders with actual information where available, do not invent quotes if none are provided. If information is missing, remove the placeholder and adapt the wording (do not invent facts or quotes, only use the knowledge base).
-- If a ground contains placeholders (usually in "<< >>"), replace them with the correct information or remove/adapt them.
+- If a ground contains placeholders (usually in "<< >>"), replace them with the correct information (only if provided) or remove/adapt them (do not invent facts or quotes, only use the knowledge base).
 
 ### Output Constraints
 - Do **not** include a title, header, introduction, summary, or concluding recommendation — output should consist only of the numbered grounds with their bullet points.
