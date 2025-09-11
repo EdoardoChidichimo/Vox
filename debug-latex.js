@@ -54,7 +54,34 @@ function escapeLatex(text) {
         .replace(/#/g, '\\#')
         .replace(/\^/g, '\\textasciicircum{}')
         .replace(/_/g, '\\_')
-        .replace(/~/g, '\\textasciitilde{}');
+        .replace(/~/g, '\\textasciitilde{}')
+        .replace(/'/g, "\\'")
+        .replace(/'/g, "\\'")
+        .replace(/'/g, "\\'");
+}
+
+// Sanitize text by removing invisible/spacing characters and asterisks
+function sanitizeText(text) {
+    if (!text) return '';
+    
+    return text
+        .normalize("NFC")
+        // Remove zero-width and invisible characters
+        .replace(/[\u200B-\u200D\uFEFF\u2060-\u2064\u00AD\u200E\u200F\u202A-\u202E\u061C]/g, '')
+        // Replace unusual spaces with normal space
+        .replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
+        // Replace line and paragraph separators with normal newline
+        .replace(/[\u2028\u2029]/g, '\n')
+        // Remove control characters except newline, carriage return, tab
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+        // Remove asterisks
+        .replace(/\*/g, '')
+        // Collapse multiple spaces/tabs
+        .replace(/[ \t]+/g, ' ')
+        // Reduce multiple blank lines but preserve Markdown paragraph breaks
+        .replace(/\n{3,}/g, '\n\n')
+        // Trim leading/trailing whitespace
+        .trim();
 }
 
 async function debugLatexGeneration() {
@@ -68,6 +95,13 @@ async function debugLatexGeneration() {
         
         console.log('📄 Template loaded, length:', latexContent.length);
         
+        // Sanitize the test data to remove invisible characters and asterisks
+        const sanitizedGroundsTitles = sanitizeText(testData.groundsTitles);
+        const sanitizedGroundReasons = sanitizeText(testData.groundReasons);
+        
+        console.log('🧹 Sanitized groundsTitles length:', sanitizedGroundsTitles.length);
+        console.log('🧹 Sanitized groundReasons length:', sanitizedGroundReasons.length);
+        
         // Replace placeholders in the LaTeX template with escaped text
         latexContent = latexContent
             .replace(/\\newcommand{\\childName}{[^}]*}/, `\\newcommand{\\childName}{${escapeLatex(testData.childName)}}`)
@@ -75,8 +109,8 @@ async function debugLatexGeneration() {
             .replace(/\\newcommand{\\schoolName}{[^}]*}/, `\\newcommand{\\schoolName}{${escapeLatex(testData.schoolName)}}`)
             .replace(/\\newcommand{\\stage}{[^}]*}/, `\\newcommand{\\stage}{${escapeLatex(testData.stage)}}`)
             .replace(/\\newcommand{\\exclusionDate}{[^}]*}/, `\\newcommand{\\exclusionDate}{${escapeLatex(testData.exclusionDate)}}`)
-            .replace(/\\newcommand{\\groundsTitles}{[^}]*}/, `\\newcommand{\\groundsTitles}{${escapeLatex(testData.groundsTitles)}}`)
-            .replace(/\\newcommand{\\groundReasons}{[^}]*}/, `\\newcommand{\\groundReasons}{${escapeLatex(testData.groundReasons)}}`);
+            .replace(/\\newcommand{\\groundsTitles}{[^}]*}/, `\\newcommand{\\groundsTitles}{${escapeLatex(sanitizedGroundsTitles)}}`)
+            .replace(/\\newcommand{\\groundReasons}{[^}]*}/, `\\newcommand{\\groundReasons}{${escapeLatex(sanitizedGroundReasons)}}`);
         
         console.log('✅ Placeholders replaced');
         

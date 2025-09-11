@@ -134,6 +134,8 @@ app.post('/api/generate-pdf', async (req, res) => {
                 .replace(/[\u2028\u2029]/g, '\n')
                 // Remove control characters except newline, carriage return, tab
                 .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+                // Remove asterisks
+                .replace(/\*/g, '')
                 // Collapse multiple spaces/tabs
                 .replace(/[ \t]+/g, ' ')
                 // Reduce multiple blank lines but preserve Markdown paragraph breaks
@@ -155,7 +157,10 @@ app.post('/api/generate-pdf', async (req, res) => {
                 .replace(/#/g, '\\#')
                 .replace(/\^/g, '\\textasciicircum{}')
                 .replace(/_/g, '\\_')
-                .replace(/~/g, '\\textasciitilde{}');
+                .replace(/~/g, '\\textasciitilde{}')
+                .replace(/'/g, "\\'")
+                .replace(/'/g, "\\'")
+                .replace(/'/g, "\\'");
         }
         
         // Read the LaTeX template
