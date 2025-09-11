@@ -55,9 +55,8 @@ function escapeLatex(text) {
         .replace(/\^/g, '\\textasciicircum{}')
         .replace(/_/g, '\\_')
         .replace(/~/g, '\\textasciitilde{}')
-        .replace(/'/g, "\\'")
-        .replace(/'/g, "\\'")
-        .replace(/'/g, "\\'");
+        // Convert all apostrophe types to simple straight apostrophe
+        .replace(/[''']/g, "'");
 }
 
 // Sanitize text by removing invisible/spacing characters and asterisks

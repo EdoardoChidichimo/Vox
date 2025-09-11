@@ -956,39 +956,39 @@ document.addEventListener('DOMContentLoaded', function() {
         const summary = [];
         
         if (userResponses.isSend) {
-            summary.push("Young person has SEND");
+            summary.push("Young person has SEND.");
             if (userResponses.sendDetails) {
-                summary.push(`SEND Details: ${userResponses.sendDetails}`);
+                summary.push(`SEND Details: ${userResponses.sendDetails}.`);
             }
             if (userResponses.ehcpDetails) {
-                summary.push(`EHCP Details: ${userResponses.ehcpDetails}`);
+                summary.push(`EHCP Details: ${userResponses.ehcpDetails}.`);
             }
         } else {
-            summary.push("Young person does NOT have SEND");
+            summary.push("Young person does NOT have SEND.");
         }
         
         if (userResponses.isEthnicMin) {
-            summary.push("Young person is from ethnic minority background");
+            summary.push("Young person is from ethnic minority background.");
         } else {
-            summary.push("Young person is NOT from ethnic minority background");
+            summary.push("Young person is NOT from ethnic minority background.");
         }
         
         if (userResponses.previousSuspensionsDetails) {
-            summary.push(`Previous suspensions: ${userResponses.previousSuspensionsDetails}`);
+            summary.push(`Previous suspensions: ${userResponses.previousSuspensionsDetails}.`);
         } else {
-            summary.push("No previous suspensions mentioned");
+            summary.push("No previous suspensions mentioned.");
         }
         
         if (userResponses.familyAwarenessDetails) {
-            summary.push(`Family awareness: ${userResponses.familyAwarenessDetails}`);
+            summary.push(`Family awareness of behavioural issues, or the risk of exclusion before it happened: ${userResponses.familyAwarenessDetails}.`);
         } else {
-            summary.push("No family awareness details provided");
+            summary.push("No family awareness of behavioural issues, or the risk of exclusion before it happened details provided.");
         }
         
         if (userResponses.personalIssuesDetails) {
-            summary.push(`Personal issues: ${userResponses.personalIssuesDetails}`);
+            summary.push(`Personal issues: ${userResponses.personalIssuesDetails}.`);
         } else {
-            summary.push("No personal issues mentioned");
+            summary.push("No personal issues mentioned.");
         }
         
         backgroundSummary = summary;
