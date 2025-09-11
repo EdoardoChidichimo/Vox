@@ -81,6 +81,8 @@ Student Background: {backgroundSummary}
 
 Case Stage Information: {stageInfo}
 
+Other information provided: {otherInformationProvided}
+
 # GUIDANCE DOCUMENTS
 Suspensions Guidance: {suspensionsGuidance}
 

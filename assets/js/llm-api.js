@@ -406,9 +406,10 @@ class LLMAPI {
      * @param {string} behaviourInSchoolsGuidance - Content from behaviour_in_schools.txt
      * @param {string} positionStatementGrounds - JSON content from position_statement_grounds.json
      * @param {string} stageInfo - Stage information and procedural details
+     * @param {string} otherInformationProvided - Any additional information provided by the user
      * @returns {Promise<string>} - Generated position statement
      */
-    async generatePositionStatement(exclusionReason, synthesisedSchoolFacts, synthesisedParentsFacts, backgroundSummary, suspensionsGuidance, behaviourInSchoolsGuidance, positionStatementGrounds, stageInfo) {
+    async generatePositionStatement(exclusionReason, synthesisedSchoolFacts, synthesisedParentsFacts, backgroundSummary, suspensionsGuidance, behaviourInSchoolsGuidance, positionStatementGrounds, stageInfo, otherInformationProvided) {
         const prompts = typeof window !== 'undefined' ? window.LLMPrompts : LLMPrompts;
         const systemMessage = prompts.systemMessages.legalExpert;
         
@@ -432,7 +433,8 @@ class LLMAPI {
             .replace('{suspensionsGuidance}', chunkedSuspensionsGuidance)
             .replace('{behaviourInSchoolsGuidance}', chunkedBehaviourGuidance)
             .replace('{positionStatementGrounds}', chunkedPositionGrounds)
-            .replace('{stageInfo}', stageInfo);
+            .replace('{stageInfo}', stageInfo)
+            .replace('{otherInformationProvided}', otherInformationProvided);
         
         return await this.callLLM(prompt, systemMessage);
     }

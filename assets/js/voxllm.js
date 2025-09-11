@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Stage 3: About the Procedure
         stage: null,
         governorProcedureInfo: null,
+        otherInformationProvided: null,
         // Stage 4: Document Details
         childName: null,
         parentName: null,
@@ -168,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Stage 3: About the Procedure
             stage: null,
             governorProcedureInfo: null,
+            otherInformationProvided: null,
             // Stage 4: Document Details
             childName: null,
             parentName: null,
@@ -309,6 +311,11 @@ document.addEventListener('DOMContentLoaded', function() {
             questionQueue.push('governorProcedureInfo');
         }
         
+        // Ask for other information after Stage 3 is complete
+        if (isStage3Complete() && userResponses.otherInformationProvided === null) {
+            questionQueue.push('otherInformationProvided');
+        }
+        
         // Stage 4: Document Details (only after position statement is generated)
         if (isStage3Complete() && llmOutputs.positionStatementRaw && !llmOutputs.positionStatementFormatted) {
             // This will be handled in the final processing, not through question queue
@@ -418,6 +425,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'governorProcedureInfo':
                 addMessage('Please provide details about any procedural issues during the Governors meeting. Did you have any concerns about fairness, time limits, or anything else that seemed odd?', 'bot');
+                showTextInput();
+                break;
+            case 'otherInformationProvided':
+                addMessage('Is there any other information you would like to provide that might be relevant to your case? This could include additional evidence, context, or details that haven\'t been covered in our previous questions.', 'bot');
                 showTextInput();
                 break;
             // Stage 4: Document Details
@@ -560,7 +571,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let stage = 1; // Default to stage 1
         if (['isSend', 'sendDetails', 'ehcpDetails', 'isEthnicMin', 'previousSuspensionsDetails', 'familyAwarenessDetails', 'personalIssuesDetails'].includes(currentQuestion)) {
             stage = 2;
-        } else if (['stage', 'governorProcedureInfo'].includes(currentQuestion)) {
+        } else if (['stage', 'governorProcedureInfo', 'otherInformationProvided'].includes(currentQuestion)) {
             stage = 3;
         } else if (['childName', 'parentName', 'schoolName', 'exclusionDate'].includes(currentQuestion)) {
             stage = 4;
@@ -613,7 +624,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let stage = 1; // Default to stage 1
         if (['isSend', 'sendDetails', 'ehcpDetails', 'isEthnicMin', 'previousSuspensionsDetails', 'familyAwarenessDetails', 'personalIssuesDetails'].includes(currentQuestion)) {
             stage = 2;
-        } else if (['stage', 'governorProcedureInfo'].includes(currentQuestion)) {
+        } else if (['stage', 'governorProcedureInfo', 'otherInformationProvided'].includes(currentQuestion)) {
             stage = 3;
         } else if (['childName', 'parentName', 'schoolName', 'exclusionDate'].includes(currentQuestion)) {
             stage = 4;
@@ -664,7 +675,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let stage = 1; // Default to stage 1
         if (['isSend', 'sendDetails', 'ehcpDetails', 'isEthnicMin', 'previousSuspensionsDetails', 'familyAwarenessDetails', 'personalIssuesDetails'].includes(currentQuestion)) {
             stage = 2;
-        } else if (['stage', 'governorProcedureInfo'].includes(currentQuestion)) {
+        } else if (['stage', 'governorProcedureInfo', 'otherInformationProvided'].includes(currentQuestion)) {
             stage = 3;
         } else if (['childName', 'parentName', 'schoolName', 'exclusionDate'].includes(currentQuestion)) {
             stage = 4;
@@ -709,6 +720,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'governorProcedureInfo':
                 userResponses.governorProcedureInfo = response;
+                break;
+            case 'otherInformationProvided':
+                userResponses.otherInformationProvided = response;
                 break;
             case 'childName':
                 userResponses.childName = response;
@@ -927,9 +941,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function isStage3Complete() {
         if (userResponses.stage === 'IRP') {
-            return userResponses.governorProcedureInfo !== null;
+            return userResponses.governorProcedureInfo !== null && userResponses.otherInformationProvided !== null;
         }
-        return userResponses.stage !== null; // For 'Governors' stage, only need the stage selection
+        return userResponses.stage !== null && userResponses.otherInformationProvided !== null; // For 'Governors' stage, need stage selection and other info
     }
     
     function isStage4Complete() {
@@ -1054,7 +1068,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 suspensionsGuidance,
                 behaviourInSchoolsGuidance,
                 positionStatementGrounds,
-                stageInfo
+                stageInfo,
+                userResponses.otherInformationProvided || 'No additional information provided'
             );
             
             if (progressBar && progressBar.parentNode) {
@@ -1304,6 +1319,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Stage 3: About the Procedure
             stage: null,
             governorProcedureInfo: null,
+            otherInformationProvided: null,
             // Stage 4: Document Details
             childName: null,
             parentName: null,
