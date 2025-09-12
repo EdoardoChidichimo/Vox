@@ -195,10 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     async function askNextQuestion() {
+        console.log('🔄 askNextQuestion called, queue length:', questionQueue.length);
         
         if (questionQueue.length === 0) {
             // Build question queue based on current responses
             buildQuestionQueue();
+            console.log('🔄 Question queue rebuilt, new length:', questionQueue.length);
         }
         
         if (questionQueue.length === 0) {
@@ -231,6 +233,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function buildQuestionQueue() {
         questionQueue = [];
+        console.log('🔄 buildQuestionQueue called');
+        console.log('Current state:', {
+            isStage2Complete: isStage2Complete(),
+            backgroundSummary: !!backgroundSummary,
+            stage: userResponses.stage,
+            governorProcedureInfo: userResponses.governorProcedureInfo,
+            otherInformationProvided: userResponses.otherInformationProvided
+        });
         
         // Stage 1: About the Exclusion
         if (userResponses.isPermanentlyExcluded === null) {
@@ -311,9 +321,30 @@ document.addEventListener('DOMContentLoaded', function() {
             questionQueue.push('governorProcedureInfo');
         }
         
-        // Ask for other information after Stage 3 is complete
-        if (isStage3Complete() && userResponses.otherInformationProvided === null) {
+        // Ask for additional information after stage is selected (and governor info if IRP) but before Stage 3 is complete
+        // For IRP, we need to check if governor info has been answered OR if it's currently being asked
+        const governorInfoAnswered = userResponses.governorProcedureInfo !== null;
+        const governorInfoCurrentlyAsked = currentQuestion === 'governorProcedureInfo';
+        const governorInfoComplete = governorInfoAnswered || governorInfoCurrentlyAsked;
+        
+        if (isStage2Complete() && backgroundSummary && userResponses.stage !== null && 
+            (userResponses.stage === 'Governors' || (userResponses.stage === 'IRP' && governorInfoComplete)) &&
+            userResponses.otherInformationProvided === null) {
+            console.log('✅ Adding otherInformationProvided to queue');
             questionQueue.push('otherInformationProvided');
+        } else {
+            console.log('❌ Not adding otherInformationProvided. Conditions:', {
+                isStage2Complete: isStage2Complete(),
+                backgroundSummary: !!backgroundSummary,
+                stageNotNull: userResponses.stage !== null,
+                stage: userResponses.stage,
+                governorInfoAnswered: governorInfoAnswered,
+                governorInfoCurrentlyAsked: governorInfoCurrentlyAsked,
+                governorInfoComplete: governorInfoComplete,
+                governorCondition: userResponses.stage === 'Governors' || (userResponses.stage === 'IRP' && governorInfoComplete),
+                governorProcedureInfo: userResponses.governorProcedureInfo,
+                otherInfoNull: userResponses.otherInformationProvided === null
+            });
         }
         
         // Stage 4: Document Details (only after position statement is generated)
@@ -338,6 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
+        console.log('📋 Final question queue:', questionQueue);
     }
     
     function isStage1Complete() {
@@ -748,13 +780,18 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     async function provideCaseSummary() {
+        console.log('🔄 provideCaseSummary called');
         console.log('Current state:', {
             isStage1Complete: isStage1Complete(),
             isStage2Complete: isStage2Complete(),
             isStage3Complete: isStage3Complete(),
             llmAnalysisCompleted: llmAnalysisCompleted,
-            llmOutputs: llmOutputs,
-            userResponses: userResponses
+            backgroundSummary: !!backgroundSummary,
+            positionStatementRaw: !!llmOutputs.positionStatementRaw,
+            positionStatementFormatted: !!llmOutputs.positionStatementFormatted,
+            stage: userResponses.stage,
+            governorProcedureInfo: userResponses.governorProcedureInfo,
+            otherInformationProvided: userResponses.otherInformationProvided
         });
         
         // Check which stage we're completing
@@ -857,6 +894,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return; // Don't continue if computation failed
             }
             
+        } else if (llmAnalysisCompleted && isStage2Complete() && backgroundSummary && !isStage3Complete()) {
+            // Stage 2 complete, background summary computed, but Stage 3 not complete yet
+            // Continue with Stage 3 questions
+            setTimeout(() => {
+                askNextQuestion();
+            }, 1000);
         } else if (llmAnalysisCompleted && isStage3Complete() && !llmOutputs.positionStatementRaw) {
             await generateFinalPositionStatement();
         } else if (llmOutputs.positionStatementFormatted && isStage4Complete()) {
