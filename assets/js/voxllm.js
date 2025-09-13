@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
             questionQueue.push('stage');
         }
         
-        if (isStage2Complete() && backgroundSummary && userResponses.stage === 'IRP' && userResponses.governorProcedureInfo === null) {
+        if (isStage2Complete() && backgroundSummary && userResponses.stage === 'Independent Review Panel' && userResponses.governorProcedureInfo === null) {
             questionQueue.push('governorProcedureInfo');
         }
         
@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const governorInfoComplete = governorInfoAnswered || governorInfoCurrentlyAsked;
         
         if (isStage2Complete() && backgroundSummary && userResponses.stage !== null && 
-            (userResponses.stage === 'Governors' || (userResponses.stage === 'IRP' && governorInfoComplete)) &&
+            (userResponses.stage === 'Governors' || (userResponses.stage === 'Independent Review Panel' && governorInfoComplete)) &&
             userResponses.otherInformationProvided === null) {
             console.log('✅ Adding otherInformationProvided to queue');
             questionQueue.push('otherInformationProvided');
@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 governorInfoAnswered: governorInfoAnswered,
                 governorInfoCurrentlyAsked: governorInfoCurrentlyAsked,
                 governorInfoComplete: governorInfoComplete,
-                governorCondition: userResponses.stage === 'Governors' || (userResponses.stage === 'IRP' && governorInfoComplete),
+                governorCondition: userResponses.stage === 'Governors' || (userResponses.stage === 'Independent Review Panel' && governorInfoComplete),
                 governorProcedureInfo: userResponses.governorProcedureInfo,
                 otherInfoNull: userResponses.otherInformationProvided === null
             });
@@ -983,7 +983,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function isStage3Complete() {
-        if (userResponses.stage === 'IRP') {
+        if (userResponses.stage === 'Independent Review Panel') {
             return userResponses.governorProcedureInfo !== null && userResponses.otherInformationProvided !== null;
         }
         return userResponses.stage !== null && userResponses.otherInformationProvided !== null; // For 'Governors' stage, need stage selection and other info
@@ -1198,7 +1198,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 childName: userResponses.childName,
                 parentName: userResponses.parentName,
                 schoolName: userResponses.schoolName,
-                stage: userResponses.stage === 'IRP' ? 'Independent Review Panel' : 'Governors',
+                stage: userResponses.stage === 'Independent Review Panel' ? 'Independent Review Panel' : 'Governors',
                 exclusionDate: userResponses.exclusionDate,
                 groundsTitles: formattedData.groundsTitles,
                 groundReasons: formattedData.groundsReasons
