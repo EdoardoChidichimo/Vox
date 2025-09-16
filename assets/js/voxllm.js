@@ -1193,15 +1193,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Failed to parse position statement data: ' + parseError.message);
             }
             
-            // Prepare data for LaTeX template
+            // Prepare data for LaTeX template using the new structure
             const latexData = {
                 childName: userResponses.childName,
                 parentName: userResponses.parentName,
                 schoolName: userResponses.schoolName,
                 stage: userResponses.stage === 'Independent Review Panel' ? 'Independent Review Panel' : 'Governors',
                 exclusionDate: userResponses.exclusionDate,
-                groundsTitles: formattedData.groundsTitles,
-                groundReasons: formattedData.groundsReasons
+                groundsData: formattedData // Send the full JSON structure
             };
             
             // Generate PDF using the LaTeX template

@@ -92,7 +92,7 @@ Behaviour in Schools Guidance: {behaviourInSchoolsGuidance}
 {positionStatementGrounds}
 
 # INSTRUCTIONS
-Generate a 2-4 page position statement using the facts provided under **Knowledge**, the two attached statutory guidance documents, and the list of grounds (JSON format below). Follow these rules:
+Generate a position statement using the facts provided under **Knowledge**, the two attached statutory guidance documents, and the list of grounds (JSON format below). Follow these rules:
 
 ### Selection and Use of Grounds
 - Select the **most relevant and important grounds** from the JSON.
@@ -104,11 +104,12 @@ Generate a 2-4 page position statement using the facts provided under **Knowledg
 - If quoting relevant excerpts from position statement grounds, quote them **in full** (from the "content" field) in quotation marks, followed by the reference (from the "reference" field) in square brackets.
 - If referencing from suspensions guidance, DocumentName should be "Exclusion Guidance".
 - If referencing from behaviour in schools guidance, DocumentName should be "Behavioural Advice".
-- Use this format for every reference where possible: "[Page/Paragraph/Part SPACE Number/NumberRange, DocumentName]"
+- Use this format for every reference where possible: "[Page/Paragraph/Part SPACE Number/NumberRange, DocumentName]" (ensure the comma is included).
+- ALL references should be in square brackets.
 - Never reference the suggested wordings as documents themselves.
 
 ### Structure and Formatting
-- Present **6–8 numbered grounds of argument**.
+- Present **4–6 numbered grounds of argument**.
 - Each ground should include:
   - The "GROUND_TITLE" as the heading.
   - **3-5 bullet points**, written as short, connected paragraph-style points. You may use multiple sentences for each bullet point.
@@ -116,6 +117,7 @@ Generate a 2-4 page position statement using the facts provided under **Knowledg
 
 ### Placeholders and Factual Integrity
 - Use only these placeholders: "[CHILD_NAME, PARENT_NAME, SCHOOL_NAME, EXCLUSION_DATE, EXCLUSION_LETTER_DATE, STAGE]".
+- Reference the child/pupil as the "young person" or replace with the [CHILD_NAME] placeholder.
 - Replace placeholders with actual information where available, do not invent quotes if none are provided. If information is missing, remove the placeholder and adapt the wording (do not invent facts or quotes, only use the knowledge base).
 - If a ground contains placeholders (usually in "<< >>"), replace them with the correct information (only if provided) or remove/adapt them (do not invent facts or quotes, only use the knowledge base).
 
@@ -129,20 +131,48 @@ Generate a 2-4 page position statement using the facts provided under **Knowledg
         formatPositionStatement: `Please reformat the following position statement into **exactly** this JSON style:
 
 {
-  "groundsTitles": "Grounds Title 1; Grounds Title 2; Grounds Title 3; Grounds Title 4; ...",
-  "groundsReasons": "Ground 1 paragraph 1 | Ground 1 paragraph 2 | Ground 1 paragraph 3 ||| Ground 2 paragraph 1 | Ground 2 paragraph 2 ||| Ground 3 paragraph 1 | Ground 3 paragraph 2 | ..."
+  "grounds": [
+    {
+      "title": "Grounds Title 1",
+      "reasons": [
+        "Ground 1 paragraph 1",
+        "Ground 1 paragraph 2",
+        "Ground 1 paragraph 3"
+      ]
+    },
+    {
+      "title": "Grounds Title 2",
+      "reasons": [
+        "Ground 2 paragraph 1",
+        "Ground 2 paragraph 2"
+      ]
+    },
+    {
+      "title": "Grounds Title 3",
+      "reasons": [
+        "Ground 3 paragraph 1",
+        "Ground 3 paragraph 2"
+      ]
+    },
+    {
+      "title": "Grounds Title 4",
+      "reasons": []
+    }
+  ]
 }
 
 Formatting rules:
-- Each ground title in "groundsTitles" must be separated by a single semicolon ';' (no trailing semicolon at the end).
-- Each grounds' reasoning block in "groundsReasons" must be separated by a triple pipe '|||'.
-- Inside each block, each paragraph/reason must be separated by a single pipe '|' (again, no trailing pipe at the end).
 - Do not add or remove grounds or paragraphs — only reformat as required.
 - Preserve the original text of titles and paragraphs exactly, except for trimming leading/trailing whitespace.
 - Replace placeholders in the position statement (including child name, parent name, school name, stage, exclusion date) with the following square bracket format: [childName], [parentName], [schoolName], [stage], [exclusionDate].
 - Remove any bullet point markers like '-', '*', etc. and any formatting style characters like '*', '**', etc. for bold, italics, etc.
 - Each paragraph should end with a period if it does not already have one.
 - The text should be copied verbatim from the position statement, do not add or remove any text, just reformat as required.
+- **IMPORTANT: Convert all quotation marks to proper LaTeX format:**
+  - Opening quotation marks should be: \`\`
+  - Closing quotation marks should be: ''
+  - For quoted text, use: \`\`quoted text here''
+  - Never use straight quotes (") or smart quotes (" ")
 
 {positionStatement}`
     },

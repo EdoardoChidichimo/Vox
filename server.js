@@ -109,31 +109,31 @@ app.get('/api/ollama-status', async (req, res) => {
 // PDF generation endpoint
 app.post('/api/generate-pdf', async (req, res) => {
     try {
-        const { childName, parentName, schoolName, stage, exclusionDate, groundsTitles, groundReasons } = req.body;
+        const { childName, parentName, schoolName, stage, exclusionDate, groundsData } = req.body;
         
         console.log('🔄 Generating PDF for:', childName);
-        console.log('📋 Request data:', { childName, parentName, schoolName, stage, exclusionDate, groundsTitles, groundReasons });
+        console.log('📋 Request data:', { childName, parentName, schoolName, stage, exclusionDate, groundsData });
         
-        // Sanitize text by removing invisible/spacing characters that can cause formatting issues
+        // Sanitize text by removing specific invisible characters that cause formatting issues
         function sanitizeText(text) {
             if (!text) return '';
             
             // Log original text for debugging if it contains suspicious characters
-            const suspiciousChars = /[\u200B-\u200D\uFEFF\u2060-\u2064\u00AD\u200E\u200F\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000\u2028\u2029\u202A-\u202E\u061C]/;
+            const suspiciousChars = /[\uFEFF\u200B\u200C\u200D\u2060\u202C\u202D\u202E\u00A0]/;
             if (suspiciousChars.test(text)) {
                 console.log('🧹 Found suspicious characters in text, sanitizing...');
             }
             
             return text
                 .normalize("NFC")
-                // Remove zero-width and invisible characters
-                .replace(/[\u200B-\u200D\uFEFF\u2060-\u2064\u00AD\u200E\u200F\u202A-\u202E\u061C]/g, '')
-                // Replace unusual spaces with normal space
-                .replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
-                // Replace line and paragraph separators with normal newline
-                .replace(/[\u2028\u2029]/g, '\n')
-                // Remove control characters except newline, carriage return, tab
-                .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+                // Remove specific problematic invisible characters
+                .replace(/\uFEFF/g, '')      // ZERO WIDTH NO-BREAK SPACE (BOM)
+                .replace(/\u200B/g, '')      // ZERO WIDTH SPACE
+                .replace(/\u200C/g, '')      // ZERO WIDTH NON-JOINER
+                .replace(/\u200D/g, '')      // ZERO WIDTH JOINER
+                .replace(/\u2060/g, '')      // WORD JOINER
+                .replace(/[\u202C\u202D\u202E]/g, '') // Bidirectional embedding/override characters
+                .replace(/\u00A0/g, ' ')     // NO-BREAK SPACE -> normal space
                 // Remove asterisks
                 .replace(/\*/g, '')
                 // Collapse multiple spaces/tabs
@@ -147,7 +147,11 @@ app.post('/api/generate-pdf', async (req, res) => {
         // Escape special LaTeX characters
         function escapeLatex(text) {
             if (!text) return '';
-            return text
+            
+            // First sanitize the text to remove invisible characters
+            const sanitized = sanitizeText(text);
+            
+            return sanitized
                 .replace(/\\/g, '\\textbackslash{}')
                 .replace(/\{/g, '\\{')
                 .replace(/\}/g, '\\}')
@@ -158,21 +162,127 @@ app.post('/api/generate-pdf', async (req, res) => {
                 .replace(/\^/g, '\\textasciicircum{}')
                 .replace(/_/g, '\\_')
                 .replace(/~/g, '\\textasciitilde{}')
-                // Convert all apostrophe types to simple straight apostrophe
+                // Convert all apostrophe types to simple straight apostrophe (but leave LaTeX quotes alone)
                 .replace(/[''']/g, "'");
+        }
+        
+        // Escape LaTeX characters and replace placeholders with actual values
+        function escapeLatexAndReplacePlaceholders(text, replacements) {
+            if (!text) return '';
+            
+            // First sanitize the text to remove invisible characters
+            let processedText = sanitizeText(text);
+            
+            // Then replace placeholders with actual values (also sanitize replacement values)
+            for (const [placeholder, value] of Object.entries(replacements)) {
+                const placeholderPattern = new RegExp(`\\[${placeholder}\\]`, 'g');
+                const sanitizedValue = sanitizeText(String(value || ''));
+                processedText = processedText.replace(placeholderPattern, sanitizedValue);
+            }
+            
+            // Finally escape LaTeX characters (but don't sanitize again since escapeLatex now does it)
+            return processedText
+                .replace(/\\/g, '\\textbackslash{}')
+                .replace(/\{/g, '\\{')
+                .replace(/\}/g, '\\}')
+                .replace(/\$/g, '\\$')
+                .replace(/&/g, '\\&')
+                .replace(/%/g, '\\%')
+                .replace(/#/g, '\\#')
+                .replace(/\^/g, '\\textasciicircum{}')
+                .replace(/_/g, '\\_')
+                .replace(/~/g, '\\textasciitilde{}')
+                // Convert all apostrophe types to simple straight apostrophe (but leave LaTeX quotes alone)
+                .replace(/[''']/g, "'");
+        }
+        
+        // Function to render grounds JSON to LaTeX
+        function renderGroundsToLatex(groundsJson, replacements, { startAt = 1, leftmargin = "6ex" } = {}) {
+            if (!groundsJson || !Array.isArray(groundsJson.grounds)) {
+                throw new Error("Invalid grounds JSON: expected an object with a 'grounds' array.");
+            }
+
+            let latex = "";
+            const seriesName = "main";
+
+            groundsJson.grounds.forEach((g, i) => {
+                const groundNumber = i + 1;
+                const title = escapeLatexAndReplacePlaceholders(g.title || "", replacements);
+                latex += `\\section*{\\raggedright Ground ${groundNumber}: ${title}}\n`;
+
+                const reasons = Array.isArray(g.reasons) ? g.reasons : [];
+
+                if (reasons.length === 0) {
+                    // No enumerate block if no reasons
+                    latex += "\n";
+                    return;
+                }
+
+                if (i === 0) {
+                    // First list: series=main and optional start
+                    const startPart = startAt && startAt !== 1 ? `, start=${startAt}` : "";
+                    latex += `\\begin{enumerate}[label=\\arabic*.,${startPart}, leftmargin=${leftmargin}, series=${seriesName}]\n`;
+                } else {
+                    // Subsequent lists: resume*=main
+                    latex += `\\begin{enumerate}[label=\\arabic*., leftmargin=${leftmargin}, resume*=${seriesName}]\n`;
+                }
+
+                for (const reason of reasons) {
+                    const item = escapeLatexAndReplacePlaceholders(reason || "", replacements);
+                    latex += `    \\item ${item}\n`;
+                }
+
+                latex += "\\end{enumerate}\n\n";
+            });
+
+            return latex.trim() + "\n";
         }
         
         // Read the LaTeX template
         const templatePath = path.join(__dirname, 'documents', 'position_statement_template.tex');
         let latexContent = await fs.readFile(templatePath, 'utf8');
         
-        // Sanitize the LLM response data to remove invisible characters
-        const sanitizedGroundsTitles = sanitizeText(groundsTitles);
-        const sanitizedGroundReasons = sanitizeText(groundReasons);
+        // Parse and validate grounds data
+        let parsedGroundsData;
+        try {
+            parsedGroundsData = typeof groundsData === 'string' ? JSON.parse(groundsData) : groundsData;
+            
+            // Sanitize all text content in the grounds data to remove invisible characters
+            if (parsedGroundsData && parsedGroundsData.grounds) {
+                parsedGroundsData.grounds = parsedGroundsData.grounds.map(ground => ({
+                    ...ground,
+                    title: sanitizeText(ground.title || ''),
+                    reasons: Array.isArray(ground.reasons) 
+                        ? ground.reasons.map(reason => sanitizeText(reason || ''))
+                        : []
+                }));
+            }
+        } catch (parseError) {
+            console.error('❌ Failed to parse grounds data:', parseError);
+            throw new Error('Invalid grounds data format: ' + parseError.message);
+        }
         
-        // Log sanitized content for debugging
-        console.log('🧹 Sanitized groundsTitles length:', sanitizedGroundsTitles.length);
-        console.log('🧹 Sanitized groundReasons length:', sanitizedGroundReasons.length);
+        console.log('📋 Parsed and sanitized grounds data:', JSON.stringify(parsedGroundsData, null, 2));
+        
+        // Create replacements object for placeholders
+        const replacements = {
+            childName: childName,
+            parentName: parentName,
+            schoolName: schoolName,
+            stage: stage,
+            exclusionDate: exclusionDate
+        };
+        
+        // Generate LaTeX for grounds using the new function (start at 4 as requested)
+        const groundsLatex = renderGroundsToLatex(parsedGroundsData, replacements, { startAt: 4, leftmargin: "6ex" });
+        console.log('📄 Generated grounds LaTeX:', groundsLatex);
+        
+        // Generate ground titles list for the summary section
+        const groundTitlesList = parsedGroundsData.grounds.map((ground, index) => {
+            const groundNumber = index + 1;
+            const title = escapeLatexAndReplacePlaceholders(ground.title || "", replacements);
+            return `\\item Ground ${groundNumber}: ${title}`;
+        }).join('\n        ');
         
         // Replace placeholders in the LaTeX template with escaped text
         latexContent = latexContent
@@ -180,23 +290,13 @@ app.post('/api/generate-pdf', async (req, res) => {
             .replace(/\\newcommand{\\parentName}{[^}]*}/, `\\newcommand{\\parentName}{${escapeLatex(parentName)}}`)
             .replace(/\\newcommand{\\schoolName}{[^}]*}/, `\\newcommand{\\schoolName}{${escapeLatex(schoolName)}}`)
             .replace(/\\newcommand{\\stage}{[^}]*}/, `\\newcommand{\\stage}{${escapeLatex(stage)}}`)
-            .replace(/\\newcommand{\\exclusionDate}{[^}]*}/, `\\newcommand{\\exclusionDate}{${escapeLatex(exclusionDate)}}`)
-            .replace(/\\newcommand{\\groundsTitles}{[^}]*}/, `\\newcommand{\\groundsTitles}{${escapeLatex(sanitizedGroundsTitles)}}`)
-            .replace(/\\newcommand{\\groundReasons}{[^}]*}/, `\\newcommand{\\groundReasons}{${escapeLatex(sanitizedGroundReasons)}}`);
+            .replace(/\\newcommand{\\exclusionDate}{[^}]*}/, `\\newcommand{\\exclusionDate}{${escapeLatex(exclusionDate)}}`);
+            
+        // Insert grounds into template at the "% INSERT GROUNDS HERE" comment
+        latexContent = latexContent.replace('% INSERT GROUNDS HERE', groundsLatex);
         
-        // Replace square bracket placeholders in groundsTitles and groundReasons with LaTeX command format
-        const placeholderReplacements = {
-            '[childName]': '\\childName\\',
-            '[parentName]': '\\parentName\\',
-            '[schoolName]': '\\schoolName\\',
-            '[stage]': '\\stage\\',
-            '[exclusionDate]': '\\exclusionDate\\'
-        };
-        
-        // Apply placeholder replacements to groundsTitles and groundReasons
-        for (const [placeholder, replacement] of Object.entries(placeholderReplacements)) {
-            latexContent = latexContent.replace(new RegExp(placeholder.replace(/[\[\]]/g, '\\$&'), 'g'), replacement);
-        }
+        // Replace the groundsTitles placeholder in the template
+        latexContent = latexContent.replace('\\GroundsTitlesList{\\groundsTitles}', `\\GroundsTitlesList{\n        ${groundTitlesList}\n    }`);
         
         // Create temporary directory for compilation
         const tempDir = path.join(__dirname, 'temp', Date.now().toString());

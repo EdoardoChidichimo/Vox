@@ -31,7 +31,6 @@
       }
     }
   },
-
   {
     "title": "Exclusion is disproportionate",
     "relevant_guidance": ["Exclusion Guidance", "Behavioural Advice"], 
@@ -62,7 +61,7 @@
           "Proportionality in public law means that any sanction imposed by an administrative body must be proportional to the alleged infraction. If a lesser sanction would be sufficient, a greater one would be considered disproportionate and should not be pursued. Put simply, even if a permanent exclusion is reasonable, if it is one of multiple reasonable responses to the student's behaviour, then the least severe must be applied.",
           "In this instance, there are less severe options available to the school.",
           "We therefore submit that the decision to permanently exclude young person was disproportionate and the governors should now reinstate them with immediate effect.",
-          "The school has failed to properly consider any contributing factors for CHILD_NAME's behaviour".
+          "The school has failed to properly consider any contributing factors for CHILD_NAME's behaviour."
         ],
         "If child does have relevant vulnerabilities": [
         "To uphold <<CHILD_NAME>>'s exclusion, the governors must be satisfied that the behaviour they are accused of is so serious that the inevitable, fundamental personal upheaval it will cause for <<CHILD_NAME>> is justified.",
