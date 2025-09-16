@@ -111,15 +111,13 @@ app.post('/api/generate-pdf', async (req, res) => {
     try {
         const { childName, parentName, schoolName, stage, exclusionDate, groundsData } = req.body;
         
-        console.log('🔄 Generating PDF for:', childName);
-        console.log('📋 Request data:', { childName, parentName, schoolName, stage, exclusionDate, groundsData });
         
         // Sanitize text by removing specific invisible characters that cause formatting issues
         function sanitizeText(text) {
             if (!text) return '';
             
             // Log original text for debugging if it contains suspicious characters
-            const suspiciousChars = /[\uFEFF\u200B\u200C\u200D\u2060\u202C\u202D\u202E\u00A0]/;
+            const suspiciousChars = /[\uFEFF\u200B\u200C\u200D\u2060\u202C\u202D\u202E\u202F\u00A0]/;
             if (suspiciousChars.test(text)) {
                 console.log('🧹 Found suspicious characters in text, sanitizing...');
             }
@@ -132,7 +130,7 @@ app.post('/api/generate-pdf', async (req, res) => {
                 .replace(/\u200C/g, '')      // ZERO WIDTH NON-JOINER
                 .replace(/\u200D/g, '')      // ZERO WIDTH JOINER
                 .replace(/\u2060/g, '')      // WORD JOINER
-                .replace(/[\u202C\u202D\u202E]/g, '') // Bidirectional embedding/override characters
+                .replace(/[\u202C\u202D\u202E\u202F]/g, '') // Bidirectional embedding/override characters
                 .replace(/\u00A0/g, ' ')     // NO-BREAK SPACE -> normal space
                 // Remove asterisks
                 .replace(/\*/g, '')
@@ -279,9 +277,8 @@ app.post('/api/generate-pdf', async (req, res) => {
         
         // Generate ground titles list for the summary section
         const groundTitlesList = parsedGroundsData.grounds.map((ground, index) => {
-            const groundNumber = index + 1;
             const title = escapeLatexAndReplacePlaceholders(ground.title || "", replacements);
-            return `\\item Ground ${groundNumber}: ${title}`;
+            return `\\item ${title}`;
         }).join('\n        ');
         
         // Replace placeholders in the LaTeX template with escaped text
