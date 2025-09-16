@@ -195,12 +195,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     async function askNextQuestion() {
-        console.log('🔄 askNextQuestion called, queue length:', questionQueue.length);
         
         if (questionQueue.length === 0) {
             // Build question queue based on current responses
             buildQuestionQueue();
-            console.log('🔄 Question queue rebuilt, new length:', questionQueue.length);
         }
         
         if (questionQueue.length === 0) {
@@ -330,22 +328,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isStage2Complete() && backgroundSummary && userResponses.stage !== null && 
             (userResponses.stage === 'Governors' || (userResponses.stage === 'Independent Review Panel' && governorInfoComplete)) &&
             userResponses.otherInformationProvided === null) {
-            console.log('✅ Adding otherInformationProvided to queue');
             questionQueue.push('otherInformationProvided');
-        } else {
-            console.log('❌ Not adding otherInformationProvided. Conditions:', {
-                isStage2Complete: isStage2Complete(),
-                backgroundSummary: !!backgroundSummary,
-                stageNotNull: userResponses.stage !== null,
-                stage: userResponses.stage,
-                governorInfoAnswered: governorInfoAnswered,
-                governorInfoCurrentlyAsked: governorInfoCurrentlyAsked,
-                governorInfoComplete: governorInfoComplete,
-                governorCondition: userResponses.stage === 'Governors' || (userResponses.stage === 'Independent Review Panel' && governorInfoComplete),
-                governorProcedureInfo: userResponses.governorProcedureInfo,
-                otherInfoNull: userResponses.otherInformationProvided === null
-            });
-        }
+        } 
         
         // Stage 4: Document Details (only after position statement is generated)
         if (isStage3Complete() && llmOutputs.positionStatementRaw && !llmOutputs.positionStatementFormatted) {
@@ -369,7 +353,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        console.log('📋 Final question queue:', questionQueue);
     }
     
     function isStage1Complete() {
@@ -780,29 +763,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     async function provideCaseSummary() {
-        console.log('🔄 provideCaseSummary called');
-        console.log('Current state:', {
-            isStage1Complete: isStage1Complete(),
-            isStage2Complete: isStage2Complete(),
-            isStage3Complete: isStage3Complete(),
-            llmAnalysisCompleted: llmAnalysisCompleted,
-            backgroundSummary: !!backgroundSummary,
-            positionStatementRaw: !!llmOutputs.positionStatementRaw,
-            positionStatementFormatted: !!llmOutputs.positionStatementFormatted,
-            stage: userResponses.stage,
-            governorProcedureInfo: userResponses.governorProcedureInfo,
-            otherInformationProvided: userResponses.otherInformationProvided
-        });
         
         // Check which stage we're completing
         if (isStage1Complete() && !llmAnalysisCompleted) {
-            console.log('🔄 Stage 1 complete, starting LLM analysis...');
-            console.log('📊 Stage 1 completion check:', {
-                isStage1Complete: isStage1Complete(),
-                llmAnalysisCompleted: llmAnalysisCompleted,
-                isPermanentlyExcluded: userResponses.isPermanentlyExcluded
-            });
-
+            
             disableUserInput();
             
             const progressTracker = document.getElementById('progressTracker');
@@ -834,7 +798,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 3000);
                     
                 } catch (error) {
-                    console.error('❌ Stage 1 analysis failed:', error);
                     addMessage('There was an error during the analysis. Please try again or contact support.', 'bot');
                     enableUserInput();
                     return; // Don't continue if analysis failed

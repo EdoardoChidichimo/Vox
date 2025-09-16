@@ -167,7 +167,7 @@ Formatting rules:
 - Replace placeholders in the position statement (including child name, parent name, school name, stage, exclusion date) with the following square bracket format: [childName], [parentName], [schoolName], [stage], [exclusionDate].
 - Remove any bullet point markers like '-', '*', etc. and any formatting style characters like '*', '**', etc. for bold, italics, etc.
 - Each paragraph should end with a period if it does not already have one.
-- The text should be copied verbatim from the position statement, do not add or remove any text, just reformat as required.
+- The text should be copied verbatim from the position statement, do not add or remove any text, just reformat as required (ensure that the ground titles are not in all-caps).
 - **IMPORTANT: Convert all quotation marks to proper LaTeX format:**
   - Opening quotation marks should be: \`\`
   - Closing quotation marks should be: ''

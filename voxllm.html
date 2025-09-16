@@ -31,8 +31,34 @@
 						</ul>
 					</nav>
 
+				
+
 				<!-- Main -->
 					<div id="main">
+						<!-- Chatbot Interface (Prominent position at top) -->
+						<div class="chatbot-interface-container">
+							<div class="chatbot-interface" id="chatbotInterface">
+								<div class="chat-header">
+									<h4>Vox Assistant</h4>
+									<button class="close-chat-btn" onclick="closeChatbot()" title="Close chat">×</button>
+								</div>
+								
+								<div class="chat-messages" id="chatMessages">
+									<!-- Messages will be dynamically added here -->
+								</div>
+								
+								<div class="chat-input-area" id="chatInputArea" style="display: none;">
+									<div class="boolean-options">
+										<button class="boolean-btn yes-btn" onclick="handleBooleanResponse(true)">Yes</button>
+										<button class="boolean-btn no-btn" onclick="handleBooleanResponse(false)">No</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						
+						<li><a href="#" class="button large primary" id="beginCaseBtn">Begin Your Case</a></li>
+								
 
 						<!-- Post -->
 							<section class="post">
@@ -67,54 +93,11 @@
 										<p>VoxLLM uses advanced AI technology to analyse your case against UK school exclusion law and guidance. Our system will automatically identify potential legal breaches and provide personalised recommendations.</p>
 										<p class="ai-note">All analysis is performed securely on our servers using specialised legal AI models. This is NOT legal advice.</p>
 									</div>
-					
-									
-									<div class="cta-section">
-										<h3>Ready to Get Started?</h3>
-										<p>We will ask you all the necessary questions to help us understand your case and provide you with the best possible support.</p>
-										<ul class="actions special">
-											<li><a href="#" class="button large primary" id="beginCaseBtn">Begin Your Case</a></li>
-										</ul>
-									</div>
-									
-									<!-- Chatbot Interface (Hidden by default) -->
-									<div class="chatbot-interface" id="chatbotInterface">
-										<div class="chat-header">
-											<h4>Vox Assistant</h4>
-											<button class="close-chat-btn" onclick="closeChatbot()" title="Close chat">×</button>
-										</div>
-										
-										<div class="chat-messages" id="chatMessages">
-											<!-- Messages will be dynamically added here -->
-										</div>
-										
-										<div class="chat-input-area" id="chatInputArea" style="display: none;">
-											<div class="boolean-options">
-												<button class="boolean-btn yes-btn" onclick="handleBooleanResponse(true)">Yes</button>
-												<button class="boolean-btn no-btn" onclick="handleBooleanResponse(false)">No</button>
-											</div>
-										</div>
-									</div>
 								</div>
 
 								</section>
-
 					</div>
 
-				<!-- Footer -->
-					<footer id="footer">
-						<section>
-							
-						</section>
-						<section class="split contact">
-							
-						</section>
-					</footer>
-
-				<!-- Copyright -->
-					<div id="copyright">
-						<ul><li>&copy; Vox</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
-					</div>
 
 			</div>
 
