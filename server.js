@@ -112,26 +112,33 @@ app.post('/api/generate-pdf', async (req, res) => {
         const { childName, parentName, schoolName, stage, exclusionDate, groundsData } = req.body;
         
         
-        // Sanitize text by removing specific invisible characters that cause formatting issues
+        // Sanitize text by removing all invisible characters that cause formatting issues
         function sanitizeText(text) {
             if (!text) return '';
             
             // Log original text for debugging if it contains suspicious characters
-            const suspiciousChars = /[\uFEFF\u200B\u200C\u200D\u2060\u202C\u202D\u202E\u202F\u00A0]/;
+            const suspiciousChars = /[\uFEFF\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFFF9-\uFFFB]/;
             if (suspiciousChars.test(text)) {
                 console.log('🧹 Found suspicious characters in text, sanitizing...');
             }
             
             return text
                 .normalize("NFC")
-                // Remove specific problematic invisible characters
-                .replace(/\uFEFF/g, '')      // ZERO WIDTH NO-BREAK SPACE (BOM)
-                .replace(/\u200B/g, '')      // ZERO WIDTH SPACE
-                .replace(/\u200C/g, '')      // ZERO WIDTH NON-JOINER
-                .replace(/\u200D/g, '')      // ZERO WIDTH JOINER
-                .replace(/\u2060/g, '')      // WORD JOINER
-                .replace(/[\u202C\u202D\u202E\u202F]/g, '') // Bidirectional embedding/override characters
-                .replace(/\u00A0/g, ' ')     // NO-BREAK SPACE -> normal space
+                // Remove Byte Order Mark (U+FEFF)
+                .replace(/\uFEFF/g, '')
+                // Remove all zero-width spaces (U+200B-U+200F)
+                .replace(/[\u200B-\u200F]/g, '')
+                // Remove bidirectional text control characters (U+202A-U+202E)
+                .replace(/[\u202A-\u202E]/g, '')
+                // Remove word joiner and other invisible characters (U+2060-U+206F)
+                .replace(/[\u2060-\u206F]/g, '')
+                // Remove object replacement character and other format controls (U+FFF9-U+FFFB)
+                .replace(/[\uFFF9-\uFFFB]/g, '')
+                // Remove all other Unicode format control characters (Cf category)
+                // This includes characters like U+061C (Arabic Letter Mark), U+070F (Syriac Abbreviation Mark), etc.
+                .replace(/[\u061C\u070F\u180E\u200C\u200D\u200E\u200F\u202A\u202B\u202C\u202D\u202E\u2060\u2061\u2062\u2063\u2064\u2066\u2067\u2068\u2069\u206A\u206B\u206C\u206D\u206E\u206F\uFFF9\uFFFA\uFFFB]/g, '')
+                // Convert NO-BREAK SPACE to normal space
+                .replace(/\u00A0/g, ' ')
                 // Remove asterisks
                 .replace(/\*/g, '')
                 // Collapse multiple spaces/tabs
