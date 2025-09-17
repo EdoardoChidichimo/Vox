@@ -231,14 +231,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function buildQuestionQueue() {
         questionQueue = [];
-        console.log('🔄 buildQuestionQueue called');
-        console.log('Current state:', {
-            isStage2Complete: isStage2Complete(),
-            backgroundSummary: !!backgroundSummary,
-            stage: userResponses.stage,
-            governorProcedureInfo: userResponses.governorProcedureInfo,
-            otherInformationProvided: userResponses.otherInformationProvided
-        });
         
         // Stage 1: About the Exclusion
         if (userResponses.isPermanentlyExcluded === null) {

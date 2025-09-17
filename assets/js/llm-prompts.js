@@ -101,7 +101,7 @@ Generate a position statement using the facts provided under **Knowledge**, the 
 - You may add your own grounds if justified by the facts.
 
 ### Referencing
-- If quoting relevant excerpts from position statement grounds, quote them **in full** (from the "content" field) in quotation marks, followed by the reference (from the "reference" field) in square brackets.
+- If quoting relevant excerpts from position statement grounds, quote them **in full** (from the "content" field) in quotation marks. You MUST follow it with the reference (from the "reference" field) in square brackets.
 - If referencing from suspensions guidance, DocumentName should be "Exclusion Guidance".
 - If referencing from behaviour in schools guidance, DocumentName should be "Behavioural Advice".
 - Use this format for every reference where possible: "[Page/Paragraph/Part SPACE Number/NumberRange, DocumentName]" (ensure the comma is included).
@@ -124,6 +124,7 @@ Generate a position statement using the facts provided under **Knowledge**, the 
 ### Output Constraints
 - Do **not** include a title, header, introduction, summary, or concluding recommendation — output should consist only of the numbered grounds with their bullet points.
 - Ensure all reasoning is **strictly relevant** to the facts and guidance provided.
+- References must be included for all quotes.
 - Do not assume or infer facts outside the knowledge base.
 
 # YOUR RESPONSE:`,
@@ -162,8 +163,8 @@ Generate a position statement using the facts provided under **Knowledge**, the 
 }
 
 Formatting rules:
-- Do not add or remove grounds or paragraphs — only reformat as required.
-- Preserve the original text of titles and paragraphs exactly, except for trimming leading/trailing whitespace.
+- Do not add or remove grounds or paragraphs or references — only reformat as required.
+- Preserve the original text of titles, paragraphs, and references exactly, except for trimming leading/trailing whitespace.
 - Replace placeholders in the position statement (including child name, parent name, school name, stage, exclusion date) with the following square bracket format: [childName], [parentName], [schoolName], [stage], [exclusionDate].
 - Remove any bullet point markers like '-', '*', etc. and any formatting style characters like '*', '**', etc. for bold, italics, etc.
 - Each paragraph should end with a period if it does not already have one.
